@@ -49,4 +49,14 @@
     <session-config>
         <session-timeout>90</session-timeout>
     </session-config>
+
+    <servlet>
+        <servlet-name>addServlet</servlet-name>
+        <servlet-class>AddServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addServlet</servlet-name>
+        <url-pattern>/add</url-pattern>
+    </servlet-mapping>
 </web-app>
