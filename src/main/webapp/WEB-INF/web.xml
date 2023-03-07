@@ -49,24 +49,4 @@
     <session-config>
         <session-timeout>90</session-timeout>
     </session-config>
-
-    <servlet>
-        <servlet-name>addServlet</servlet-name>
-        <servlet-class>AddServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>addServlet</servlet-name>
-        <url-pattern>/add</url-pattern>
-    </servlet-mapping>
-    
-    <servlet>
-        <servlet-name>sqServlet</servlet-name>
-        <servlet-class>SqServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>sqServlet</servlet-name>
-        <url-pattern>/square</url-pattern>
-    </servlet-mapping>
 </web-app>
