@@ -18,13 +18,12 @@
     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
   <context:annotation-config />
-  <context:component-scan
-    base-package="com.bulletinBoard.system" />
+
+  <context:component-scan base-package="com.bulletinBoard.system" />
 
   <mvc:annotation-driven />
 
-  <!-- <mvc:resources mapping="/resources/**"
-    location="/resources/" /> -->
+  <mvc:resources mapping="/resources/**" location="/resources/" />
 
   <!-- <bean id="viewResolver"
     class="org.springframework.web.servlet.view.UrlBasedViewResolver">
