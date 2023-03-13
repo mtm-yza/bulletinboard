@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+    <definition name="addPostView" extends="template1">
+        <put-attribute name="title" value="Add Post" />
+        <put-attribute name="body" value="/WEB-INF/pages/post/addPost.jsp" />
+    </definition>
+    
+    <definition name="editPostView" extends="template2">
+        <put-attribute name="title" value="Update Post" />
+        <put-attribute name="body" value="/WEB-INF/pages/post/updatePost.jsp" />
+    </definition>
+    
+    <definition name="postListView" extends="template1">
+        <put-attribute name="title" value="Post List" />
+        <put-attribute name="body" value="/WEB-INF/pages/post/displayPosts.jsp" />
+    </definition>
+
+</tiles-definitions>
