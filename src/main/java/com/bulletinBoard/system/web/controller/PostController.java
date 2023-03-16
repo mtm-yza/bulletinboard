@@ -28,19 +28,25 @@ import com.bulletinBoard.system.web.form.PostForm;
 public class PostController {
     
     private static final String HOME_VIEW = "postListView";
-    private static final String HOME_REDIRECT = "redirect:list";
+    private static final String HOME_REDIRECT = "redirect:/post/list";
     private static final String ADD_VIEW = "addPostView";
     private static final String EDIT_VIEW = "editPostView"; 
 
     @Autowired
     PostService service;
+
+    @GetMapping({"/", ""})
+    protected ModelAndView redirectHome(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        return new ModelAndView(HOME_REDIRECT);
+    }
     
     @GetMapping("list")
     protected ModelAndView getAllPosts(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName(HOME_VIEW);
+        ModelAndView mv = new ModelAndView(HOME_VIEW);
         mv.addObject("posts", service.getByStatusActive());
 
         return mv;
@@ -50,10 +56,7 @@ public class PostController {
     protected ModelAndView redirectAddPostForm(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName(ADD_VIEW);
-
-        return mv;
+        return new ModelAndView(ADD_VIEW);
     }
 
     @PostMapping("add")
@@ -75,8 +78,7 @@ public class PostController {
     @GetMapping("update")
     protected ModelAndView redirectEditPostForm(HttpServletRequest req, HttpServletResponse resp) {
         
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName(EDIT_VIEW);
+        ModelAndView mv = new ModelAndView(EDIT_VIEW);
         mv.addObject("posts", service.getAll());
         
         return mv;
