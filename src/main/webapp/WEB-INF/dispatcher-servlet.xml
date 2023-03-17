@@ -18,12 +18,21 @@
     http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
 
   <context:annotation-config />
-
   <context:component-scan base-package="com.bulletinBoard.system" />
 
   <mvc:annotation-driven />
-
   <mvc:resources mapping="/resources/**" location="/resources/" />
+  
+  <!-- <bean id="propertyConfigurer"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>/WEB-INF/jdbc.properties</value>
+        <value>classpath:app.properties</value>
+        <value>classpath:setting.properties</value>
+      </list>
+    </property>
+  </bean> -->
 
   <bean id="viewResolver"
     class="org.springframework.web.servlet.view.UrlBasedViewResolver">
@@ -41,72 +50,43 @@
       </list>
      </property>
   </bean>
-  
- <!--  <bean id="tilesConfigurer"
-    class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
-    <property name="definitions">
-      <list>
-        <value>/WEB-INF/layouts/layouts.xml</value>
-        <value>/WEB-INF/layouts/views-error.xml</value>
-        <value>/WEB-INF/layouts/views-allowance.xml</value>
-        <value>/WEB-INF/layouts/views-attendance.xml</value>
-        <value>/WEB-INF/layouts/views-attendanceReport.xml</value>
-        <value>/WEB-INF/layouts/views-totalsalary.xml</value>
-        <value>/WEB-INF/layouts/views-department.xml</value>
-        <value>/WEB-INF/layouts/views-dashboard.xml</value>
-        <value>/WEB-INF/layouts/views-employee.xml</value>
-        <value>/WEB-INF/layouts/views-leaverecord.xml</value>
-        <value>/WEB-INF/layouts/views-login.xml</value>
-        <value>/WEB-INF/layouts/views-overtime.xml</value>
-        <value>/WEB-INF/layouts/views-payment.xml</value>
-        <value>/WEB-INF/layouts/views-paymentAttribute.xml</value>
-        <value>/WEB-INF/layouts/views-profile.xml</value>
-        <value>/WEB-INF/layouts/views-transportationfee.xml</value>
-        <value>/WEB-INF/layouts/views-transportationrecord.xml</value>
-        <value>/WEB-INF/layouts/views-transportation.xml</value>
-        <value>/WEB-INF/layouts/views-language.xml</value>
-        <value>/WEB-INF/layouts/views-position.xml</value>
-        <value>/WEB-INF/layouts/views-monthlyReport.xml</value>
-        <value>/WEB-INF/layouts/views-newPayment.xml</value>
-        <value>/WEB-INF/layouts/views-holiday.xml</value>
-        <value>/WEB-INF/layouts/views-paymentAttributeDetail.xml</value>
-        <value>/WEB-INF/layouts/views-otherTransportation.xml</value>
-        <value>/WEB-INF/layouts/views-fingerprint.xml</value>
-        <value>/WEB-INF/layouts/views-addressChange.xml</value>
-        <value>/WEB-INF/layouts/views-ferry.xml</value>
-        <value>/WEB-INF/layouts/views-profileChange.xml</value>
-        <value>/WEB-INF/layouts/views-ferryAbsent.xml</value>
-        <value>/WEB-INF/layouts/views-wfh.xml</value>
-        <value>/WEB-INF/layouts/views-departmentChange.xml</value>
-        <value>/WEB-INF/layouts/views-groupChat.xml</value>
-        <value>/WEB-INF/layouts/views-leaveType.xml</value>
-        <value>/WEB-INF/layouts/views-employeeSkill.xml</value>
-        <value>/WEB-INF/layouts/views-defaultDateSetting.xml</value>
-        <value>/WEB-INF/layouts/views-projectAssign.xml</value>
-        <value>/WEB-INF/layouts/views-exchangeRate.xml</value>
-        <value>/WEB-INF/layouts/views-currency.xml</value>
-        <value>/WEB-INF/layouts/views-meetingRoom.xml</value>
-        <value>/WEB-INF/layouts/views-equipment.xml</value>
-        <value>/WEB-INF/layouts/views-schedule.xml</value>
-        <value>/WEB-INF/layouts/views-scheduleList.xml</value>
-        <value>/WEB-INF/layouts/views-organizationChart.xml</value>
-        <value>/WEB-INF/layouts/views-dailyTemperatureRecord.xml</value>
-        <value>/WEB-INF/layouts/views-positionChangesHistory.xml</value>
-        <value>/WEB-INF/layouts/views-shiftPattern.xml</value>
-        <value>/WEB-INF/layouts/views-shift.xml</value>
-        <value>/WEB-INF/layouts/views-forgotPassword.xml</value>
-        <value>/WEB-INF/layouts/views-employeeferrydata.xml</value>
-        <value>/WEB-INF/layouts/views-ferryroute.xml</value>
-        <value>/WEB-INF/layouts/views-personalIncomeTax.xml</value>
-      </list>
-    </property>
-  </bean> -->
 
   <bean
     class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <property name="order" value="1" />
     <property name="prefix" value="/WEB-INF/pages/" />
     <property name="suffix" value=".jsp" />
+  </bean>
+
+  <bean id="dataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+    <property name="url" value="jdbc:mysql://localhost:3306/TestDB?useSSL=false" />
+    <property name="username" value="root" />
+    <property name="password" value="scmyza@123" />
+  </bean>
+
+  <bean id="sessionFactory"
+    class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <!-- <property name="configLocation">
+      <value>classpath:hibernate.cfg.xml</value>
+    </property> -->
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+        <prop key="hibernate.show_sql">true</prop>
+      </props>
+    </property>
+    <property name="packagesToScan" value="com.bulletinBoard.system.persistance.entity"/>
+  </bean>
+
+  <tx:annotation-driven
+    transaction-manager="transactionManager" />
+
+  <bean id="transactionManager"
+    class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+    <property name="sessionFactory" ref="sessionFactory" />
   </bean>
 
 <!--  
@@ -116,47 +96,7 @@
       value="classpath:messages,classpath:validationMessages" />
     <property name="defaultEncoding" value="UTF-8" />
   </bean>
-  <bean id="propertyConfigurer"
-    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="locations">
-      <list>
-        <value>/WEB-INF/jdbc.properties</value>
-        <value>classpath:app.properties</value>
-        <value>classpath:setting.properties</value>
-      </list>
-    </property>
-  </bean>
 
-  <bean id="dataSource"
-    class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName"
-      value="${jdbc.driverClassName}" />
-    <property name="url" value="${jdbc.databaseurl}" />
-    <property name="username" value="${jdbc.username}" />
-    <property name="password" value="${jdbc.password}" />
-  </bean>
-
-  <bean id="sessionFactory"
-    class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-    <property name="dataSource" ref="dataSource" />
-    <property name="configLocation">
-      <value>classpath:hibernate.cfg.xml</value>
-    </property>
-    <property name="hibernateProperties">
-      <props>
-        <prop key="hibernate.dialect">${jdbc.dialect}</prop>
-        <prop key="hibernate.show_sql">false</prop>
-      </props>
-    </property>
-      <property name="packagesToScan" value="scm.payroll.system.persistence.entity"/>
-  </bean>
-
-  <tx:annotation-driven
-    transaction-manager="transactionManager" />
-  <bean id="transactionManager"
-    class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-    <property name="sessionFactory" ref="sessionFactory" />
-  </bean>
 
   <bean id="bCryptPasswordEncoder"
     class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">

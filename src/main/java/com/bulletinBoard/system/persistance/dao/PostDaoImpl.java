@@ -6,105 +6,76 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bulletinBoard.system.common.util.HibernateUtil;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.web.form.PostForm;
 
 @Repository
+@Transactional
 public class PostDaoImpl implements PostDao {
 
     private static final String TABLE_NAME = "posts";
     private static final String SELECT_STMT = "SELECT * FROM " + TABLE_NAME;
     private static final String COUNT_STMT = "SELECT Count(id) FROM " + TABLE_NAME;
 
+    @Autowired
     SessionFactory sessionFactory;
 
-    public PostDaoImpl() {
-        super();
-        this.sessionFactory = HibernateUtil.getSessionFactory();
-        this.sessionFactory.openSession();
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
     }
 
     @Override
-    @Transactional
     public void insert(PostForm post) {
-
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
 
         String stmt = new StringBuilder("INSERT INTO " + TABLE_NAME).append(" (title, description, status) VALUES")
                 .append(" (:title, :description, :status)").toString();
 
-        Query<?> query = session.createSQLQuery(stmt);
+        Query<?> query = getSession().createSQLQuery(stmt);
         bindToQuery(post, query);
         query.executeUpdate();
-
-        transaction.commit();
-        session.close();
     }
 
     @Override
     public void update(PostForm post) {
 
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
-
         String stmt = new StringBuilder("UPDATE " + TABLE_NAME + " SET ")
-                .append("title= :title, description = :description, status = :status ")
-                .append("WHERE id=:id").toString();
+                .append("title= :title, description = :description, status = :status ").append("WHERE id=:id")
+                .toString();
 
-        Query<?> query = session.createSQLQuery(stmt);
+        Query<?> query = getSession().createSQLQuery(stmt);
         query.setParameter("id", post.getId());
         bindToQuery(post, query);
         query.executeUpdate();
-
-        transaction.commit();
-        session.close();
     }
 
     @Override
     public void delete(int id) {
-        Session session = sessionFactory.openSession();
         String stmt = "DELETE FROM " + TABLE_NAME + " WHERE id=:id";
-        Transaction transaction = session.beginTransaction();
-        
-        Query<?> query = session.createSQLQuery(stmt);
+
+        Query<?> query = getSession().createSQLQuery(stmt);
         query.setParameter("id", id);
         query.executeUpdate();
-        
-        transaction.commit();
-        session.close();
     }
 
     @Override
     public List<Post> getAll() {
-        Session session = sessionFactory.openSession();
-        List<Post> list = session.createNativeQuery(SELECT_STMT, Post.class).list();
-        session.close();
-        return list;
+        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").toString();
+        return getSession().createNativeQuery(stmt, Post.class).list();
     }
 
     @Override
     public List<Post> getByActiveStatus() {
-        Session session = sessionFactory.openSession();
-
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1").toString();
-        List<Post> list = session.createNativeQuery(stmt, Post.class).list();
-
-        session.close();
-        return list;
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
+        return getSession().createNativeQuery(stmt, Post.class).list();
     }
 
     @Override
     public int getCount() {
-        Session session = sessionFactory.openSession();
-        int count = (int) session.createSQLQuery(COUNT_STMT).uniqueResult();
-        session.close();
-        return count;
+        return (int) getSession().createSQLQuery(COUNT_STMT).uniqueResult();
     }
 
     private void bindToQuery(PostForm post, Query query) {
