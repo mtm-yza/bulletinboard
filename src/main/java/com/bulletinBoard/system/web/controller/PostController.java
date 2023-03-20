@@ -38,14 +38,14 @@ public class PostController {
     PostService service;
 
     @GetMapping({"/", ""})
-    protected ModelAndView redirectHome(HttpServletRequest req, HttpServletResponse resp)
+    protected ModelAndView getHomeView(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         return new ModelAndView(HOME_REDIRECT);
     }
     
     @GetMapping("list")
-    protected ModelAndView getAllPosts(HttpServletRequest req, HttpServletResponse resp)
+    protected ModelAndView getPostListView(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         ModelAndView mv = new ModelAndView(HOME_VIEW);
@@ -58,7 +58,7 @@ public class PostController {
     }
 
     @GetMapping("add")
-    protected ModelAndView redirectAddPostForm(HttpServletRequest req, HttpServletResponse resp)
+    protected ModelAndView getAddPostForm(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
         return new ModelAndView(ADD_VIEW);
@@ -81,7 +81,7 @@ public class PostController {
     }
     
     @GetMapping("update")
-    protected ModelAndView redirectEditPostForm(HttpServletRequest req, HttpServletResponse resp) {
+    protected ModelAndView getEditPostForm(HttpServletRequest req, HttpServletResponse resp) {
         
         ModelAndView mv = new ModelAndView(EDIT_VIEW);
         mv.addObject("posts", service.getAll());
@@ -108,7 +108,7 @@ public class PostController {
     }
     
     @PostMapping("delete")
-    protected ModelAndView addPost(@RequestParam("id") int id, HttpServletResponse resp) throws ServletException, IOException {
+    protected ModelAndView deletePost(@RequestParam("id") int id, HttpServletResponse resp) throws ServletException, IOException {
 
         ModelAndView mv = new ModelAndView();
         
