@@ -1,0 +1,3 @@
+/*$("#modal").click(function() {
+	$("")
+})*/

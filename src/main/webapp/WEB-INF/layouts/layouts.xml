@@ -3,17 +3,29 @@
 <tiles-definitions>
 
     <definition name="template">
-        <put-attribute name="title" value="" />
-        <put-attribute name="class" value="" />
+        <put-attribute name="title"/>
         <put-attribute name="header" value="/WEB-INF/pages/common/inc/header1.jsp" />
         <put-attribute name="menu" value="/WEB-INF/pages/common/inc/menu.jsp" />
         <put-attribute name="footer" value="/WEB-INF/pages/common/inc/footer.jsp" />
+        <put-list-attribute name="css">
+            <add-attribute value="/resources/css/bootstrap.min.css" />
+        </put-list-attribute>
+        <put-list-attribute name="initScripts">
+            <add-attribute value="/resources/js/jquery-3.6.4.min.js" />
+            <add-attribute value="/resources/js/bootstrap.bundle.min.js" />
+        </put-list-attribute>
+        <put-list-attribute name="scripts">
+            <add-attribute value="/resources/js/common.js" />
+        </put-list-attribute>
     </definition>
 
     <definition name="template1"
         extends="template"
         template="/WEB-INF/pages/common/template1.jsp">
         <put-attribute name="header" value="/WEB-INF/pages/common/inc/header1.jsp" />
+        <put-list-attribute name="css" inherit="true">
+            <add-attribute value="/resources/css/template1.css" />
+        </put-list-attribute>
     </definition>
 
     <definition name="template2"

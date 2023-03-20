@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.PostService;
 import com.bulletinBoard.system.web.form.PostForm;
+import com.google.gson.Gson;
 
 @Controller
 @RequestMapping("/post")
@@ -47,7 +49,10 @@ public class PostController {
             throws ServletException, IOException {
 
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        mv.addObject("posts", service.getByStatusActive());
+        
+        List<PostDTO> postDto = service.getAll();
+        String json = (new Gson()).toJson(postDto);
+        mv.addObject("posts", json);
 
         return mv;
     }
@@ -90,16 +95,15 @@ public class PostController {
             HttpServletResponse resp) throws ServletException, IOException {
 
         PostForm post = new PostForm(id, title, description, status);
-        ModelAndView mv = new ModelAndView();
+        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         
-        if (!validate(post, mv, EDIT_VIEW)) {
+        if (!validate(post, mv, HOME_VIEW)) {
             mv.addObject("posts", service.getAll());
             return mv;
         }
         
         service.update(post);
-        mv.setViewName(HOME_REDIRECT);
-
+        
         return mv;
     }
     
