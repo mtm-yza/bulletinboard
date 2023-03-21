@@ -9,9 +9,7 @@
 </head>
 <body>
   <%!int coef = 3;%>
-
   <h1>Hello World!</h1>
-
   <%
   int i = 9;
   out.println(7 + 5);

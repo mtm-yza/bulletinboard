@@ -10,7 +10,6 @@
   <%
   int number1 = Integer.parseInt(request.getParameter("num1"));
   int number2 = Integer.parseInt(request.getParameter("num2"));
-
   int output = number1 + number2;
   out.println("Output: " + output);
   %>

@@ -1,1 +1,4 @@
-<% response.sendRedirect("post/");  %>
+
+<%
+response.sendRedirect("post/");
+%>

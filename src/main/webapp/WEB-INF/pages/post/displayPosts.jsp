@@ -7,11 +7,9 @@
     <th>Description</th>
     <th></th>
     <th></th>
-  </thead> 
+  </thead>
   <tbody id="postListBody"></tbody>
- 
 </table>
-
 <!-- Add Post Form -->
 <div class="modal fade" id="formAddPost" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -26,46 +24,37 @@
       </div>
       <div class="modal-body">
         <form method="post">
-
           <c:if test="${errors != null }">
             <div class="alert alert-danger" role="alert">
-
               <h6>
                 <c:out value="${msg}" />
               </h6>
-
               <c:forEach var="error" items="${errors}">
                 <li><c:out value="${error.toString()}" /></li>
               </c:forEach>
-
             </div>
           </c:if>
-
           <div class="form-group">
-            <label for="id">ID</label>
-            <input id="txtId" class="form-control"
-              type="number" name="id" placeholder="ID" required readonly>
+            <label for="id">ID</label> <input id="txtId"
+              class="form-control" type="number" name="id"
+              placeholder="ID" required readonly>
           </div>
-
           <div class="form-group">
-            <label for="title">Title</label>
-            <input id="txtTitle" class="form-control"
-              type="text" name="title" placeholder="Title">
+            <label for="title">Title</label> <input id="txtTitle"
+              class="form-control" type="text" name="title"
+              placeholder="Title">
           </div>
-
           <div class="form-group">
             <label for="description">Description</label>
             <textarea id="txtDescription" class="form-control"
               name="description" rows="3"></textarea>
           </div>
-
           <div class="form-group">
             <select name="status" id="chkBxStatus">
               <option value="0" selected>Disable</option>
               <option value="1">Active</option>
             </select>
           </div>
-
           <div class="modal-footer">
             <input class="btn btn-primary" formaction="update"
               type="submit" value="Edit"> <input
@@ -77,8 +66,7 @@
     </div>
   </div>
 </div>
-
 <!-- Data -->
 <script>
-	var list = ${posts};
+    var list = ${ posts }
 </script>

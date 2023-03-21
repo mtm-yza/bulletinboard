@@ -3,24 +3,29 @@
 
 <tiles-definitions>
 
+    <!-- Post List View -->
     <definition name="postListView" extends="template1">
         <put-attribute name="title" value="Post List" />
-        <put-attribute name="body" value="/WEB-INF/pages/post/displayPosts.jsp" />
+        <put-attribute name="body"
+            value="/WEB-INF/pages/post/displayPosts.jsp" />
         <put-list-attribute name="scripts">
-            <add-attribute value="/resources/js/view-post.js" />
+            <add-attribute
+                value="/resources/js/view-post.js" />
         </put-list-attribute>
     </definition>
-    
+    <!-- Add Post View -->
     <definition name="addPostView" extends="template1">
         <put-attribute name="title" value="Add Post" />
-        <put-attribute name="body" value="/WEB-INF/pages/post/addPost.jsp" />
+        <put-attribute name="body"
+            value="/WEB-INF/pages/post/addPost.jsp" />
         <put-list-attribute name="scripts">
         </put-list-attribute>
     </definition>
-    
+    <!-- Edit Post View -->
     <definition name="editPostView" extends="template2">
         <put-attribute name="title" value="Update Post" />
-        <put-attribute name="body" value="/WEB-INF/pages/post/updatePost.jsp" />
+        <put-attribute name="body"
+            value="/WEB-INF/pages/post/updatePost.jsp" />
     </definition>
 
 </tiles-definitions>

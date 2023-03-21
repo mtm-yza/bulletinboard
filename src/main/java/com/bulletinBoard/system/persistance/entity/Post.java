@@ -24,21 +24,65 @@ import lombok.ToString;
 @Table(name = "posts")
 public class Post {
 
+    /**
+     * <h2>id</h2>
+     * <p>
+     * ID Number Of Post
+     * </p>
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * <h2>title</h2>
+     * <p>
+     * Title Of Post
+     * </p>
+     */
     private String title;
+
+    /**
+     * <h2>description</h2>
+     * <p>
+     * description
+     * </p>
+     */
     private String description;
+
+    /**
+     * <h2>status</h2>
+     * <p>
+     * Status Of Posts
+     * </p>
+     */
     private int status;
 
+    /**
+     * <h2>Constructor for Post</h2>
+     * <p>
+     * Constructor for Post
+     * </p>
+     * 
+     * @param title       String
+     * @param description String
+     * @param status      int
+     */
     public Post(String title, String description, int status) {
-        super();  
+        super();
         this.title = title;
         this.description = description;
         this.status = status;
     }
-    
+
+    /**
+     * <h2>Constructor for Post</h2>
+     * <p>
+     * Constructor for Post
+     * </p>
+     * 
+     * @param post Post
+     */
     public Post(Post post) {
         super();
         this.title = post.getTitle();

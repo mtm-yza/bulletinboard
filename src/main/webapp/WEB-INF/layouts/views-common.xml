@@ -3,9 +3,10 @@
 
 <tiles-definitions>
 
+    <!-- Result -->
     <definition name="result" extends="template1">
         <put-attribute name="title" value="Result" />
-        <put-attribute name="body" value="/WEB-INF/pages/result.jsp" />
+        <put-attribute name="body"
+            value="/WEB-INF/pages/result.jsp" />
     </definition>
-
 </tiles-definitions>

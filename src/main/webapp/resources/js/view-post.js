@@ -6,7 +6,6 @@ function displayPostList() {
 
 	var root = $("#postListBody");
 	list.forEach((item, index) => {
-
 		var dataRow = "<tr>"
 			+ '<td class="w-50">' + item.title + "</td>"
 			+ '<td class="w-50">' + item.description + "</td>"

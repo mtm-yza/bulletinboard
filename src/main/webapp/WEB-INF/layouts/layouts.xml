@@ -2,36 +2,43 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
+    <!-- Base Template -->
     <definition name="template">
-        <put-attribute name="title"/>
-        <put-attribute name="header" value="/WEB-INF/pages/common/inc/header1.jsp" />
-        <put-attribute name="menu" value="/WEB-INF/pages/common/inc/menu.jsp" />
-        <put-attribute name="footer" value="/WEB-INF/pages/common/inc/footer.jsp" />
+        <put-attribute name="title" />
+        <put-attribute name="header"
+            value="/WEB-INF/pages/common/inc/header1.jsp" />
+        <put-attribute name="menu"
+            value="/WEB-INF/pages/common/inc/menu.jsp" />
+        <put-attribute name="footer"
+            value="/WEB-INF/pages/common/inc/footer.jsp" />
         <put-list-attribute name="css">
-            <add-attribute value="/resources/css/bootstrap.min.css" />
+            <add-attribute
+                value="/resources/css/bootstrap.min.css" />
         </put-list-attribute>
         <put-list-attribute name="initScripts">
-            <add-attribute value="/resources/js/jquery-3.6.4.min.js" />
-            <add-attribute value="/resources/js/bootstrap.bundle.min.js" />
+            <add-attribute
+                value="/resources/js/jquery-3.6.4.min.js" />
+            <add-attribute
+                value="/resources/js/bootstrap.bundle.min.js" />
         </put-list-attribute>
         <put-list-attribute name="scripts">
             <add-attribute value="/resources/js/common.js" />
         </put-list-attribute>
     </definition>
-
-    <definition name="template1"
-        extends="template"
+    <!-- Template 1 -->
+    <definition name="template1" extends="template"
         template="/WEB-INF/pages/common/template1.jsp">
-        <put-attribute name="header" value="/WEB-INF/pages/common/inc/header1.jsp" />
+        <put-attribute name="header"
+            value="/WEB-INF/pages/common/inc/header1.jsp" />
         <put-list-attribute name="css" inherit="true">
-            <add-attribute value="/resources/css/template1.css" />
+            <add-attribute
+                value="/resources/css/template1.css" />
         </put-list-attribute>
     </definition>
-
-    <definition name="template2"
-        extends="template"
+    <!-- Template 2 -->
+    <definition name="template2" extends="template"
         template="/WEB-INF/pages/common/template2.jsp">
-        <put-attribute name="header" value="/WEB-INF/pages/common/inc/header2.jsp" />
+        <put-attribute name="header"
+            value="/WEB-INF/pages/common/inc/header2.jsp" />
     </definition>
-
 </tiles-definitions>

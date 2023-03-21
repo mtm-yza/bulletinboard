@@ -24,16 +24,12 @@
     <tiles:insertAttribute name="footer" />
   </footer>
 </body>
-
 <style>
-
-  footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
-
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
 </style>
-
 <tiles:insertAttribute name="javascript" ignore="true" />
 </html>

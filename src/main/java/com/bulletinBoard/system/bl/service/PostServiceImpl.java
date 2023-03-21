@@ -11,42 +11,114 @@ import com.bulletinBoard.system.persistance.dao.PostDao;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.web.form.PostForm;
 
+/**
+ * <h2>PostServiceImpl Class</h2>
+ * <p>
+ * Process for PostServiceImpl
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 @Service
 public class PostServiceImpl implements PostService {
 
+    /**
+     * <h2>postDao</h2>
+     * <p>
+     * Data Access Object of Post
+     * </p>
+     */
     @Autowired
     private PostDao postDao;
 
+    /**
+     * <h2>add</h2>
+     * <p>
+     * Add PostForm
+     * </p>
+     * 
+     * @param post PostForm
+     */
     @Override
     public void add(PostForm post) {
         postDao.insert(post);
     }
 
+    /**
+     * <h2>update</h2>
+     * <p>
+     * Update PostForm
+     * </p>
+     * 
+     * @param post PostForm
+     */
     @Override
     public void update(PostForm post) {
         postDao.update(post);
     }
 
+    /**
+     * <h2>delete</h2>
+     * <p>
+     * Delete Post By ID
+     * </p>
+     * 
+     * @param id int
+     */
     @Override
     public void delete(int id) {
         postDao.delete(id);
     }
 
+    /**
+     * <h2>getAll</h2>
+     * <p>
+     * Get A List Of All Posts
+     * </p>
+     * 
+     * @return List<PostDTO>
+     */
     @Override
     public List<PostDTO> getAll() {
         return getPostDto(postDao.getAll());
     }
 
+    /**
+     * <h2>getByStatusActive</h2>
+     * <p>
+     * Get A List of Post by Active Status
+     * </p>
+     * 
+     * @return List<PostDTO>
+     */
     @Override
     public List<PostDTO> getByStatusActive() {
         return getPostDto(postDao.getByActiveStatus());
     }
 
+    /**
+     * <h2>getCount</h2>
+     * <p>
+     * Get Total Number of Posts
+     * </p>
+     * 
+     * @return int
+     */
     @Override
     public int getCount() {
         return postDao.getCount();
     }
 
+    /**
+     * <h2>getPostDto</h2>
+     * <p>
+     * Convert And Get A List Of Post from Post Entity List
+     * </p>
+     *
+     * @param postList List<Post>
+     * @return List<PostDTO>
+     */
     private List<PostDTO> getPostDto(List<Post> postList) {
         return postList.stream()
                 .map(item -> new PostDTO(item.getId(), item.getTitle(), item.getDescription(), item.getStatus()))
