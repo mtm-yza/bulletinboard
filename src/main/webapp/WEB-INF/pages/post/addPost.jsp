@@ -27,10 +27,17 @@
     <textarea class="form-control" name="description" rows="3"></textarea>
   </div>
   <div class="form-group">
-    <select name="status">
-      <option value="0" selected>Disable</option>
-      <option value="1">Active</option>
-    </select>
+    <label for=status>Status</label><br/>
+    <div class="form-check form-check-inline">
+      <label class="form-check-label"> <input type="radio"
+        class="form-check-input" name="status" value="0" checked>Private
+      </label>
+    </div>
+    <div class="form-check form-check-inline">
+      <label class="form-check-label"> <input type="radio"
+        class="form-check-input" name="status" value="1">Public
+      </label>
+    </div>
   </div>
   <input class="btn btn-primary" formaction="add" type="submit"
     value="Submit">

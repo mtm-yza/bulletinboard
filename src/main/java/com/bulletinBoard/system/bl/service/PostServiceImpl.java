@@ -52,9 +52,13 @@ public class PostServiceImpl implements PostService {
      * </p>
      * 
      * @param post PostForm
+     * @param flag int
      */
     @Override
-    public void update(PostForm post) {
+    public void update(PostForm post, int flag) {
+        if (flag == 1) {
+            post.setStatus((post.getStatus() == 1) ? 0 : 1);
+        }
         postDao.update(post);
     }
 

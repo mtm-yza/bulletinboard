@@ -33,9 +33,10 @@ public interface PostService {
      * </p>
      *
      * @param post PostForm
+     * @param flag int
      * @return void
      */
-    public void update(PostForm post);
+    public void update(PostForm post, int flag);
     /**
      * <h2>delete</h2>
      * <p>

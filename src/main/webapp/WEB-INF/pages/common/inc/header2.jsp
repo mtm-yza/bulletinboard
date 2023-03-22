@@ -6,7 +6,6 @@
     <ul class="navbar-nav">
       <li class="nav-item"><a class="nav-link" href="list">Home</a></li>
       <li class="nav-item"><a class="nav-link" href="add">Add Post</a></li>
-      <li class="nav-item"><a class="nav-link" href="update">Update Post</a></li>
     </ul>
   </div>
 </nav>

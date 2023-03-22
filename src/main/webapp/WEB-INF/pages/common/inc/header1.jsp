@@ -1,11 +1,10 @@
-<nav class="bg-dark pt-5">
-  <div class="nav-header text-center" id="navbarHeader">
-    <h1>Bulletin Board</h1>
-  </div>
+<nav class="navbar-dark bg-dark">
   <div class="navbar navbar-expand navbar-dark">
+    <a class="navbar-brand" href="/Demo/post"> BulletinBoard </a>
     <ul class="navbar-nav">
       <li class="nav-item"><a class="nav-link" href="list">Home</a></li>
-      <li class="nav-item"><a class="nav-link" href="add">Add Post</a></li>
+      <li class="nav-item"><a class="nav-link" href="add">Add
+          Post</a></li>
     </ul>
   </div>
 </nav>

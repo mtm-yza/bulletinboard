@@ -168,19 +168,20 @@ public class PostController {
      * @param title       String
      * @param description String
      * @param status      String
+     * @param flag        int
      * @return mv ModelAndView
      */
     @PostMapping("update")
     protected ModelAndView updatePost(@RequestParam("id") int id, @RequestParam("title") String title,
             @RequestParam("description") String description, @RequestParam("status") int status,
-            HttpServletResponse resp) {
+            @RequestParam("flag") int flag, HttpServletResponse resp) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         PostForm post = new PostForm(id, title, description, status);
         if (!validate(post, mv, HOME_VIEW)) {
             mv.addObject("posts", service.getAll());
             return mv;
         }
-        service.update(post);
+        service.update(post, flag);
         return mv;
     }
 
@@ -190,7 +191,7 @@ public class PostController {
      * Delete Post
      * </p>
      *
-     * @param id int 
+     * @param id int
      * @return mv ModelAndView
      */
     @PostMapping("delete")
@@ -212,8 +213,8 @@ public class PostController {
      * Validate PostForm
      * </p>
      *
-     * @param form PostFrom
-     * @param mv ModelAndView
+     * @param form     PostFrom
+     * @param mv       ModelAndView
      * @param viewName String
      * @return boolean
      */
