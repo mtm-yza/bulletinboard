@@ -67,6 +67,17 @@ public interface PostDao {
     public List<Post> getByActiveStatus();
 
     /**
+     * <h2>getByTitle</h2>
+     * <p>
+     * Get Posts By Title
+     * </p>
+     *
+     * @param title String
+     * @return List<Post>
+     */
+    public List<Post> getByTitle(String title);
+
+    /**
      * <h2>getCount</h2>
      * <p>
      * Get Total Number of Post

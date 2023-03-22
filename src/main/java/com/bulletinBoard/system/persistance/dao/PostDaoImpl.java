@@ -155,6 +155,20 @@ public class PostDaoImpl implements PostDao {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
         return getSession().createNativeQuery(stmt, Post.class).list();
     }
+    
+    /**
+     * <h2>getByTitle</h2>
+     * <p>
+     * Get Posts By Title
+     * </p>
+     *
+     * @param title String
+     * @return List<Post>
+     */
+    public List<Post> getByTitle(String title) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE title = :title ORDER BY id").toString();
+        return getSession().createNativeQuery(stmt, Post.class).setParameter("title", title).list();
+    }
 
     /**
      * <h2>getCount</h2>

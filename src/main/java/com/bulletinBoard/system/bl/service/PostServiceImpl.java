@@ -39,10 +39,16 @@ public class PostServiceImpl implements PostService {
      * </p>
      * 
      * @param post PostForm
+     * @return boolean 
      */
     @Override
-    public void add(PostForm post) {
+    public boolean add(PostForm post) {
+        List<Post> list = postDao.getByTitle(post.getTitle());
+        if ((!list.isEmpty())) {
+            return false;
+        }
         postDao.insert(post);
+        return true;
     }
 
     /**

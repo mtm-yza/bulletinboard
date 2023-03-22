@@ -1,5 +1,6 @@
 package com.bulletinBoard.system.web.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -138,7 +139,13 @@ public class PostController {
         if (!validate(post, mv, ADD_VIEW)) {
             return mv;
         }
-        service.add(post);
+        boolean isSuccess = service.add(post);
+        if (!isSuccess) {
+          mv.addObject("msg", "Unable to Save the Post");
+          mv.addObject("errors", Arrays.asList("Title Must Be Unique."));
+          mv.setViewName(ADD_VIEW);
+          return mv; 
+        }
         mv.setViewName(HOME_REDIRECT);
         return mv;
     }

@@ -23,9 +23,9 @@ public interface PostService {
      * </p>
      *
      * @param post PostForm
-     * @return void
+     * @return boolean
      */
-    public void add(PostForm post);
+    public boolean add(PostForm post);
     /**
      * <h2>update</h2>
      * <p>
