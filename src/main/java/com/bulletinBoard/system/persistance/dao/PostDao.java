@@ -52,9 +52,11 @@ public interface PostDao {
      * Get All Post
      * </p>
      *
+     * @param offset int
+     * @param limit  int
      * @return List<Post>
      */
-    public List<Post> getAll();
+    public List<Post> getAll(int offset, int limit);
 
     /**
      * <h2>getByActiveStatus</h2>

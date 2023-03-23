@@ -1,5 +1,6 @@
 package com.bulletinBoard.system.persistance.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -134,11 +135,14 @@ public class PostDaoImpl implements PostDao {
      * Get All Posts
      * </p>
      * 
+     * @param offset int
+     * @param limit  int
      * @return id int
      */
     @Override
-    public List<Post> getAll() {
-        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").toString();
+    public List<Post> getAll(int offset, int limit) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").append(" LIMIT " + limit)
+                .append(" OFFSET " + offset).toString();
         return getSession().createNativeQuery(stmt, Post.class).list();
     }
 
@@ -155,7 +159,7 @@ public class PostDaoImpl implements PostDao {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
         return getSession().createNativeQuery(stmt, Post.class).list();
     }
-    
+
     /**
      * <h2>getByTitle</h2>
      * <p>
@@ -180,7 +184,8 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public int getCount() {
-        return (int) getSession().createSQLQuery(COUNT_STMT).uniqueResult();
+        BigInteger count = (BigInteger) getSession().createSQLQuery(COUNT_STMT).uniqueResult();
+        return count.intValue();
     }
 
     /**

@@ -83,10 +83,13 @@ public class PostController {
      * Get Home view
      * </p>
      *
+     * @param page int
+     * @param size int
      * @return ModelAndView
      */
     @GetMapping({ "/", "" })
-    protected ModelAndView getHomeView() {
+    protected ModelAndView getHomeView(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "3") int size) {
         return new ModelAndView(HOME_REDIRECT);
     }
 
@@ -96,14 +99,28 @@ public class PostController {
      * Get Post List View
      * </p>
      *
+     * @param page int
+     * @param size int
      * @return mv ModelAndView
      */
     @GetMapping("list")
-    protected ModelAndView getPostListView() {
+    protected ModelAndView getPostListView(@RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        List<PostDTO> postDto = service.getAll();
-        String json = (new Gson()).toJson(postDto);
-        mv.addObject("posts", json);
+        // Get List of Post by offset
+        int offset = (page - 1) * size;
+        List<PostDTO> postDto = service.getAll(offset, size);
+        // Calculate Total Page for Pagination
+        int count = service.getCount();
+        int pageCount = count / size;
+        int remainder = count % size;
+        if (remainder > 0) {
+            pageCount += 1;
+        }
+        mv.addObject("posts", (new Gson()).toJson(postDto));
+        mv.addObject("pageIndex", page);
+        mv.addObject("pageCount", pageCount);
+        mv.addObject("pageSize", size);
         return mv;
     }
 
@@ -160,9 +177,7 @@ public class PostController {
      */
     @GetMapping("update")
     protected ModelAndView getEditPostForm() {
-        ModelAndView mv = new ModelAndView(EDIT_VIEW);
-        mv.addObject("posts", service.getAll());
-        return mv;
+        return new ModelAndView(EDIT_VIEW);
     }
 
     /**
@@ -184,8 +199,7 @@ public class PostController {
             @RequestParam("flag") int flag, HttpServletResponse resp) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         PostForm post = new PostForm(id, title, description, status);
-        if (!validate(post, mv, HOME_VIEW)) {
-            mv.addObject("posts", service.getAll());
+        if (!validate(post, mv, HOME_REDIRECT)) {
             return mv;
         }
         service.update(post, flag);

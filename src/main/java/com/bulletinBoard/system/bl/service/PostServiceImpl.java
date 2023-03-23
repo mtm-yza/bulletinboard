@@ -87,11 +87,13 @@ public class PostServiceImpl implements PostService {
      * Get A List Of All Posts
      * </p>
      * 
+     * @param offset int
+     * @param size   int
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> getAll() {
-        return getPostDto(postDao.getAll());
+    public List<PostDTO> getAll(int offset, int size) {
+        return getPostDto(postDao.getAll(offset, size));
     }
 
     /**

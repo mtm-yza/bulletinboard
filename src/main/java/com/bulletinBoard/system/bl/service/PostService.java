@@ -56,9 +56,11 @@ public interface PostService {
      * Get A List Of PostDTO
      * </p>
      *
+     * @param offset int
+     * @param size   int
      * @return List<PostDTO>
      */
-    public List<PostDTO> getAll();
+    public List<PostDTO> getAll(int offset, int size);
 
     /**
      * <h2>getByStatusActive</h2>
