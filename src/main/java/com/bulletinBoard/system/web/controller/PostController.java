@@ -141,10 +141,10 @@ public class PostController {
         }
         boolean isSuccess = service.add(post);
         if (!isSuccess) {
-          mv.addObject("msg", "Unable to Save the Post");
-          mv.addObject("errors", Arrays.asList("Title Must Be Unique."));
-          mv.setViewName(ADD_VIEW);
-          return mv; 
+            mv.addObject("msg", "Unable to Save the Post");
+            mv.addObject("errors", Arrays.asList("Title Must Be Unique."));
+            mv.setViewName(ADD_VIEW);
+            return mv;
         }
         mv.setViewName(HOME_REDIRECT);
         return mv;

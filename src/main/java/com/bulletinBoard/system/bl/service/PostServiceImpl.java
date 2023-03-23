@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
      * </p>
      * 
      * @param post PostForm
-     * @return boolean 
+     * @return boolean
      */
     @Override
     public boolean add(PostForm post) {
