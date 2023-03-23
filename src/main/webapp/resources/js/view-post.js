@@ -3,17 +3,17 @@ $(document).ready(function() {
 });
 
 function displayPostList() {
-
 	var root = $("#postListBody");
 	list.forEach((item, index) => {
 		// Data to Display
 		var dataRow = "<tr>"
-			+ '<td class="w-50">' + item.title + "</td>"
-			+ '<td class="w-50">' + item.description + "</td>";
+			+ '<td>' + (index + 1) + '</td>'
+			+ '<td>' + item.title + "</td>"
+			+ '<td style="word-break: break-all;"><p style="margin: 0;">' + item.description + "</p></td>";
 		// Controls
 		dataRow += getStatusBtn(index);
 		dataRow += '<td><button class="btn btn-primary w-100" type="button" data-toggle="modal" data-target="#editPostModal" onclick="openEditForm(' + index + ')">Edit</button></td>'
-			+ '<td><button class="btn btn-danger w-100" type="button" onclick="deletePost(' + item.id + ')">Delete</button></td>';
+			+ '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deletePost(' + index + ')">Delete</button></td>';
 		dataRow += "</tr>";
 		root.append(dataRow);
 	})
@@ -34,7 +34,7 @@ function openEditForm(index) {
 function updatePostStatus(index) {
 	setFormValues(index);
 	$("#txtFlag").val(1);
-	$('#postForm [formaction="update"]').click();
+	$('#postEditForm [formaction="update"]').click();
 }
 
 function setFormValues(index) {
@@ -45,7 +45,11 @@ function setFormValues(index) {
 	$("#chkBxStatus").val(post.status);
 }
 
-function deletePost(id) {
-	$("#txtId").val(id);
-	$('#postForm [formaction="delete"]').click();
-}
+function deletePost(index) {
+	var id = list[index].id;
+	$("#btnConfirm").off("click").click(function() {		
+		$("#txtId").val(id);
+    	$('#postEditForm [formaction="delete"]').click();
+		$("#confirmModal").modal("hide");	
+	});
+} 
