@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.persistance.dao;
+package com.bulletinBoard.system.persistance.dao.impl;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.bulletinBoard.system.persistance.dao.PostDao;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.web.form.PostForm;
 
@@ -81,7 +82,7 @@ public class PostDaoImpl implements PostDao {
      * @param post PostForm
      */
     @Override
-    public void insert(PostForm post) {
+    public void dbInsertPost(PostForm post) {
 
         String stmt = new StringBuilder("INSERT INTO " + TABLE_NAME).append(" (title, description, status) VALUES")
                 .append(" (:title, :description, :status)").toString();
@@ -100,7 +101,7 @@ public class PostDaoImpl implements PostDao {
      * @param post PostForm
      */
     @Override
-    public void update(PostForm post) {
+    public void dbUpdatePost(PostForm post) {
 
         String stmt = new StringBuilder("UPDATE " + TABLE_NAME + " SET ")
                 .append("title= :title, description = :description, status = :status ").append("WHERE id=:id")
@@ -121,7 +122,7 @@ public class PostDaoImpl implements PostDao {
      * @param id int
      */
     @Override
-    public void delete(int id) {
+    public void dbDeletePost(int id) {
         String stmt = "DELETE FROM " + TABLE_NAME + " WHERE id=:id";
 
         Query<?> query = getSession().createSQLQuery(stmt);
@@ -140,7 +141,7 @@ public class PostDaoImpl implements PostDao {
      * @return id int
      */
     @Override
-    public List<Post> getAll(int offset, int limit) {
+    public List<Post> dbGetPosts(int offset, int limit) {
         String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").append(" LIMIT " + limit)
                 .append(" OFFSET " + offset).toString();
         return getSession().createNativeQuery(stmt, Post.class).list();
@@ -155,7 +156,7 @@ public class PostDaoImpl implements PostDao {
      * @return List<Post>
      */
     @Override
-    public List<Post> getByActiveStatus() {
+    public List<Post> dbGetPostByActiveStatus() {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
         return getSession().createNativeQuery(stmt, Post.class).list();
     }
@@ -169,7 +170,7 @@ public class PostDaoImpl implements PostDao {
      * @param title String
      * @return List<Post>
      */
-    public List<Post> getByTitle(String title) {
+    public List<Post> dbPostsByTitle(String title) {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE title = :title ORDER BY id").toString();
         return getSession().createNativeQuery(stmt, Post.class).setParameter("title", title).list();
     }
@@ -183,7 +184,7 @@ public class PostDaoImpl implements PostDao {
      * @return int
      */
     @Override
-    public int getCount() {
+    public int dbGetPostCount() {
         BigInteger count = (BigInteger) getSession().createSQLQuery(COUNT_STMT).uniqueResult();
         return count.intValue();
     }

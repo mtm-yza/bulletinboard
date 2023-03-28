@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	displayDataList();
 });
-
 function displayDataList() {
 	var root = $("#tbl-body");
 	list.forEach((item, index) => {
@@ -19,11 +18,9 @@ function displayDataList() {
 		root.append(dataRow);
 	})
 }
-
 function openEditForm(index) {
 	setFormValues(index);
 }
-
 function setFormValues(index) {
 	var user = list[index];
 	$("#txtId").val(user.id);
@@ -31,14 +28,11 @@ function setFormValues(index) {
 	$("#txtEmail").val(user.email);
 	$("#txtAddress").val(user.address);
 }
-
 function deleteUser(index) {
 	var id = list[index].id;
-	$("#btnConfirm").off("click").click(function() {		
+	$("#btnConfirm").off("click").click(function() {
 		$("#txtId").val(id);
-    	$('#userEditForm [formaction="delete"]').click();
-		$("#confirmModal").modal("hide");	
+		$('#userEditForm [formaction="delete"]').click();
+		$("#confirmModal").modal("hide");
 	});
 }
-
-

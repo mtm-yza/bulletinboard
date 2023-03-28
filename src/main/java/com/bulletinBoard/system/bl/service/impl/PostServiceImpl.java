@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.bl.service;
+package com.bulletinBoard.system.bl.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
+import com.bulletinBoard.system.bl.service.PostService;
 import com.bulletinBoard.system.persistance.dao.PostDao;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.web.form.PostForm;
@@ -33,43 +34,43 @@ public class PostServiceImpl implements PostService {
     private PostDao postDao;
 
     /**
-     * <h2>add</h2>
+     * <h2>doAddPost</h2>
      * <p>
-     * Add PostForm
+     * Add Post
      * </p>
      * 
      * @param post PostForm
      * @return boolean
      */
     @Override
-    public boolean add(PostForm post) {
-        List<Post> list = postDao.getByTitle(post.getTitle());
+    public boolean doAddPost(PostForm post) {
+        List<Post> list = postDao.dbPostsByTitle(post.getTitle());
         if ((!list.isEmpty())) {
             return false;
         }
-        postDao.insert(post);
+        postDao.dbInsertPost(post);
         return true;
     }
 
     /**
-     * <h2>update</h2>
+     * <h2>doUpdatePost</h2>
      * <p>
-     * Update PostForm
+     * Update Post
      * </p>
      * 
      * @param post PostForm
      * @param flag int
      */
     @Override
-    public void update(PostForm post, int flag) {
+    public void doUpdatePost(PostForm post, int flag) {
         if (flag == 1) {
             post.setStatus((post.getStatus() == 1) ? 0 : 1);
         }
-        postDao.update(post);
+        postDao.dbUpdatePost(post);
     }
 
     /**
-     * <h2>delete</h2>
+     * <h2>doDeletePostById</h2>
      * <p>
      * Delete Post By ID
      * </p>
@@ -77,12 +78,12 @@ public class PostServiceImpl implements PostService {
      * @param id int
      */
     @Override
-    public void delete(int id) {
-        postDao.delete(id);
+    public void doDeletePostById(int id) {
+        postDao.dbDeletePost(id);
     }
 
     /**
-     * <h2>getAll</h2>
+     * <h2>doGetPostList</h2>
      * <p>
      * Get A List Of All Posts
      * </p>
@@ -92,12 +93,12 @@ public class PostServiceImpl implements PostService {
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> getAll(int offset, int size) {
-        return getPostDto(postDao.getAll(offset, size));
+    public List<PostDTO> doGetPostList(int offset, int size) {
+        return getPostDto(postDao.dbGetPosts(offset, size));
     }
 
     /**
-     * <h2>getByStatusActive</h2>
+     * <h2>doGetPostListByActiveStatus</h2>
      * <p>
      * Get A List of Post by Active Status
      * </p>
@@ -105,12 +106,12 @@ public class PostServiceImpl implements PostService {
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> getByStatusActive() {
-        return getPostDto(postDao.getByActiveStatus());
+    public List<PostDTO> doGetPostListByActiveStatus() {
+        return getPostDto(postDao.dbGetPostByActiveStatus());
     }
 
     /**
-     * <h2>getCount</h2>
+     * <h2>doGetPostCount</h2>
      * <p>
      * Get Total Number of Posts
      * </p>
@@ -118,8 +119,8 @@ public class PostServiceImpl implements PostService {
      * @return int
      */
     @Override
-    public int getCount() {
-        return postDao.getCount();
+    public int doGetPostCount() {
+        return postDao.dbGetPostCount();
     }
 
     /**

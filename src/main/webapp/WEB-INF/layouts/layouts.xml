@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-
     <!-- Base Template -->
     <definition name="template">
         <put-attribute name="title" />
@@ -12,6 +11,8 @@
         <put-list-attribute name="css">
             <add-attribute
                 value="/resources/css/bootstrap.min.css" />
+            <add-attribute
+                value="/resources/css/common.css" />
         </put-list-attribute>
         <put-list-attribute name="initScripts">
             <add-attribute

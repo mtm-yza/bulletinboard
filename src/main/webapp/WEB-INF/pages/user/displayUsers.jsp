@@ -1,18 +1,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!-- User Display Table -->
 <table class="table table-bordered" col="4">
   <thead>
-    <th class="text-center">No</th>
-    <th class="text-center">Name</th>
-    <th class="text-center">Email</th>
-    <th class="w-50 text-center">Address</th>
-    <th class="w-25 text-center" colspan="3">Actions</th>
+    <tr>
+      <th class="text-center">No</th>
+      <th class="text-center">Name</th>
+      <th class="text-center">Email</th>
+      <th class="w-50 text-center">Address</th>
+      <th class="w-25 text-center" colspan="3">Actions</th>
+    </tr>
   </thead>
   <tbody id="tbl-body"></tbody>
 </table>
 <!-- Edit Post Form -->
-<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog"
+  aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -34,7 +36,7 @@
               </c:forEach>
             </div>
           </c:if>
-          <div class="form-group" hidden>
+          <div class="form-group hidden">
             <input id="txtId" class="form-control" type="number"
               name="id" required readonly>
           </div>
@@ -56,8 +58,8 @@
           <div class="container text-center">
             <button class="btn btn-primary" type="submit"
               formaction="update">Update</button>
-            <button class="btn btn-primary" type="submit"
-              formaction="delete" hidden>Delete</button>
+            <button class="btn btn-primary hidden" type="submit"
+              formaction="delete">Delete</button>
             <button class="btn btn-primary" type="button"
               data-dismiss="modal">Cancel</button>
           </div>

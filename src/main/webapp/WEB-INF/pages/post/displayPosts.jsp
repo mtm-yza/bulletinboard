@@ -1,12 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!-- Post Display Table -->
 <table class="table table-bordered" col="4">
   <thead>
-    <th class="text-center">No</th>
-    <th class="w-25 text-center">Title</th>
-    <th class="w-50 text-center">Description</th>
-    <th class="text-center" colspan="3">Actions</th>
+    <tr>
+      <th class="text-center">No</th>
+      <th class="w-25 text-center">Title</th>
+      <th class="w-50 text-center">Description</th>
+      <th class="text-center" colspan="3">Actions</th>
+    </tr>
   </thead>
   <tbody id="postListBody"></tbody>
 </table>
@@ -34,7 +35,7 @@
               </c:forEach>
             </div>
           </c:if>
-          <div class="form-group" hidden>
+          <div class="form-group hidden">
             <label for="id">ID</label> <input id="txtId"
               class="form-control" type="number" name="id"
               placeholder="ID" required readonly>
@@ -49,21 +50,21 @@
             <textarea id="txtDescription" class="form-control"
               name="description" rows="3"></textarea>
           </div>
-          <div class="form-group" readonly hidden>
+          <div class="form-group">
             <select name="status" id="chkBxStatus">
               <option value="0" selected>Disable</option>
               <option value="1">Active</option>
             </select>
           </div>
-          <div class="form-group" readonly hidden>
-            <input id="txtFlag" class="form-control" type="text"
-              name="flag">
+          <div class="form-group">
+            <input id="txtFlag" class="form-control" type="hidden"
+              name="flag" readonly>
           </div>
           <div class="container text-center">
             <button class="btn btn-primary" type="submit"
               formaction="update">Update</button>
-            <button class="btn btn-primary" type="submit"
-              formaction="delete" hidden>Delete</button>
+            <button class="btn btn-primary hidden" type="submit"
+              formaction="delete">Delete</button>
             <button class="btn btn-primary" type="button"
               data-dismiss="modal">Cancel</button>
           </div>

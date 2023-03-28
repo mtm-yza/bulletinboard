@@ -1,7 +1,5 @@
 package com.bulletinBoard.system.bl.dto;
 
-import com.bulletinBoard.system.persistance.entity.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -21,12 +19,11 @@ public class UserDTO {
     private String address;
     private String password;
     
-    public UserDTO(User user) {
+    public UserDTO(int id, String name, String email, String address) {
         super();
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.address = user.getAddress();
-        this.password = user.getAddress();
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.address = address;
     }
 }

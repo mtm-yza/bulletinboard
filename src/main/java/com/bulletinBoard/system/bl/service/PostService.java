@@ -17,30 +17,30 @@ import com.bulletinBoard.system.web.form.PostForm;
 public interface PostService {
 
     /**
-     * <h2>add</h2>
+     * <h2>doAddPost</h2>
      * <p>
-     * Add Post Form
+     * Add Post
      * </p>
      *
      * @param post PostForm
      * @return boolean
      */
-    public boolean add(PostForm post);
+    public boolean doAddPost(PostForm post);
 
     /**
-     * <h2>update</h2>
+     * <h2>doUpdatePost</h2>
      * <p>
-     * Add Post Form
+     * Update Post
      * </p>
      *
      * @param post PostForm
      * @param flag int
      * @return void
      */
-    public void update(PostForm post, int flag);
+    public void doUpdatePost(PostForm post, int flag);
 
     /**
-     * <h2>delete</h2>
+     * <h2>doDeletePost</h2>
      * <p>
      * Delete Post By ID
      * </p>
@@ -48,10 +48,10 @@ public interface PostService {
      * @param id int
      * @return void
      */
-    public void delete(int id);
+    public void doDeletePostById(int id);
 
     /**
-     * <h2>getAll</h2>
+     * <h2>doGetPostList</h2>
      * <p>
      * Get A List Of PostDTO
      * </p>
@@ -60,25 +60,25 @@ public interface PostService {
      * @param size   int
      * @return List<PostDTO>
      */
-    public List<PostDTO> getAll(int offset, int size);
+    public List<PostDTO> doGetPostList(int offset, int size);
 
     /**
-     * <h2>getByStatusActive</h2>
+     * <h2>doGetPostListByActiveStatus</h2>
      * <p>
      * Get A List Of Post By Active Status
      * </p>
      *
      * @return List<PostDTO>
      */
-    public List<PostDTO> getByStatusActive();
+    public List<PostDTO> doGetPostListByActiveStatus();
 
     /**
-     * <h2>getCount</h2>
+     * <h2>doGetPostCount</h2>
      * <p>
      * Get Total Number Of Posts
      * </p>
      *
      * @return int
      */
-    public int getCount();
+    public int doGetPostCount();
 }

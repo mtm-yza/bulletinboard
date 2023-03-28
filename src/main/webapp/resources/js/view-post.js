@@ -1,7 +1,6 @@
 $(document).ready(function() {
 	displayPostList();
 });
-
 function displayPostList() {
 	var root = $("#postListBody");
 	list.forEach((item, index) => {
@@ -18,19 +17,16 @@ function displayPostList() {
 		root.append(dataRow);
 	})
 }
-
 function getStatusBtn(index) {
 	var status = list[index].status;
 	var btnStyle = 'btn-status btn w-100 ' + (status ? 'btn-success' : "") + '';
 	var btnText = status ? "Active" : "Disable";
 	return '<td><button type="button" class="' + btnStyle + '" onclick="updatePostStatus(' + index + ')">' + btnText + '</button></td>';
 }
-
 function openEditForm(index) {
 	setFormValues(index);
 	$("#txtFlag").val(0);
 }
-
 function updatePostStatus(index) {
 	setFormValues(index);
 	$("#txtFlag").val(1);
@@ -44,7 +40,6 @@ function setFormValues(index) {
 	$("#txtDescription").val(post.description);
 	$("#chkBxStatus").val(post.status);
 }
-
 function deletePost(index) {
 	var id = list[index].id;
 	$("#btnConfirm").off("click").click(function() {		

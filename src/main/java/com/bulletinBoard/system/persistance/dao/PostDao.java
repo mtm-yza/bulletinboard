@@ -17,37 +17,37 @@ import com.bulletinBoard.system.web.form.PostForm;
 public interface PostDao {
 
     /**
-     * <h2>insert</h2>
+     * <h2>dbInsertPost</h2>
      * <p>
      * Insert Post
      * </p>
      *
      * @param post PostForm
      */
-    public void insert(PostForm post);
+    public void dbInsertPost(PostForm post);
 
     /**
-     * <h2>update</h2>
+     * <h2>dbUpdatePost</h2>
      * <p>
      * Update Post
      * </p>
      *
      * @param post PostForm
      */
-    public void update(PostForm post);
+    public void dbUpdatePost(PostForm post);
 
     /**
-     * <h2>delete</h2>
+     * <h2>dbDeletePost</h2>
      * <p>
      * Delete Post By ID
      * </p>
      *
      * @param id int
      */
-    public void delete(int id);
+    public void dbDeletePost(int id);
 
     /**
-     * <h2>getAll</h2>
+     * <h2>dbGetPosts</h2>
      * <p>
      * Get All Post
      * </p>
@@ -56,20 +56,20 @@ public interface PostDao {
      * @param limit  int
      * @return List<Post>
      */
-    public List<Post> getAll(int offset, int limit);
+    public List<Post> dbGetPosts(int offset, int limit);
 
     /**
-     * <h2>getByActiveStatus</h2>
+     * <h2>dbGetPostByActiveStatus</h2>
      * <p>
      * Get Active Posts
      * </p>
      *
      * @return List<Post>
      */
-    public List<Post> getByActiveStatus();
+    public List<Post> dbGetPostByActiveStatus();
 
     /**
-     * <h2>getByTitle</h2>
+     * <h2>getPostsByTitle</h2>
      * <p>
      * Get Posts By Title
      * </p>
@@ -77,7 +77,7 @@ public interface PostDao {
      * @param title String
      * @return List<Post>
      */
-    public List<Post> getByTitle(String title);
+    public List<Post> dbPostsByTitle(String title);
 
     /**
      * <h2>getCount</h2>
@@ -87,5 +87,5 @@ public interface PostDao {
      *
      * @return int
      */
-    public int getCount();
+    public int dbGetPostCount();
 }

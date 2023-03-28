@@ -1,10 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <form method="post">
   <c:if test="${errors != null }">
     <div class="alert alert-danger" role="alert">
-
       <div class="container">
         <h3 class="display-6">
           <c:out value="${msg}" />

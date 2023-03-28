@@ -3,16 +3,93 @@ package com.bulletinBoard.system.bl.service;
 import java.util.List;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
-import com.bulletinBoard.system.persistance.entity.User;
 import com.bulletinBoard.system.web.form.UserForm;
 
+/**
+ * <h2>UserService Class</h2>
+ * <p>
+ * Process for User Service
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 public interface UserService {
 
-    public boolean add(UserForm post);
-    public void update(UserForm post, int flag);
-    public void delete(int id);
-    public User getById(int id);
-    public User getByEmail(String email);
-    public List<UserDTO> getAll(int offset, int size);
-    public int getCount();
+    /**
+     * <h2>doAddUser</h2>
+     * <p>
+     * Add User
+     * </p>
+     *
+     * @param post UserForm
+     * @return int
+     */
+    public int doAddUser(UserForm post);
+
+    /**
+     * <h2>doUpdateUser</h2>
+     * <p>
+     * Update User
+     * </p>
+     *
+     * @param post UserForm
+     * @param flag int
+     * @return int
+     */
+    public int doUpdateUser(UserForm post, int flag);
+
+    /**
+     * <h2>doDeleteUser</h2>
+     * <p>
+     * Delete User by ID
+     * </p>
+     *
+     * @param id int
+     */
+    public void doDeleteUser(int id);
+
+    /**
+     * <h2>doGetUserById</h2>
+     * <p>
+     * Get User By ID
+     * </p>
+     *
+     * @param id int
+     * @return UserDTO
+     */
+    public UserDTO doGetUserById(int id);
+
+    /**
+     * <h2>doGetUserByEmail</h2>
+     * <p>
+     * Get User By Email
+     * </p>
+     *
+     * @param email String
+     * @return UserDTO
+     */
+    public UserDTO doGetUserByEmail(String email);
+
+    /**
+     * <h2>doGetUserList</h2>
+     * <p>
+     * Get User List
+     * </p>
+     *
+     * @param offset int
+     * @param size int
+     * @return List<UserDTO>
+     */
+    public List<UserDTO> doGetUserList(int offset, int size);
+
+    /**
+     * <h2>doGetUserCount</h2>
+     * <p>
+     * Get User Count
+     * </p>
+     *
+     * @return int
+     */
+    public int doGetUserCount();
 }

@@ -4,7 +4,6 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles-extras"
   prefix="tilesx"%>
-
 <!DOCTYPE html>
 <html>
 <head>

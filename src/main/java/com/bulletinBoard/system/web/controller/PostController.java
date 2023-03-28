@@ -109,9 +109,9 @@ public class PostController {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         // Get List of Post by offset
         int offset = (page - 1) * size;
-        List<PostDTO> postDto = service.getAll(offset, size);
+        List<PostDTO> postDto = service.doGetPostList(offset, size);
         // Calculate Total Page for Pagination
-        int count = service.getCount();
+        int count = service.doGetPostCount();
         int pageCount = count / size;
         int remainder = count % size;
         if (remainder > 0) {
@@ -156,7 +156,7 @@ public class PostController {
         if (!validate(post, mv, ADD_VIEW)) {
             return mv;
         }
-        boolean isSuccess = service.add(post);
+        boolean isSuccess = service.doAddPost(post);
         if (!isSuccess) {
             mv.addObject("msg", "Unable to Save the Post");
             mv.addObject("errors", Arrays.asList("Title Must Be Unique."));
@@ -202,7 +202,7 @@ public class PostController {
         if (!validate(post, mv, HOME_REDIRECT)) {
             return mv;
         }
-        service.update(post, flag);
+        service.doUpdatePost(post, flag);
         return mv;
     }
 
@@ -223,7 +223,7 @@ public class PostController {
             mv.addObject("msg", "Invalid User ID");
             return mv;
         }
-        service.delete(id);
+        service.doDeletePostById(id);
         mv.setViewName(HOME_REDIRECT);
         return mv;
     }
