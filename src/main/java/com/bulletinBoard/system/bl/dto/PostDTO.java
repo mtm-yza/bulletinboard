@@ -8,6 +8,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h2>PostDTO Class</h2>
+ * <p>
+ * Process for PostDTO
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 @Data
 @Getter
 @Setter
@@ -43,7 +52,15 @@ public class PostDTO {
      * </p>
      */
     private int status;
-    
+
+    /**
+     * <h2>Constructor for PostDTO</h2>
+     * <p>
+     * Constructor for PostDTO
+     * </p>
+     * 
+     * @param post Post
+     */
     public PostDTO(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();

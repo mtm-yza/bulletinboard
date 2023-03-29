@@ -57,9 +57,9 @@ public class PostForm {
      * Constructor for PostForm
      * </p>
      * 
-     * @param title String
+     * @param title       String
      * @param description String
-     * @param status int
+     * @param status      int
      */
     public PostForm(String title, String description, int status) {
         super();
