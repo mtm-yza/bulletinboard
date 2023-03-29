@@ -4,6 +4,10 @@ footer {
   width: 100%;
 }
 
- .hidden {
+footer {
+  color: #FFFFFF;
+}
+
+.hidden {
   display: none;
- }
+}
