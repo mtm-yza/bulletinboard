@@ -133,8 +133,6 @@ public class PostServiceImpl implements PostService {
      * @return List<PostDTO>
      */
     private List<PostDTO> getPostDto(List<Post> postList) {
-        return postList.stream()
-                .map(item -> new PostDTO(item.getId(), item.getTitle(), item.getDescription(), item.getStatus()))
-                .collect(Collectors.toList());
+        return postList.stream().map(item -> new PostDTO(item)).collect(Collectors.toList());
     }
 }

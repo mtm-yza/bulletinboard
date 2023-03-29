@@ -1,5 +1,7 @@
 package com.bulletinBoard.system.bl.dto;
 
+import com.bulletinBoard.system.persistance.entity.Post;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -41,4 +43,11 @@ public class PostDTO {
      * </p>
      */
     private int status;
+    
+    public PostDTO(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.status = post.getStatus();
+        this.description = post.getDescription();
+    }
 }

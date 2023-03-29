@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.bulletinBoard.system.web.form.PostForm;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -80,10 +82,11 @@ public class Post {
      * Constructor for Post
      * </p>
      * 
-     * @param post Post
+     * @param post PostForm
      */
-    public Post(Post post) {
+    public Post(PostForm post) {
         super();
+        this.id = post.getId();
         this.title = post.getTitle();
         this.description = post.getDescription();
         this.status = post.getStatus();
