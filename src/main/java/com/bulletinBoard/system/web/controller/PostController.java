@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
-import com.bulletinBoard.system.bl.service.PostService;
+import com.bulletinBoard.system.bl.service.post.PostService;
 import com.bulletinBoard.system.web.form.PostForm;
 import com.google.gson.Gson;
 

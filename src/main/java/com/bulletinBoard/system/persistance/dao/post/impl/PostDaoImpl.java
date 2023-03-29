@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.persistance.dao.impl;
+package com.bulletinBoard.system.persistance.dao.post.impl;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bulletinBoard.system.persistance.dao.PostDao;
+import com.bulletinBoard.system.persistance.dao.post.PostDao;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.web.form.PostForm;
 

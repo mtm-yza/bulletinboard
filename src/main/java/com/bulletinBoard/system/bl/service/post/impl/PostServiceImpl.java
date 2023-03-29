@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.bl.service.impl;
+package com.bulletinBoard.system.bl.service.post.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
-import com.bulletinBoard.system.bl.service.PostService;
-import com.bulletinBoard.system.persistance.dao.PostDao;
+import com.bulletinBoard.system.bl.service.post.PostService;
+import com.bulletinBoard.system.persistance.dao.post.PostDao;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.web.form.PostForm;
 
