@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!-- Post Display Table -->
 <table class="table table-bordered">
   <thead>
@@ -24,7 +25,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="postEditForm" method="post">
+        <form:form id="postEditForm" method="post" modelAttribute="post">
           <c:if test="${errors != null }">
             <div class="alert alert-danger" role="alert">
               <h6>
@@ -36,27 +37,25 @@
             </div>
           </c:if>
           <div class="form-group hidden">
-            <label for="id">ID</label> <input id="txtId"
-              class="form-control" type="number" name="id"
-              placeholder="ID" required readonly>
+            <form:label path="id">ID</form:label>
+            <form:input id="txtId" class="form-control" type="number"
+              path="id" placeholder="ID"/>
           </div>
           <div class="form-group">
-            <label for="title">Title</label> <input id="txtTitle"
-              class="form-control" type="text" name="title"
-              placeholder="Title">
+            <form:label path="title">Title</form:label>
+            <form:input id="txtTitle" class="form-control" type="text"
+              path="title" placeholder="Title"/>
           </div>
           <div class="form-group">
-            <label for="description">Description</label>
-            <textarea id="txtDescription" class="form-control"
-              name="description" rows="3"></textarea>
+            <form:label path="description">Description</form:label>
+            <form:textarea id="txtDescription" class="form-control"
+              path="description" rows="3"></form:textarea>
           </div>
           <div class="form-group">
-            <input name="isActive" id="chkBxIsActive" type="hidden"
-              readonly /> <input name="isStatusUpdate"
-              id="chkBxIsStatusUpdate" type="hidden" value=false readonly />
+            <form:input path="isActive" id="chkBxIsActive" type="hidden" />
+            <input name="isStatusUpdate" id="chkBxIsStatusUpdate"
+              type="hidden" value=false readonly />
           </div>
-          <input id="txtFlag" class="form-control" type="hidden"
-            name="flag" readonly>
           <div class="container text-center">
             <button class="btn btn-primary" type="submit"
               formaction="update">Update</button>
@@ -65,7 +64,7 @@
             <button class="btn btn-primary" type="button"
               data-dismiss="modal">Cancel</button>
           </div>
-        </form>
+        </form:form>
       </div>
     </div>
   </div>

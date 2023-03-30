@@ -1,18 +1,15 @@
 package com.bulletinBoard.system.web.controller;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,7 +72,7 @@ public class PostController {
      * </p>
      */
     @Autowired
-    PostService service;
+    private PostService postService;
 
     /**
      * <h2>getHomeView</h2>
@@ -88,8 +85,7 @@ public class PostController {
      * @return ModelAndView
      */
     @GetMapping({ "/", "" })
-    protected ModelAndView getHomeView(@RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "3") int size) {
+    protected ModelAndView getHomeView() {
         return new ModelAndView(HOME_REDIRECT);
     }
 
@@ -107,11 +103,13 @@ public class PostController {
     protected ModelAndView getPostListView(@RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
+        // Post for Edit From
+        mv.addObject("post", new PostForm());
         // Get List of Post by offset
         int offset = (page - 1) * size;
-        List<PostDTO> postDto = service.doGetPostList(offset, size);
+        List<PostDTO> postDto = this.postService.doGetPostList(offset, size);
         // Calculate Total Page for Pagination
-        int count = service.doGetPostCount();
+        int count = this.postService.doGetPostCount();
         int pageCount = count / size;
         int remainder = count % size;
         if (remainder > 0) {
@@ -134,7 +132,9 @@ public class PostController {
      */
     @GetMapping("add")
     protected ModelAndView getAddPostForm() {
-        return new ModelAndView(ADD_VIEW);
+        ModelAndView mv = new ModelAndView(ADD_VIEW);
+        mv.addObject("post", new PostForm());
+        return mv;
     }
 
     /**
@@ -143,26 +143,20 @@ public class PostController {
      * Add Post
      * </p>
      *
-     * @param title       String
-     * @param description String
-     * @param status      int
+     * @param post          PostForm
+     * @param bindingResult BindingResult
      * @return mv ModelAndView
      */
     @PostMapping("add")
-    protected ModelAndView addPost(@RequestParam("title") String title, @RequestParam("description") String description,
-            @RequestParam("isActive") Boolean isActive) {
-        PostForm post = new PostForm(title, description, isActive);
+    protected ModelAndView addPost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult) {
         ModelAndView mv = new ModelAndView();
-        if (!validate(post, mv, ADD_VIEW)) {
-            return mv;
-        }
-        boolean isSuccess = service.doAddPost(post);
-        if (!isSuccess) {
-            mv.addObject("msg", "Unable to Save the Post");
-            mv.addObject("errors", Arrays.asList("Title Must Be Unique."));
+        if (bindingResult.hasErrors()) {
+            mv.addObject("msg", "Validation Error");
+            mv.addObject("errors", this.getErrorMessages(bindingResult));
             mv.setViewName(ADD_VIEW);
             return mv;
         }
+        this.postService.doAddPost(post);
         mv.setViewName(HOME_REDIRECT);
         return mv;
     }
@@ -186,25 +180,19 @@ public class PostController {
      * Update Post
      * </p>
      *
-     * @param id          int
-     * @param title       String
-     * @param description String
-     * @param isStatus    Boolean
+     * @param post           PostForm
+     * @param isStatusUpdate Boolean
+     * @param bindingResult  BindingResult
      * @return mv ModelAndView
      */
     @PostMapping("update")
-    protected ModelAndView updatePost(@RequestParam("id") int id, @RequestParam("title") String title,
-            @RequestParam("description") String description, @RequestParam("isActive") Boolean isActive,
-            @RequestParam Boolean isStatusUpdate, HttpServletResponse resp) {
+    protected ModelAndView updatePost(@ModelAttribute PostForm post, @RequestParam Boolean isStatusUpdate,
+            BindingResult bindingResult) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-        PostForm post = new PostForm(id, title, description, isActive);
-        if (!validate(post, mv, HOME_REDIRECT)) {
-            return mv;
-        }
         if (isStatusUpdate) {
-            service.doEnableDisablePost(post);
+            this.postService.doEnableDisablePost(post);
         } else {
-            service.doUpdatePost(post);
+            this.postService.doUpdatePost(post);
         }
         return mv;
     }
@@ -219,39 +207,28 @@ public class PostController {
      * @return mv ModelAndView
      */
     @PostMapping("delete")
-    protected ModelAndView deletePost(@RequestParam("id") int id) {
+    protected ModelAndView deletePost(@RequestParam int id) {
         ModelAndView mv = new ModelAndView();
         if (id <= 0) {
             mv.setViewName(EDIT_VIEW);
             mv.addObject("msg", "Invalid User ID");
             return mv;
         }
-        this.service.doDeletePostById(id);
+        this.postService.doDeletePostById(id);
         mv.setViewName(HOME_REDIRECT);
         return mv;
     }
 
     /**
-     * <h2>validate</h2>
+     * <h2>getErrorMessages</h2>
      * <p>
-     * Validate PostForm
+     * Get A List of Error Messages from BindingResult
      * </p>
      *
-     * @param form     PostFrom
-     * @param mv       ModelAndView
-     * @param viewName String
-     * @return boolean
+     * @param bindingResult BindingResult
+     * @return List<String>
      */
-    private boolean validate(PostForm form, ModelAndView mv, String viewName) {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<PostForm>> violations = validator.validate(form);
-        List<String> errors = violations.stream().map(item -> item.getMessage()).collect(Collectors.toList());
-        if (!errors.isEmpty()) {
-            mv.setViewName(viewName);
-            mv.addObject("msg", "Validation Error");
-            mv.addObject("errors", errors);
-            return false;
-        }
-        return true;
+    private List<String> getErrorMessages(BindingResult bindingResult) {
+        return bindingResult.getAllErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList());
     }
 }

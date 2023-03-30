@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<form method="post">
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<form:form method="post" modelAttribute="post">
   <c:if test="${errors != null }">
     <div class="alert alert-danger" role="alert">
       <div class="container">
@@ -17,26 +18,28 @@
     </div>
   </c:if>
   <div class="form-group">
-    <label for="title">Title</label> <input class="form-control"
-      type="text" name="title" placeholder="Title">
+    <form:label path="title">Title</form:label>
+    <form:input class="form-control" type="text" path="title"
+      placeholder="Title" />
   </div>
   <div class="form-group">
-    <label for="description">Description</label>
-    <textarea class="form-control" name="description" rows="3" placeholder="Description"></textarea>
+    <form:label path="description">Description</form:label>
+    <form:textarea class="form-control" path="description" rows="3"
+      placeholder="Description"></form:textarea>
   </div>
   <div class="form-group">
-    <label for=status>Status</label><br/>
+    <label>Status</label><br />
     <div class="form-check form-check-inline">
-      <label class="form-check-label"> <input type="radio"
-        class="form-check-input" name="isActive" value=false checked>Private
+      <label class="form-check-label"> <form:radiobutton
+          class="form-check-input" path="isActive" value="false" checked="true" />Private
       </label>
     </div>
     <div class="form-check form-check-inline">
-      <label class="form-check-label"> <input type="radio"
-        class="form-check-input" name="isActive" value=true>Public
+      <label class="form-check-label"> <form:radiobutton
+          class="form-check-input" path="isActive" value="true" />Public
       </label>
     </div>
   </div>
   <input class="btn btn-primary" formaction="add" type="submit"
     value="Submit">
-</form>
+</form:form>
