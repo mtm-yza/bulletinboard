@@ -44,12 +44,12 @@ public class PostForm {
     private String description;
 
     /**
-     * <h2>status</h2>
+     * <h2>isActiveStatus</h2>
      * <p>
-     * Status Of Post
+     * Value that indicate if the post is active.
      * </p>
      */
-    private int status;
+    private Boolean isActive;
 
     /**
      * <h2>Constructor for PostForm</h2>
@@ -59,12 +59,12 @@ public class PostForm {
      * 
      * @param title       String
      * @param description String
-     * @param status      int
+     * @param status      Boolean
      */
-    public PostForm(String title, String description, int status) {
+    public PostForm(String title, String description, Boolean isActive) {
         super();
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.isActive = isActive;
     }
 }

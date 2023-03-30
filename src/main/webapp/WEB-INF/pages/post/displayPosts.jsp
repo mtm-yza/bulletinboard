@@ -51,15 +51,12 @@
               name="description" rows="3"></textarea>
           </div>
           <div class="form-group">
-            <select name="status" id="chkBxStatus">
-              <option value="0" selected>Disable</option>
-              <option value="1">Active</option>
-            </select>
+            <input name="isActive" id="chkBxIsActive" type="hidden"
+              readonly /> <input name="isStatusUpdate"
+              id="chkBxIsStatusUpdate" type="hidden" value=false readonly />
           </div>
-          <div class="form-group">
-            <input id="txtFlag" class="form-control" type="hidden"
-              name="flag" readonly>
-          </div>
+          <input id="txtFlag" class="form-control" type="hidden"
+            name="flag" readonly>
           <div class="container text-center">
             <button class="btn btn-primary" type="submit"
               formaction="update">Update</button>
@@ -117,8 +114,8 @@
 </div>
 <!-- Data -->
 <script>
-    var pageIndex = ${pageIndex}
-    var pageCount = ${pageCount}
-    var pageSize = ${pageSize}
-    var list = ${posts}
+    var pageIndex = ${ pageIndex }
+    var pageCount = ${ pageCount }
+    var pageSize = ${ pageSize }
+    var list = ${ posts }
 </script>

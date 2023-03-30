@@ -3,7 +3,6 @@ package com.bulletinBoard.system.persistance.dao.post;
 import java.util.List;
 
 import com.bulletinBoard.system.persistance.entity.Post;
-import com.bulletinBoard.system.web.form.PostForm;
 
 /**
  * <h2>PostDao Class</h2>
@@ -22,9 +21,9 @@ public interface PostDao {
      * Insert Post
      * </p>
      *
-     * @param post PostForm
+     * @param post Post
      */
-    public void dbInsertPost(PostForm post);
+    public void dbInsertPost(Post post);
 
     /**
      * <h2>dbUpdatePost</h2>
@@ -32,9 +31,9 @@ public interface PostDao {
      * Update Post
      * </p>
      *
-     * @param post PostForm
+     * @param post Post
      */
-    public void dbUpdatePost(PostForm post);
+    public void dbUpdatePost(Post post);
 
     /**
      * <h2>dbDeletePost</h2>
@@ -45,6 +44,17 @@ public interface PostDao {
      * @param id int
      */
     public void dbDeletePost(int id);
+
+    /**
+     * <h2>dbGetPostById</h2>
+     * <p>
+     * Get Post By ID
+     * </p>
+     *
+     * @param id
+     * @return Post
+     */
+    public Post dbGetPostById(int id);
 
     /**
      * <h2>dbGetPosts</h2>

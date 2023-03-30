@@ -28,12 +28,12 @@
     <label for=status>Status</label><br/>
     <div class="form-check form-check-inline">
       <label class="form-check-label"> <input type="radio"
-        class="form-check-input" name="status" value="0" checked>Private
+        class="form-check-input" name="isActive" value=false checked>Private
       </label>
     </div>
     <div class="form-check form-check-inline">
       <label class="form-check-label"> <input type="radio"
-        class="form-check-input" name="status" value="1">Public
+        class="form-check-input" name="isActive" value=true>Public
       </label>
     </div>
   </div>

@@ -18,27 +18,26 @@ function displayPostList() {
 	})
 }
 function getStatusBtn(index) {
-	var status = list[index].status;
+	var status = list[index].isActive;
 	var btnStyle = 'btn-status btn w-100 ' + (status ? 'btn-success' : "") + '';
 	var btnText = status ? "Active" : "Disable";
 	return '<td><button type="button" class="' + btnStyle + '" onclick="updatePostStatus(' + index + ')">' + btnText + '</button></td>';
 }
 function openEditForm(index) {
 	setFormValues(index);
-	$("#txtFlag").val(0);
 }
 function updatePostStatus(index) {
 	setFormValues(index);
-	$("#txtFlag").val(1);
+	$('#chkBxIsStatusUpdate').val(true)
 	$('#postEditForm [formaction="update"]').click();
 }
-
 function setFormValues(index) {
 	var post = list[index];
 	$("#txtId").val(post.id);
 	$("#txtTitle").val(post.title);
 	$("#txtDescription").val(post.description);
-	$("#chkBxStatus").val(post.status);
+	$("#chkBxIsActive").val(post.isActive);
+	$("#chkBxIsActive").prop("checked", post.isActive);
 }
 function deletePost(index) {
 	var id = list[index].id;

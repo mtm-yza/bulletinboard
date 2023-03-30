@@ -51,7 +51,7 @@ public class PostDTO {
      * Status Of Post
      * </p>
      */
-    private int status;
+    private Boolean isActive;
 
     /**
      * <h2>Constructor for PostDTO</h2>
@@ -64,7 +64,7 @@ public class PostDTO {
     public PostDTO(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
-        this.status = post.getStatus();
+        this.isActive = post.getIsActive();
         this.description = post.getDescription();
     }
 }

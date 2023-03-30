@@ -44,11 +44,11 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public boolean doAddPost(PostForm post) {
-        List<Post> list = postDao.dbPostsByTitle(post.getTitle());
+        List<Post> list = this.postDao.dbPostsByTitle(post.getTitle());
         if ((!list.isEmpty())) {
             return false;
         }
-        postDao.dbInsertPost(post);
+        this.postDao.dbInsertPost(new Post(post));
         return true;
     }
 
@@ -59,13 +59,24 @@ public class PostServiceImpl implements PostService {
      * </p>
      * 
      * @param post PostForm
-     * @param flag int
      */
     @Override
-    public void doUpdatePost(PostForm post, int flag) {
-        if (flag == 1) {
-            post.setStatus((post.getStatus() == 1) ? 0 : 1);
-        }
+    public void doUpdatePost(PostForm postForm) {
+        postDao.dbUpdatePost(new Post(postForm));
+    }
+
+    /**
+     * <h2>doEnableDisablePost</h2>
+     * <p>
+     * Enable or Disable Post
+     * </p>
+     *
+     * @param postForm PostForm
+     */
+    @Override
+    public void doEnableDisablePost(PostForm postForm) {
+        Post post = new Post(postForm);
+        post.setIsActive(!post.getIsActive());
         postDao.dbUpdatePost(post);
     }
 
@@ -79,7 +90,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void doDeletePostById(int id) {
-        postDao.dbDeletePost(id);
+        this.postDao.dbDeletePost(id);
     }
 
     /**
@@ -94,7 +105,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<PostDTO> doGetPostList(int offset, int size) {
-        return getPostDto(postDao.dbGetPosts(offset, size));
+        return getPostDto(this.postDao.dbGetPosts(offset, size));
     }
 
     /**
@@ -107,7 +118,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public List<PostDTO> doGetPostListByActiveStatus() {
-        return getPostDto(postDao.dbGetPostByActiveStatus());
+        return getPostDto(this.postDao.dbGetPostByActiveStatus());
     }
 
     /**
@@ -120,7 +131,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public int doGetPostCount() {
-        return postDao.dbGetPostCount();
+        return this.postDao.dbGetPostCount();
     }
 
     /**

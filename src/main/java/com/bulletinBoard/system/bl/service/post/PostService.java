@@ -34,10 +34,19 @@ public interface PostService {
      * </p>
      *
      * @param post PostForm
-     * @param flag int
      * @return void
      */
-    public void doUpdatePost(PostForm post, int flag);
+    public void doUpdatePost(PostForm post);
+
+    /**
+     * <h2>doEnableDisablePost</h2>
+     * <p>
+     * Enable or Disable Post
+     * </p>
+     *
+     * @param postForm PostForm
+     */
+    public void doEnableDisablePost(PostForm postForm);
 
     /**
      * <h2>doDeletePost</h2>

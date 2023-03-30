@@ -52,12 +52,12 @@ public class Post {
     private String description;
 
     /**
-     * <h2>status</h2>
+     * <h2>isActive</h2>
      * <p>
-     * Status Of Posts
+     * Status if the status is active
      * </p>
      */
-    private int status;
+    private Boolean isActive;
 
     /**
      * <h2>Constructor for Post</h2>
@@ -67,13 +67,13 @@ public class Post {
      * 
      * @param title       String
      * @param description String
-     * @param status      int
+     * @param isActive    Boolean
      */
-    public Post(String title, String description, int status) {
+    public Post(String title, String description, Boolean isActive) {
         super();
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.isActive = isActive;
     }
 
     /**
@@ -89,6 +89,6 @@ public class Post {
         this.id = post.getId();
         this.title = post.getTitle();
         this.description = post.getDescription();
-        this.status = post.getStatus();
+        this.isActive = post.getIsActive();
     }
 }

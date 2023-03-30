@@ -150,8 +150,8 @@ public class PostController {
      */
     @PostMapping("add")
     protected ModelAndView addPost(@RequestParam("title") String title, @RequestParam("description") String description,
-            @RequestParam("status") int status) {
-        PostForm post = new PostForm(title, description, status);
+            @RequestParam("isActive") Boolean isActive) {
+        PostForm post = new PostForm(title, description, isActive);
         ModelAndView mv = new ModelAndView();
         if (!validate(post, mv, ADD_VIEW)) {
             return mv;
@@ -189,20 +189,23 @@ public class PostController {
      * @param id          int
      * @param title       String
      * @param description String
-     * @param status      String
-     * @param flag        int
+     * @param isStatus    Boolean
      * @return mv ModelAndView
      */
     @PostMapping("update")
     protected ModelAndView updatePost(@RequestParam("id") int id, @RequestParam("title") String title,
-            @RequestParam("description") String description, @RequestParam("status") int status,
-            @RequestParam("flag") int flag, HttpServletResponse resp) {
+            @RequestParam("description") String description, @RequestParam("isActive") Boolean isActive,
+            @RequestParam Boolean isStatusUpdate, HttpServletResponse resp) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-        PostForm post = new PostForm(id, title, description, status);
+        PostForm post = new PostForm(id, title, description, isActive);
         if (!validate(post, mv, HOME_REDIRECT)) {
             return mv;
         }
-        service.doUpdatePost(post, flag);
+        if (isStatusUpdate) {
+            service.doEnableDisablePost(post);
+        } else {
+            service.doUpdatePost(post);
+        }
         return mv;
     }
 
@@ -223,7 +226,7 @@ public class PostController {
             mv.addObject("msg", "Invalid User ID");
             return mv;
         }
-        service.doDeletePostById(id);
+        this.service.doDeletePostById(id);
         mv.setViewName(HOME_REDIRECT);
         return mv;
     }

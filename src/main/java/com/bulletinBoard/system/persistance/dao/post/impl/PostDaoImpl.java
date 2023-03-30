@@ -6,13 +6,11 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.bulletinBoard.system.persistance.dao.post.PostDao;
 import com.bulletinBoard.system.persistance.entity.Post;
-import com.bulletinBoard.system.web.form.PostForm;
 
 /**
  * <h2>PostDaoImpl Class</h2>
@@ -58,7 +56,7 @@ public class PostDaoImpl implements PostDao {
      * </p>
      */
     @Autowired
-    SessionFactory sessionFactory;
+    private SessionFactory sessionFactory;
 
     /**
      * <h2>insert</h2>
@@ -69,8 +67,8 @@ public class PostDaoImpl implements PostDao {
      * @param post PostForm
      */
     @Override
-    public void dbInsertPost(PostForm post) {
-        this.getSession().save(new Post(post));
+    public void dbInsertPost(Post post) {
+        this.getSession().save(post);
     }
 
     /**
@@ -82,8 +80,8 @@ public class PostDaoImpl implements PostDao {
      * @param post PostForm
      */
     @Override
-    public void dbUpdatePost(PostForm post) {
-        this.getSession().update(new Post(post));
+    public void dbUpdatePost(Post post) {
+        this.getSession().update(post);
     }
 
     /**
@@ -95,10 +93,22 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public void dbDeletePost(int id) {
-        String stmt = new StringBuilder("DELETE FROM " + TABLE_NAME).append(" WHERE id=:id").toString();
-        Query<?> query = this.getSession().createQuery(stmt);
-        query.setParameter("id", id);
-        query.executeUpdate();
+        Post post = this.dbGetPostById(id);
+        this.getSession().delete(post);
+    }
+
+    /**
+     * <h2>dbGetPostById</h2>
+     * <p>
+     * Get Post By ID
+     * </p>
+     *
+     * @param id
+     * @return Post
+     */
+    @Override
+    public Post dbGetPostById(int id) {
+        return this.getSession().get(Post.class, id);
     }
 
     /**
@@ -114,8 +124,7 @@ public class PostDaoImpl implements PostDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Post> dbGetPosts(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").toString();
-        return this.getSession().createQuery(stmt).setMaxResults(limit).setFirstResult(offset).list();
+        return this.getSession().createQuery(SELECT_STMT).setMaxResults(limit).setFirstResult(offset).list();
     }
 
     /**
