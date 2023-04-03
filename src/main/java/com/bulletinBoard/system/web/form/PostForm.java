@@ -59,9 +59,7 @@ public class PostForm {
      * Constructor for PostForm
      * </p>
      * 
-     * @param title       String
-     * @param description String
-     * @param status      Boolean
+     * @param post Posts
      */
     public PostForm(Post post) {
         super();

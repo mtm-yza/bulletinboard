@@ -72,6 +72,36 @@ public class PostController {
     private PostService postService;
 
     /**
+     * <h2>getHomeView</h2>
+     * <p>
+     * Get Home view
+     * </p>
+     *
+     * @param page int
+     * @param size int
+     * @return ModelAndView
+     */
+    @GetMapping({ "/", "" })
+    protected ModelAndView getHomeView() {
+        return new ModelAndView(HOME_REDIRECT);
+    }
+
+    /**
+     * <h2>getAddPostForm</h2>
+     * <p>
+     * Get Add Post Form
+     * </p>
+     *
+     * @return ModelAndView
+     */
+    @GetMapping("add")
+    protected ModelAndView getAddPostForm() {
+        ModelAndView mv = new ModelAndView(ADD_VIEW);
+        mv.addObject("post", new PostForm());
+        return mv;
+    }
+
+    /**
      * <h2>addPost</h2>
      * <p>
      * Add Post
@@ -97,21 +127,6 @@ public class PostController {
         this.addRedirectMessages(redirectAttribute, "success", "Adding Post Compeleted",
                 "Your Post Was Successfully Added");
         return mv;
-    }
-
-    /**
-     * <h2>getHomeView</h2>
-     * <p>
-     * Get Home view
-     * </p>
-     *
-     * @param page int
-     * @param size int
-     * @return ModelAndView
-     */
-    @GetMapping({ "/", "" })
-    protected ModelAndView getHomeView() {
-        return new ModelAndView(HOME_REDIRECT);
     }
 
     /**
@@ -148,21 +163,6 @@ public class PostController {
     }
 
     /**
-     * <h2>getAddPostForm</h2>
-     * <p>
-     * Get Add Post Form
-     * </p>
-     *
-     * @return ModelAndView
-     */
-    @GetMapping("add")
-    protected ModelAndView getAddPostForm() {
-        ModelAndView mv = new ModelAndView(ADD_VIEW);
-        mv.addObject("post", new PostForm());
-        return mv;
-    }
-
-    /**
      * <h2>updatePost</h2>
      * <p>
      * Update Post
@@ -179,7 +179,6 @@ public class PostController {
             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         if (!this.validate(post, mv, HOME_REDIRECT)) {
-            System.out.println("Blah Blah Blah");
             this.addRedirectMessages(redirectAttributes, "error", "Validation Error", "Your Input is Invalid");
             redirectAttributes.addFlashAttribute("post", new PostForm());
             return mv;
@@ -219,7 +218,10 @@ public class PostController {
     }
 
     /**
-     * <h2>validate</h2> Validate PostForm
+     * <h2>validate</h2> 
+     * <p>
+     * Validate PostForm
+     * </p>
      * 
      * @param form     PostFrom
      * @param mv       ModelAndView
@@ -262,7 +264,6 @@ public class PostController {
      * @param type               String
      * @param header             String
      * @param message            String
-     * @return void
      */
     private void addRedirectMessages(RedirectAttributes redirectAttributes, String type, String header,
             String message) {

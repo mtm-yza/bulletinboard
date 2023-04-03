@@ -21,6 +21,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h2> Post Class</h2>
+ * <p>
+ * Process for Displaying Post
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 @Data
 @Getter
 @Setter
@@ -66,15 +75,6 @@ public class Post {
     private Boolean isActive;
 
     /**
-     * <h2>Constructor for Post</h2>
-     * <p>
-     * Constructor for Post
-     * </p>
-     * 
-     * @param post PostForm
-     */
-
-    /**
      * <h2>created_at</h2>
      * <p>
      * Creation Date
@@ -87,7 +87,7 @@ public class Post {
     /**
      * <h2>updated_at</h2>
      * <p>
-     * Updated Date
+     * Last Update Date
      * </p>
      */
     @UpdateTimestamp

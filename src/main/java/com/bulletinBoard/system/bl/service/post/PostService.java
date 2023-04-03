@@ -66,7 +66,6 @@ public interface PostService {
      * </p>
      *
      * @param post PostForm
-     * @return void
      */
     public void doUpdatePost(PostForm post);
 
@@ -87,7 +86,6 @@ public interface PostService {
      * </p>
      *
      * @param id int
-     * @return void
      */
     public void doDeletePostById(int id);
 }

@@ -31,6 +31,7 @@ public class PostDTO {
      * </p>
      */
     private int id;
+
     /**
      * <h2>title</h2>
      * <p>
@@ -38,6 +39,7 @@ public class PostDTO {
      * </p>
      */
     private String title;
+
     /**
      * <h2>description</h2>
      * <p>
@@ -45,6 +47,7 @@ public class PostDTO {
      * </p>
      */
     private String description;
+
     /**
      * <h2>status</h2>
      * <p>
