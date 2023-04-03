@@ -29,7 +29,7 @@
           <c:if test="${errors != null }">
             <div class="alert alert-danger" role="alert">
               <h6>
-                <c:out value="${msg}" />
+                <c:out value="${msgHeader}" />
               </h6>
               <c:forEach var="error" items="${errors}">
                 <li><c:out value="${error.toString()}" /></li>

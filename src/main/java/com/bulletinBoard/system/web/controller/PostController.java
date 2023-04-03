@@ -178,11 +178,18 @@ public class PostController {
     protected ModelAndView updatePost(@ModelAttribute PostForm post, @RequestParam Boolean isStatusUpdate,
             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-        if (!this.validate(post, mv, HOME_REDIRECT)) {
-            this.addRedirectMessages(redirectAttributes, "error", "Validation Error", "Your Input is Invalid");
+
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<PostForm>> violations = validator.validate(post);
+        List<String> errors = violations.stream().map(item -> item.getMessage()).collect(Collectors.toList());
+
+        if (!errors.isEmpty()) {
+            this.addRedirectMessages(redirectAttributes, "error", "Validation Error", "Please Enter The Valid Input");
+            redirectAttributes.addFlashAttribute("errors", errors);
             redirectAttributes.addFlashAttribute("post", new PostForm());
             return mv;
         }
+
         if (isStatusUpdate) {
             this.postService.doEnableDisablePost(post);
         } else {
@@ -215,30 +222,6 @@ public class PostController {
         this.addRedirectMessages(redirectAttributes, "success", "Deleting Post Completed",
                 "Your Post Was Successfuly Deleted");
         return mv;
-    }
-
-    /**
-     * <h2>validate</h2> 
-     * <p>
-     * Validate PostForm
-     * </p>
-     * 
-     * @param form     PostFrom
-     * @param mv       ModelAndView
-     * @param viewName String
-     * @return boolean
-     */
-    private boolean validate(PostForm form, ModelAndView mv, String viewName) {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<PostForm>> violations = validator.validate(form);
-        List<String> errors = violations.stream().map(item -> item.getMessage()).collect(Collectors.toList());
-        if (!errors.isEmpty()) {
-            mv.setViewName(viewName);
-            mv.addObject("msg", "Validation Error");
-            mv.addObject("errors", errors);
-            return false;
-        }
-        return true;
     }
 
     /**
