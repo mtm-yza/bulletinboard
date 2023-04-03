@@ -44,12 +44,53 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public boolean doAddPost(PostForm post) {
-        List<Post> list = this.postDao.dbPostsByTitle(post.getTitle());
+        List<Post> list = this.postDao.dbGetPostsByTitle(post.getTitle());
         if ((!list.isEmpty())) {
             return false;
         }
         this.postDao.dbInsertPost(new Post(post));
         return true;
+    }
+
+    /**
+     * <h2>doGetPostList</h2>
+     * <p>
+     * Get A List Of All Posts
+     * </p>
+     * 
+     * @param offset int
+     * @param size   int
+     * @return List<PostDTO>
+     */
+    @Override
+    public List<PostDTO> doGetPostList(int offset, int size) {
+        return this.getPostDto(this.postDao.dbGetPosts(offset, size));
+    }
+
+    /**
+     * <h2>doGetPostListByActiveStatus</h2>
+     * <p>
+     * Get A List of Post by Active Status
+     * </p>
+     * 
+     * @return List<PostDTO>
+     */
+    @Override
+    public List<PostDTO> doGetPostListByActiveStatus() {
+        return this.getPostDto(this.postDao.dbGetPostByActiveStatus());
+    }
+
+    /**
+     * <h2>doGetPostCount</h2>
+     * <p>
+     * Get Total Number of Posts
+     * </p>
+     * 
+     * @return int
+     */
+    @Override
+    public int doGetPostCount() {
+        return this.postDao.dbGetPostCount();
     }
 
     /**
@@ -91,47 +132,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void doDeletePostById(int id) {
         this.postDao.dbDeletePost(id);
-    }
-
-    /**
-     * <h2>doGetPostList</h2>
-     * <p>
-     * Get A List Of All Posts
-     * </p>
-     * 
-     * @param offset int
-     * @param size   int
-     * @return List<PostDTO>
-     */
-    @Override
-    public List<PostDTO> doGetPostList(int offset, int size) {
-        return getPostDto(this.postDao.dbGetPosts(offset, size));
-    }
-
-    /**
-     * <h2>doGetPostListByActiveStatus</h2>
-     * <p>
-     * Get A List of Post by Active Status
-     * </p>
-     * 
-     * @return List<PostDTO>
-     */
-    @Override
-    public List<PostDTO> doGetPostListByActiveStatus() {
-        return getPostDto(this.postDao.dbGetPostByActiveStatus());
-    }
-
-    /**
-     * <h2>doGetPostCount</h2>
-     * <p>
-     * Get Total Number of Posts
-     * </p>
-     * 
-     * @return int
-     */
-    @Override
-    public int doGetPostCount() {
-        return this.postDao.dbGetPostCount();
     }
 
     /**

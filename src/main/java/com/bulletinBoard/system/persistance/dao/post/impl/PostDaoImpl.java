@@ -72,6 +72,81 @@ public class PostDaoImpl implements PostDao {
     }
 
     /**
+     * <h2>getAll</h2>
+     * <p>
+     * Get All Posts
+     * </p>
+     * 
+     * @param offset int
+     * @param limit  int
+     * @return List<Post>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Post> dbGetPosts(int offset, int limit) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY created_at DESC").toString();
+        return this.getSession().createQuery(stmt).list();
+    }
+
+    /**
+     * <h2>getByTitle</h2>
+     * <p>
+     * Get Posts By Title
+     * </p>
+     *
+     * @param title String
+     * @return List<Post>
+     */
+    @SuppressWarnings("unchecked")
+    public List<Post> dbGetPostsByTitle(String title) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE title = :title ORDER BY id").toString();
+        return this.getSession().createQuery(stmt).setParameter("title", title).list();
+    }
+
+    /**
+     * <h2>getByActiveStatus</h2>
+     * <p>
+     * Get Active Posts
+     * </p>
+     * 
+     * @return List<Post>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Post> dbGetPostByActiveStatus() {
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
+        return this.getSession().createQuery(stmt).list();
+    }
+
+    /**
+     * <h2>dbGetPostById</h2>
+     * <p>
+     * Get Post By ID
+     * </p>
+     *
+     * @param id
+     * @return Post
+     */
+    @Override
+    public Post dbGetPostById(int id) {
+        return this.getSession().get(Post.class, id);
+    }
+
+    /**
+     * <h2>getCount</h2>
+     * <p>
+     * Get Number Of All Posts
+     * </p>
+     * 
+     * @return int
+     */
+    @Override
+    public int dbGetPostCount() {
+        Long count = (Long) this.getSession().createQuery(COUNT_STMT).uniqueResult();
+        return count.intValue();
+    }
+
+    /**
      * <h2>update</h2>
      * <p>
      * Update Post
@@ -95,80 +170,6 @@ public class PostDaoImpl implements PostDao {
     public void dbDeletePost(int id) {
         Post post = this.dbGetPostById(id);
         this.getSession().delete(post);
-    }
-
-    /**
-     * <h2>dbGetPostById</h2>
-     * <p>
-     * Get Post By ID
-     * </p>
-     *
-     * @param id
-     * @return Post
-     */
-    @Override
-    public Post dbGetPostById(int id) {
-        return this.getSession().get(Post.class, id);
-    }
-
-    /**
-     * <h2>getAll</h2>
-     * <p>
-     * Get All Posts
-     * </p>
-     * 
-     * @param offset int
-     * @param limit  int
-     * @return List<Post>
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Post> dbGetPosts(int offset, int limit) {
-        return this.getSession().createQuery(SELECT_STMT).setMaxResults(limit).setFirstResult(offset).list();
-    }
-
-    /**
-     * <h2>getByActiveStatus</h2>
-     * <p>
-     * Get Active Posts
-     * </p>
-     * 
-     * @return List<Post>
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Post> dbGetPostByActiveStatus() {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
-        return this.getSession().createQuery(stmt).list();
-    }
-
-    /**
-     * <h2>getByTitle</h2>
-     * <p>
-     * Get Posts By Title
-     * </p>
-     *
-     * @param title String
-     * @return List<Post>
-     */
-    @SuppressWarnings("unchecked")
-    public List<Post> dbPostsByTitle(String title) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE title = :title ORDER BY id").toString();
-        return this.getSession().createQuery(stmt).setParameter("title", title).list();
-    }
-
-    /**
-     * <h2>getCount</h2>
-     * <p>
-     * Get Number Of All Posts
-     * </p>
-     * 
-     * @return int
-     */
-    @Override
-    public int dbGetPostCount() {
-        Long count = (Long) this.getSession().createQuery(COUNT_STMT).uniqueResult();
-        return count.intValue();
     }
 
     /**

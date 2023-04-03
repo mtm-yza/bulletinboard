@@ -72,6 +72,34 @@ public class PostController {
     private PostService postService;
 
     /**
+     * <h2>addPost</h2>
+     * <p>
+     * Add Post
+     * </p>
+     *
+     * @param post              PostForm
+     * @param bindingResult     BindingResult
+     * @param redirectAttribute RedirectAttributes
+     * @return mv ModelAndView
+     */
+    @PostMapping("add")
+    protected ModelAndView addPost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
+            RedirectAttributes redirectAttribute) {
+        if (bindingResult.hasErrors()) {
+            ModelAndView mv = new ModelAndView(ADD_VIEW);
+            mv.addObject("post", post);
+            mv.addObject("msg", "Validation Error");
+            mv.addObject("errors", this.getErrorMessages(bindingResult));
+            return mv;
+        }
+        this.postService.doAddPost(post);
+        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
+        this.addRedirectMessages(redirectAttribute, "success", "Adding Post Compeleted",
+                "Your Post Was Successfully Added");
+        return mv;
+    }
+
+    /**
      * <h2>getHomeView</h2>
      * <p>
      * Get Home view
@@ -131,34 +159,6 @@ public class PostController {
     protected ModelAndView getAddPostForm() {
         ModelAndView mv = new ModelAndView(ADD_VIEW);
         mv.addObject("post", new PostForm());
-        return mv;
-    }
-
-    /**
-     * <h2>addPost</h2>
-     * <p>
-     * Add Post
-     * </p>
-     *
-     * @param post              PostForm
-     * @param bindingResult     BindingResult
-     * @param redirectAttribute RedirectAttributes
-     * @return mv ModelAndView
-     */
-    @PostMapping("add")
-    protected ModelAndView addPost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
-            RedirectAttributes redirectAttribute) {
-        if (bindingResult.hasErrors()) {
-            ModelAndView mv = new ModelAndView(ADD_VIEW);
-            mv.addObject("post", post);
-            mv.addObject("msg", "Validation Error");
-            mv.addObject("errors", this.getErrorMessages(bindingResult));
-            return mv;
-        }
-        this.postService.doAddPost(post);
-        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-        this.addRedirectMessages(redirectAttribute, "success", "Adding Post Compeleted",
-                "Your Post Was Successfully Added");
         return mv;
     }
 

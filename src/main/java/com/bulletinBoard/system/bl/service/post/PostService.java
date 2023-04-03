@@ -28,38 +28,6 @@ public interface PostService {
     public boolean doAddPost(PostForm post);
 
     /**
-     * <h2>doUpdatePost</h2>
-     * <p>
-     * Update Post
-     * </p>
-     *
-     * @param post PostForm
-     * @return void
-     */
-    public void doUpdatePost(PostForm post);
-
-    /**
-     * <h2>doEnableDisablePost</h2>
-     * <p>
-     * Enable or Disable Post
-     * </p>
-     *
-     * @param postForm PostForm
-     */
-    public void doEnableDisablePost(PostForm postForm);
-
-    /**
-     * <h2>doDeletePost</h2>
-     * <p>
-     * Delete Post By ID
-     * </p>
-     *
-     * @param id int
-     * @return void
-     */
-    public void doDeletePostById(int id);
-
-    /**
      * <h2>doGetPostList</h2>
      * <p>
      * Get A List Of PostDTO
@@ -90,4 +58,36 @@ public interface PostService {
      * @return int
      */
     public int doGetPostCount();
+
+    /**
+     * <h2>doUpdatePost</h2>
+     * <p>
+     * Update Post
+     * </p>
+     *
+     * @param post PostForm
+     * @return void
+     */
+    public void doUpdatePost(PostForm post);
+
+    /**
+     * <h2>doEnableDisablePost</h2>
+     * <p>
+     * Enable or Disable Post
+     * </p>
+     *
+     * @param postForm PostForm
+     */
+    public void doEnableDisablePost(PostForm postForm);
+
+    /**
+     * <h2>doDeletePost</h2>
+     * <p>
+     * Delete Post By ID
+     * </p>
+     *
+     * @param id int
+     * @return void
+     */
+    public void doDeletePostById(int id);
 }

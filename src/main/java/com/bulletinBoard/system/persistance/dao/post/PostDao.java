@@ -26,37 +26,6 @@ public interface PostDao {
     public void dbInsertPost(Post post);
 
     /**
-     * <h2>dbUpdatePost</h2>
-     * <p>
-     * Update Post
-     * </p>
-     *
-     * @param post Post
-     */
-    public void dbUpdatePost(Post post);
-
-    /**
-     * <h2>dbDeletePost</h2>
-     * <p>
-     * Delete Post By ID
-     * </p>
-     *
-     * @param id int
-     */
-    public void dbDeletePost(int id);
-
-    /**
-     * <h2>dbGetPostById</h2>
-     * <p>
-     * Get Post By ID
-     * </p>
-     *
-     * @param id
-     * @return Post
-     */
-    public Post dbGetPostById(int id);
-
-    /**
      * <h2>dbGetPosts</h2>
      * <p>
      * Get All Post
@@ -79,7 +48,7 @@ public interface PostDao {
     public List<Post> dbGetPostByActiveStatus();
 
     /**
-     * <h2>getPostsByTitle</h2>
+     * <h2>dbGetPostsByTitle</h2>
      * <p>
      * Get Posts By Title
      * </p>
@@ -87,7 +56,18 @@ public interface PostDao {
      * @param title String
      * @return List<Post>
      */
-    public List<Post> dbPostsByTitle(String title);
+    public List<Post> dbGetPostsByTitle(String title);
+
+    /**
+     * <h2>dbGetPostById</h2>
+     * <p>
+     * Get Post By ID
+     * </p>
+     *
+     * @param id
+     * @return Post
+     */
+    public Post dbGetPostById(int id);
 
     /**
      * <h2>getCount</h2>
@@ -98,4 +78,24 @@ public interface PostDao {
      * @return int
      */
     public int dbGetPostCount();
+
+    /**
+     * <h2>dbUpdatePost</h2>
+     * <p>
+     * Update Post
+     * </p>
+     *
+     * @param post Post
+     */
+    public void dbUpdatePost(Post post);
+
+    /**
+     * <h2>dbDeletePost</h2>
+     * <p>
+     * Delete Post By ID
+     * </p>
+     *
+     * @param id int
+     */
+    public void dbDeletePost(int id);
 }
