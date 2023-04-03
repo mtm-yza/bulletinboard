@@ -65,23 +65,6 @@ public class Post {
      * Constructor for Post
      * </p>
      * 
-     * @param title       String
-     * @param description String
-     * @param isActive    Boolean
-     */
-    public Post(String title, String description, Boolean isActive) {
-        super();
-        this.title = title;
-        this.description = description;
-        this.isActive = isActive;
-    }
-
-    /**
-     * <h2>Constructor for Post</h2>
-     * <p>
-     * Constructor for Post
-     * </p>
-     * 
      * @param post PostForm
      */
     public Post(PostForm post) {

@@ -31,12 +31,13 @@
     <label>Status</label><br />
     <div class="form-check form-check-inline">
       <label class="form-check-label"> <form:radiobutton
-          class="form-check-input" path="isActive" value="false" checked="true" />Private
+          class="form-check-input" path="isActive" value="true"
+          checked="true" />Public
       </label>
     </div>
     <div class="form-check form-check-inline">
       <label class="form-check-label"> <form:radiobutton
-          class="form-check-input" path="isActive" value="true" />Public
+          class="form-check-input" path="isActive" value="false" />Private
       </label>
     </div>
   </div>

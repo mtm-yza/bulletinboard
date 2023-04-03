@@ -1,9 +1,13 @@
 package com.bulletinBoard.system.web.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
@@ -58,14 +63,6 @@ public class PostController {
     private static final String ADD_VIEW = "addPostView";
 
     /**
-     * <h2>EDIT_VIEW</h2>
-     * <p>
-     * View Name of Add Post Form from PostController
-     * </p>
-     */
-    private static final String EDIT_VIEW = "editPostView";
-
-    /**
      * <h2>service</h2>
      * <p>
      * Post Service
@@ -103,8 +100,6 @@ public class PostController {
     protected ModelAndView getPostListView(@RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        // Post for Edit From
-        mv.addObject("post", new PostForm());
         // Get List of Post by offset
         int offset = (page - 1) * size;
         List<PostDTO> postDto = this.postService.doGetPostList(offset, size);
@@ -119,6 +114,8 @@ public class PostController {
         mv.addObject("pageIndex", page);
         mv.addObject("pageCount", pageCount);
         mv.addObject("pageSize", size);
+        // Post Form to Edit
+        mv.addObject("post", new PostForm());
         return mv;
     }
 
@@ -143,35 +140,26 @@ public class PostController {
      * Add Post
      * </p>
      *
-     * @param post          PostForm
-     * @param bindingResult BindingResult
+     * @param post              PostForm
+     * @param bindingResult     BindingResult
+     * @param redirectAttribute RedirectAttributes
      * @return mv ModelAndView
      */
     @PostMapping("add")
-    protected ModelAndView addPost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult) {
-        ModelAndView mv = new ModelAndView();
+    protected ModelAndView addPost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
+            RedirectAttributes redirectAttribute) {
         if (bindingResult.hasErrors()) {
+            ModelAndView mv = new ModelAndView(ADD_VIEW);
+            mv.addObject("post", post);
             mv.addObject("msg", "Validation Error");
             mv.addObject("errors", this.getErrorMessages(bindingResult));
-            mv.setViewName(ADD_VIEW);
             return mv;
         }
         this.postService.doAddPost(post);
-        mv.setViewName(HOME_REDIRECT);
+        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
+        this.addRedirectMessages(redirectAttribute, "success", "Adding Post Compeleted",
+                "Your Post Was Successfully Added");
         return mv;
-    }
-
-    /**
-     * <h2>getEditPostForm</h2>
-     * <p>
-     * Get Edit Post Form
-     * </p>
-     *
-     * @return mv ModelAndView
-     */
-    @GetMapping("update")
-    protected ModelAndView getEditPostForm() {
-        return new ModelAndView(EDIT_VIEW);
     }
 
     /**
@@ -180,20 +168,30 @@ public class PostController {
      * Update Post
      * </p>
      *
-     * @param post           PostForm
-     * @param isStatusUpdate Boolean
-     * @param bindingResult  BindingResult
+     * @param post              PostForm
+     * @param isStatusUpdate    Boolean
+     * @param bindingResult     BindingResult
+     * @param redirectAttribute RedirectAttributes
      * @return mv ModelAndView
      */
     @PostMapping("update")
     protected ModelAndView updatePost(@ModelAttribute PostForm post, @RequestParam Boolean isStatusUpdate,
-            BindingResult bindingResult) {
+            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
+        if (!this.validate(post, mv, HOME_REDIRECT)) {
+            System.out.println("Blah Blah Blah");
+            this.addRedirectMessages(redirectAttributes, "error", "Validation Error", "Your Input is Invalid");
+            redirectAttributes.addFlashAttribute("post", new PostForm());
+            return mv;
+        }
         if (isStatusUpdate) {
             this.postService.doEnableDisablePost(post);
         } else {
             this.postService.doUpdatePost(post);
         }
+        this.addRedirectMessages(redirectAttributes, "success", "Updating Post Completed",
+                "Your Post Was Successfully Updated");
+        redirectAttributes.addFlashAttribute("post", new PostForm());
         return mv;
     }
 
@@ -203,20 +201,42 @@ public class PostController {
      * Delete Post
      * </p>
      *
-     * @param id int
+     * @param id                int
+     * @param redirectAttribute RedirectAttributes
      * @return mv ModelAndView
      */
     @PostMapping("delete")
-    protected ModelAndView deletePost(@RequestParam int id) {
-        ModelAndView mv = new ModelAndView();
+    protected ModelAndView deletePost(@RequestParam int id, RedirectAttributes redirectAttributes) {
+        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         if (id <= 0) {
-            mv.setViewName(EDIT_VIEW);
-            mv.addObject("msg", "Invalid User ID");
+            this.addRedirectMessages(redirectAttributes, "error", "Invalid ID", "Your Post ID Is Invalid");
             return mv;
         }
         this.postService.doDeletePostById(id);
-        mv.setViewName(HOME_REDIRECT);
+        this.addRedirectMessages(redirectAttributes, "success", "Deleting Post Completed",
+                "Your Post Was Successfuly Deleted");
         return mv;
+    }
+
+    /**
+     * <h2>validate</h2> Validate PostForm
+     * 
+     * @param form     PostFrom
+     * @param mv       ModelAndView
+     * @param viewName String
+     * @return boolean
+     */
+    private boolean validate(PostForm form, ModelAndView mv, String viewName) {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<PostForm>> violations = validator.validate(form);
+        List<String> errors = violations.stream().map(item -> item.getMessage()).collect(Collectors.toList());
+        if (!errors.isEmpty()) {
+            mv.setViewName(viewName);
+            mv.addObject("msg", "Validation Error");
+            mv.addObject("errors", errors);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -230,5 +250,24 @@ public class PostController {
      */
     private List<String> getErrorMessages(BindingResult bindingResult) {
         return bindingResult.getAllErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList());
+    }
+
+    /**
+     * <h2>addRedirectMessages</h2>
+     * <p>
+     * To add message data as redirect attribute
+     * </p>
+     *
+     * @param redirectAttributes RedriectAttributes
+     * @param type               String
+     * @param header             String
+     * @param message            String
+     * @return void
+     */
+    private void addRedirectMessages(RedirectAttributes redirectAttributes, String type, String header,
+            String message) {
+        redirectAttributes.addFlashAttribute("msgType", type);
+        redirectAttributes.addFlashAttribute("msgHeader", header);
+        redirectAttributes.addFlashAttribute("msg", message);
     }
 }

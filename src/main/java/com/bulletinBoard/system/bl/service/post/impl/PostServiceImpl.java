@@ -62,7 +62,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void doUpdatePost(PostForm postForm) {
-        postDao.dbUpdatePost(new Post(postForm));
+        this.postDao.dbUpdatePost(new Post(postForm));
     }
 
     /**
@@ -77,7 +77,7 @@ public class PostServiceImpl implements PostService {
     public void doEnableDisablePost(PostForm postForm) {
         Post post = new Post(postForm);
         post.setIsActive(!post.getIsActive());
-        postDao.dbUpdatePost(post);
+        this.postDao.dbUpdatePost(post);
     }
 
     /**

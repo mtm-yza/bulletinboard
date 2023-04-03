@@ -27,6 +27,28 @@
   </header>
   <main class="py-5">
     <div class="container">
+      <c:if test="${msg != null}">
+        <div
+          class="alert 
+            <c:choose>
+              <c:when test="${msgType eq 'success'}">alert-success</c:when>
+              <c:when test="${msgType eq 'error'}">alert-danger</c:when>
+              <c:otherwise>alert-primary</c:otherwise>
+            </c:choose>
+          "
+          role="alert">
+          <div class="container">
+            <h3 class="display-6">
+              <c:out value="${msgHeader}" />
+
+            </h3>
+            <hr class="my-3">
+            <ul class="lead">
+              <c:if test="${msg!= null}"><c:out value="${msg}"/></c:if>
+            </ul>
+          </div>
+        </div>
+      </c:if>
       <tiles:insertAttribute name="body" />
     </div>
     <div class="py-5"></div>

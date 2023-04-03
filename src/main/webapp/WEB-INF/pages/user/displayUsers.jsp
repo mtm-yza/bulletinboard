@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!-- User Display Table -->
-<table class="table table-bordered" col="4">
+<table class="table table-bordered">
   <thead>
     <tr>
       <th class="text-center">No</th>
