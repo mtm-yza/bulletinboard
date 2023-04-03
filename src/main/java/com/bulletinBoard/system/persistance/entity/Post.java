@@ -1,10 +1,16 @@
 package com.bulletinBoard.system.persistance.entity;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import com.bulletinBoard.system.web.form.PostForm;
 
@@ -58,6 +64,34 @@ public class Post {
      * </p>
      */
     private Boolean isActive;
+
+    /**
+     * <h2>Constructor for Post</h2>
+     * <p>
+     * Constructor for Post
+     * </p>
+     * 
+     * @param post PostForm
+     */
+
+    /**
+     * <h2>created_at</h2>
+     * <p>
+     * Creation Date
+     * </p>
+     */
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp created_at;
+
+    /**
+     * <h2>updated_at</h2>
+     * <p>
+     * Updated Date
+     * </p>
+     */
+    @UpdateTimestamp
+    private Timestamp updated_at;
 
     /**
      * <h2>Constructor for Post</h2>
