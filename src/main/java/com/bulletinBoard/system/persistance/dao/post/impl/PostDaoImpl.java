@@ -85,7 +85,7 @@ public class PostDaoImpl implements PostDao {
     @Override
     public List<Post> dbGetPosts(int offset, int limit) {
         String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY created_at DESC").toString();
-        return this.getSession().createQuery(stmt).list();
+        return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
     }
 
     /**
