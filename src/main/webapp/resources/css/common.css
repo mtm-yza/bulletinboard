@@ -5,6 +5,13 @@ footer {
   color: #FFFFFF;
 }
 
+.label-error {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: .875em;
+  color: #DC3545;
+}
+
 .hidden {
   display: none;
 }

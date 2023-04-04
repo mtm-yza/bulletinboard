@@ -1,17 +1,15 @@
 package com.bulletinBoard.system.web.controller;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -113,12 +111,11 @@ public class PostController {
      * @return mv ModelAndView
      */
     @PostMapping("add")
-    protected ModelAndView addPost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
+    protected ModelAndView addPost(@ModelAttribute @Valid PostForm post, BindingResult bindingResult,
             RedirectAttributes redirectAttribute) {
         if (bindingResult.hasErrors()) {
             ModelAndView mv = new ModelAndView(ADD_VIEW);
             mv.addObject("post", post);
-            mv.addObject("msg", "Validation Error");
             mv.addObject("errors", this.getErrorMessages(bindingResult));
             return mv;
         }
@@ -137,11 +134,12 @@ public class PostController {
      *
      * @param page int
      * @param size int
+     * @param post PostForm
      * @return mv ModelAndView
      */
     @GetMapping("list")
     protected ModelAndView getPostListView(@RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size, @ModelAttribute("post") PostForm post) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         // Get List of Post by offset
         int offset = (page - 1) * size;
@@ -158,7 +156,11 @@ public class PostController {
         mv.addObject("pageCount", pageCount);
         mv.addObject("pageSize", size);
         // Post Form to Edit
-        mv.addObject("post", new PostForm());
+        if (post.getId() != 0) {
+            mv.addObject("post", post);
+        } else {
+            mv.addObject("post", new PostForm());
+        }
         return mv;
     }
 
@@ -168,28 +170,21 @@ public class PostController {
      * Update Post
      * </p>
      *
-     * @param post              PostForm
-     * @param isStatusUpdate    Boolean
-     * @param bindingResult     BindingResult
-     * @param redirectAttribute RedirectAttributes
+     * @param post               PostForm
+     * @param bindingResult      BindingResult
+     * @param isStatusUpdate     Boolean
+     * @param redirectAttributes RedirectAttributes
      * @return mv ModelAndView
      */
     @PostMapping("update")
-    protected ModelAndView updatePost(@ModelAttribute PostForm post, @RequestParam Boolean isStatusUpdate,
-            BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    protected ModelAndView updatePost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
+            @RequestParam Boolean isStatusUpdate, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<PostForm>> violations = validator.validate(post);
-        List<String> errors = violations.stream().map(item -> item.getMessage()).collect(Collectors.toList());
-
-        if (!errors.isEmpty()) {
-            this.addRedirectMessages(redirectAttributes, "error", "Validation Error", "Please Enter The Valid Input");
-            redirectAttributes.addFlashAttribute("errors", errors);
-            redirectAttributes.addFlashAttribute("post", new PostForm());
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", this.getErrorMessages(bindingResult));
+            redirectAttributes.addFlashAttribute("post", post);
             return mv;
         }
-
         if (isStatusUpdate) {
             this.postService.doEnableDisablePost(post);
         } else {
@@ -197,7 +192,6 @@ public class PostController {
         }
         this.addRedirectMessages(redirectAttributes, "success", "Updating Post Completed",
                 "Your Post Was Successfully Updated");
-        redirectAttributes.addFlashAttribute("post", new PostForm());
         return mv;
     }
 
@@ -207,8 +201,8 @@ public class PostController {
      * Delete Post
      * </p>
      *
-     * @param id                int
-     * @param redirectAttribute RedirectAttributes
+     * @param id                 int
+     * @param redirectAttributes RedirectAttributes
      * @return mv ModelAndView
      */
     @PostMapping("delete")
@@ -231,10 +225,14 @@ public class PostController {
      * </p>
      *
      * @param bindingResult BindingResult
-     * @return List<String>
+     * @return Map<String, String>
      */
-    private List<String> getErrorMessages(BindingResult bindingResult) {
-        return bindingResult.getAllErrors().stream().map(item -> item.getDefaultMessage()).collect(Collectors.toList());
+    private Map<String, String> getErrorMessages(BindingResult bindingResult) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            errors.put(error.getField(), error.getDefaultMessage());
+        }
+        return errors;
     }
 
     /**

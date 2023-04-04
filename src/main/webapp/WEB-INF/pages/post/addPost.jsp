@@ -2,30 +2,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <form:form method="post" modelAttribute="post">
-  <c:if test="${errors != null }">
-    <div class="alert alert-danger" role="alert">
-      <div class="container">
-        <h3 class="display-6">
-          <c:out value="${msg}" />
-        </h3>
-        <hr class="my-4">
-        <ul class="lead">
-          <c:forEach var="error" items="${errors}">
-            <li><c:out value="${error.toString()}" /></li>
-          </c:forEach>
-        </ul>
-      </div>
-    </div>
-  </c:if>
   <div class="form-group">
+    <form:errors path="title" />
     <form:label path="title">Title</form:label>
     <form:input class="form-control" type="text" path="title"
       placeholder="Title" />
+    <div class="label-error">
+      <c:out value="${errors['title']}" />
+    </div>
   </div>
   <div class="form-group">
+    <form:errors path="description" cssClass="error"></form:errors>
     <form:label path="description">Description</form:label>
     <form:textarea class="form-control" path="description" rows="3"
       placeholder="Description"></form:textarea>
+    <div class="label-error">
+      <c:out value="${errors['description']}" />
+    </div>
   </div>
   <div class="form-group">
     <label>Status</label><br />

@@ -13,7 +13,8 @@
   <tbody id="postListBody"></tbody>
 </table>
 <!-- Edit Post Form -->
-<div class="modal fade" id="editPostModal" tabindex="-1" role="dialog"
+<div class="modal show" id="editPostModal" tabindex="-1" role="dialog"
+  id="editPostModal" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -26,30 +27,26 @@
       </div>
       <div class="modal-body">
         <form:form id="postEditForm" method="post" modelAttribute="post">
-          <c:if test="${errors != null }">
-            <div class="alert alert-danger" role="alert">
-              <h6>
-                <c:out value="${msgHeader}" />
-              </h6>
-              <c:forEach var="error" items="${errors}">
-                <li><c:out value="${error.toString()}" /></li>
-              </c:forEach>
-            </div>
-          </c:if>
           <div class="form-group hidden">
             <form:label path="id">ID</form:label>
             <form:input id="txtId" class="form-control" type="number"
-              path="id" placeholder="ID"/>
+              path="id" placeholder="ID" />
           </div>
           <div class="form-group">
             <form:label path="title">Title</form:label>
             <form:input id="txtTitle" class="form-control" type="text"
-              path="title" placeholder="Title"/>
+              path="title" placeholder="Title" />
+            <div class="label-error">
+              <c:out value="${errors['title']}" />
+            </div>
           </div>
           <div class="form-group">
             <form:label path="description">Description</form:label>
             <form:textarea id="txtDescription" class="form-control"
               path="description" rows="3"></form:textarea>
+            <div class="label-error">
+              <c:out value="${errors['description']}" />
+            </div>
           </div>
           <div class="form-group">
             <form:input path="isActive" id="chkBxIsActive" type="hidden" />
@@ -113,8 +110,9 @@
 </div>
 <!-- Data -->
 <script>
-    var pageIndex = ${ pageIndex }
-    var pageCount = ${ pageCount }
-    var pageSize = ${ pageSize }
-    var list = ${ posts }
+    var pageIndex = ${pageIndex}
+    var pageCount = ${pageCount}
+    var pageSize = ${pageSize}
+    var list = ${posts}
+    var errors = '${errors}'
 </script>

@@ -1,5 +1,8 @@
 $(document).ready(function() {
 	displayPostList();
+	if (errors) {
+		$('#editPostModal').modal('show');
+	}
 });
 function displayPostList() {
 	var root = $("#postListBody");
