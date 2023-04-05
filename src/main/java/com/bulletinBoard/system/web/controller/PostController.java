@@ -76,8 +76,7 @@ public class PostController {
      * Get Home view
      * </p>
      *
-     * @param page int
-     * @param size int
+     * @param session HttpSession
      * @return ModelAndView
      */
     @GetMapping({ "/", "" })
@@ -135,9 +134,9 @@ public class PostController {
      * Get Post List View
      * </p>
      *
-     * @param page int
-     * @param size int
-     * @param post PostForm
+     * @param page    int
+     * @param post    PostForm
+     * @param session HttpSession
      * @return mv ModelAndView
      */
     @GetMapping("list")
@@ -241,7 +240,7 @@ public class PostController {
      * </p>
      *
      * @param bindingResult BindingResult
-     * @return Map<String, String>
+     * @return errors Map<String, String>
      */
     private Map<String, String> getErrorMessages(BindingResult bindingResult) {
         Map<String, String> errors = new HashMap<>();
