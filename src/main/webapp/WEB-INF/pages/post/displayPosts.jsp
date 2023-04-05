@@ -73,18 +73,18 @@
   <ul class="pagination justify-content-center">
     <li class="page-item <c:if test="${isStartPage}">disabled</c:if>">
       <a class="page-link" tabindex="-1"
-      href="list?page=<c:out value="${pageIndex - 1}"/>&size=<c:out value="${pageSize}"/>">Prev</a>
+      href="list?page=<c:out value="${pageIndex - 1}"/>">Prev</a>
     </li>
     <c:forEach var="item" begin="1" end="${pageCount}">
       <li
         class="page-item <c:if test="${item == pageIndex}">active</c:if>"><a
         class="page-link"
-        href="list?page=<c:out value="${item}"/>&size=<c:out value="${pageSize}"/>"><c:out
+        href="list?page=<c:out value="${item}"/>"><c:out
             value="${item}" /></a></li>
     </c:forEach>
     <li class="page-item <c:if test="${isEndPage}">disabled</c:if>">
       <a class="page-link"
-      href="list?page=<c:out value="${pageIndex + 1}"/>&size=<c:out value="${pageSize}"/>">Next</a>
+      href="list?page=<c:out value="${pageIndex + 1}"/>">Next</a>
     </li>
   </ul>
 </nav>
