@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,9 @@ public class PostController {
      * @return ModelAndView
      */
     @GetMapping({ "/", "" })
-    protected ModelAndView getHomeView() {
+    protected ModelAndView getHomeView(HttpSession session) {
+        session.removeAttribute("pageCount");
+        session.removeAttribute("pageIndex");
         return new ModelAndView(HOME_REDIRECT);
     }
 
@@ -138,23 +141,36 @@ public class PostController {
      * @return mv ModelAndView
      */
     @GetMapping("list")
-    protected ModelAndView getPostListView(@RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size, @ModelAttribute("post") PostForm post) {
+    protected ModelAndView getPostListView(@RequestParam(defaultValue = "0") int page,
+            @ModelAttribute("post") PostForm post, HttpSession session) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        // Get List of Post by offset
-        int offset = (page - 1) * size;
-        List<PostDTO> postDto = this.postService.doGetPostList(offset, size);
-        // Calculate Total Page for Pagination
-        int count = this.postService.doGetPostCount();
-        int pageCount = count / size;
-        int remainder = count % size;
-        if (remainder > 0) {
-            pageCount += 1;
+        // Get Page Count for Pagination
+        int pageCount = 0;
+        int pageIndex = 0;
+        int pageSize = 10;
+        Object pageCountSession = session.getAttribute("pageCount");
+        Boolean isSessionExist = (pageCountSession != null);
+        if (isSessionExist) {
+            pageCount = (int) session.getAttribute("pageCount");
+        } else {
+            int postTotalCount = this.postService.doGetPostCount();
+            pageCount = postTotalCount / pageSize;
+            int remainder = postTotalCount % pageSize;
+            pageCount += (remainder > 0) ? 1 : 0;
         }
-        mv.addObject("posts", (new Gson()).toJson(postDto));
-        mv.addObject("pageIndex", page);
-        mv.addObject("pageCount", pageCount);
-        mv.addObject("pageSize", size);
+        // Calculate offset from Page Index
+        if (page != 0) {
+            pageIndex = page;
+        } else {
+            Object indexSession = session.getAttribute("pageIndex");
+            pageIndex = (indexSession != null) ? (int) indexSession : 1;
+        }
+        int offset = (pageIndex - 1) * pageSize;
+        session.setAttribute("pageCount", pageCount);
+        session.setAttribute("pageIndex", pageIndex);
+        // Get Data for Posts
+        List<PostDTO> posts = this.postService.doGetPostList(offset, pageSize);
+        mv.addObject("posts", (new Gson()).toJson(posts));
         // Post Form to Edit
         if (post.getId() != 0) {
             mv.addObject("post", post);

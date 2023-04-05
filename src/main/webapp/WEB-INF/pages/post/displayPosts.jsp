@@ -112,7 +112,6 @@
 <script>
     var pageIndex = ${pageIndex}
     var pageCount = ${pageCount}
-    var pageSize = ${pageSize}
     var list = ${posts}
     var errors = '${errors}'
 </script>
