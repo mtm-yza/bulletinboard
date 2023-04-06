@@ -81,8 +81,9 @@ public class PostController {
      */
     @GetMapping({ "/", "" })
     protected ModelAndView getHomeView(HttpSession session) {
-        session.removeAttribute("pageCount");
+        session.removeAttribute("totalCount");
         session.removeAttribute("pageIndex");
+        session.removeAttribute("pageSize");
         return new ModelAndView(HOME_REDIRECT);
     }
 
@@ -144,19 +145,9 @@ public class PostController {
             @ModelAttribute("post") PostForm post, HttpSession session) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         // Get Page Count for Pagination
-        int pageCount = 0;
         int pageIndex = 0;
         int pageSize = 10;
-        Object pageCountSession = session.getAttribute("pageCount");
-        Boolean isSessionExist = (pageCountSession != null);
-        if (isSessionExist) {
-            pageCount = (int) session.getAttribute("pageCount");
-        } else {
-            int postTotalCount = this.postService.doGetPostCount();
-            pageCount = postTotalCount / pageSize;
-            int remainder = postTotalCount % pageSize;
-            pageCount += (remainder > 0) ? 1 : 0;
-        }
+        int postTotalCount = this.postService.doGetPostCount();
         // Calculate offset from Page Index
         if (page != 0) {
             pageIndex = page;
@@ -164,10 +155,11 @@ public class PostController {
             Object indexSession = session.getAttribute("pageIndex");
             pageIndex = (indexSession != null) ? (int) indexSession : 1;
         }
-        int offset = (pageIndex - 1) * pageSize;
-        session.setAttribute("pageCount", pageCount);
+        session.setAttribute("totalCount", postTotalCount);
         session.setAttribute("pageIndex", pageIndex);
+        session.setAttribute("pageSize", pageSize);
         // Get Data for Posts
+        int offset = (pageIndex - 1) * pageSize;
         List<PostDTO> posts = this.postService.doGetPostList(offset, pageSize);
         mv.addObject("posts", (new Gson()).toJson(posts));
         // Post Form to Edit

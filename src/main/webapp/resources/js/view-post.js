@@ -19,6 +19,21 @@ function displayPostList() {
 		dataRow += "</tr>";
 		root.append(dataRow);
 	})
+	$('#pagination-container').pagination({
+		className: "paginationjs-big",
+		pageNumber: pageIndex,
+		pageSize: pageSize,
+		pageRange: 1,
+		dataSource: Array.from({ length: totalCount }, (_, i) => i + 1),
+		callback: function() {
+			$('.paginationjs-pages ul li:not(.disabled)').each(function() {
+				var btnLink = $(this).children('a');
+				var link = 'list?page=' + $(this).attr('data-num');
+				btnLink.attr("href", link);
+				btnLink.click(function() { location.href = link; });
+			});
+		}
+	})
 }
 function getStatusBtn(index) {
 	var status = list[index].isActive;
