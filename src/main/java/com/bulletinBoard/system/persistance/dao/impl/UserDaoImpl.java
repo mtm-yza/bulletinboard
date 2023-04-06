@@ -80,38 +80,20 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * <h2>dbUpdateUser</h2>
+     * <h2>dbGetUsers</h2>
      * <p>
-     * Update User
+     * Get All Users
      * </p>
      * 
-     * @param user UserForm
+     * @param offset int
+     * @param limit int
+     * @return List<UserDTO>
      */
     @Override
-    public void dbUpdateUser(UserForm user) {
-        String stmt = new StringBuilder("UPDATE " + TABLE_NAME + " SET ")
-                .append("name = :name, email = :email, address= :address").append(" WHERE id=:id").toString();
-        System.out.println(stmt);
-        Query<?> query = getSession().createSQLQuery(stmt);
-        bindToQuery(user, query);
-        query.setParameter("id", user.getId());
-        query.executeUpdate();
-    }
-
-    /**
-     * <h2>dbDeleteUser</h2>
-     * <p>
-     * Delete User
-     * </p>
-     * 
-     * @param id int
-     */
-    @Override
-    public void dbDeleteUser(int id) {
-        String stmt = "DELETE FROM " + TABLE_NAME + " WHERE id=:id";
-        Query<?> query = getSession().createSQLQuery(stmt);
-        query.setParameter("id", id);
-        query.executeUpdate();
+    public List<UserDTO> dbGetUsers(int offset, int limit) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").append(" LIMIT " + limit)
+                .append(" OFFSET " + offset).toString();
+        return getUserDtos(getSession().createNativeQuery(stmt, User.class).list());
     }
 
     /**
@@ -144,23 +126,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * <h2>dbGetUsers</h2>
-     * <p>
-     * Get All Users
-     * </p>
-     * 
-     * @param offset int
-     * @param limit int
-     * @return List<UserDTO>
-     */
-    @Override
-    public List<UserDTO> dbGetUsers(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").append(" LIMIT " + limit)
-                .append(" OFFSET " + offset).toString();
-        return getUserDtos(getSession().createNativeQuery(stmt, User.class).list());
-    }
-
-    /**
      * <h2>dbGetUserCount</h2>
      * <p>
      * Get User Cou t
@@ -172,6 +137,41 @@ public class UserDaoImpl implements UserDao {
     public int dbGetUserCount() {
         BigInteger count = (BigInteger) getSession().createSQLQuery(COUNT_STMT).uniqueResult();
         return count.intValue();
+    }
+
+    /**
+     * <h2>dbUpdateUser</h2>
+     * <p>
+     * Update User
+     * </p>
+     * 
+     * @param user UserForm
+     */
+    @Override
+    public void dbUpdateUser(UserForm user) {
+        String stmt = new StringBuilder("UPDATE " + TABLE_NAME + " SET ")
+                .append("name = :name, email = :email, address= :address").append(" WHERE id=:id").toString();
+        System.out.println(stmt);
+        Query<?> query = getSession().createSQLQuery(stmt);
+        bindToQuery(user, query);
+        query.setParameter("id", user.getId());
+        query.executeUpdate();
+    }
+
+    /**
+     * <h2>dbDeleteUser</h2>
+     * <p>
+     * Delete User
+     * </p>
+     * 
+     * @param id int
+     */
+    @Override
+    public void dbDeleteUser(int id) {
+        String stmt = "DELETE FROM " + TABLE_NAME + " WHERE id=:id";
+        Query<?> query = getSession().createSQLQuery(stmt);
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
     /**

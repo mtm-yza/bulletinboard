@@ -26,24 +26,16 @@ public interface UserDao {
     public void dbInsertUser(UserForm user);
 
     /**
-     * <h2>dbUpdateUser</h2>
+     * <h2>dbGetUsers</h2>
      * <p>
-     * Update User
+     * Get Users
      * </p>
      *
-     * @param user UserForm
+     * @param offset
+     * @param limit
+     * @return List<UserDTO>
      */
-    public void dbUpdateUser(UserForm user);
-
-    /**
-     * <h2>dbDeleteUser</h2>
-     * <p>
-     * Delete User
-     * </p>
-     *
-     * @param id int
-     */
-    public void dbDeleteUser(int id);
+    public List<UserDTO> dbGetUsers(int offset, int limit);
 
     /**
      * <h2>dbGetUserById</h2>
@@ -68,18 +60,6 @@ public interface UserDao {
     public UserDTO dbGetUserByEmail(String email);
 
     /**
-     * <h2>dbGetUsers</h2>
-     * <p>
-     * Get Users
-     * </p>
-     *
-     * @param offset
-     * @param limit
-     * @return List<UserDTO>
-     */
-    public List<UserDTO> dbGetUsers(int offset, int limit);
-
-    /**
      * <h2>dbGetUserCount</h2>
      * <p>
      * Get User Count
@@ -88,4 +68,24 @@ public interface UserDao {
      * @return int
      */
     public int dbGetUserCount();
+
+    /**
+     * <h2>dbUpdateUser</h2>
+     * <p>
+     * Update User
+     * </p>
+     *
+     * @param user UserForm
+     */
+    public void dbUpdateUser(UserForm user);
+
+    /**
+     * <h2>dbDeleteUser</h2>
+     * <p>
+     * Delete User
+     * </p>
+     *
+     * @param id int
+     */
+    public void dbDeleteUser(int id);
 }

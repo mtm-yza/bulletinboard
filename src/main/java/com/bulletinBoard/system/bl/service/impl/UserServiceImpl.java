@@ -52,31 +52,18 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * <h2>doUpdateUser</h2>
+     * <h2>doGetUserList</h2>
      * <p>
-     * Update User
+     * Get User List
      * </p>
      * 
-     * @param user int
-     * @param flag int
-     * @return int
+     * @param offset int
+     * @param size int
+     * @return List<UserDTO>
      */
     @Override
-    public int doUpdateUser(UserForm user, int flag) {
-        userDao.dbUpdateUser(user);
-        return Constant.SUCCESS;
-    }
-
-    /**
-     * <h2>doDeleteUser</h2>
-     * <p>
-     * Delete User
-     * </p>
-     * 
-     */
-    @Override
-    public void doDeleteUser(int id) {
-        userDao.dbDeleteUser(id);
+    public List<UserDTO> doGetUserList(int offset, int size) {
+        return userDao.dbGetUsers(offset, size);
     }
 
     /**
@@ -108,21 +95,6 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * <h2>doGetUserList</h2>
-     * <p>
-     * Get User List
-     * </p>
-     * 
-     * @param offset int
-     * @param size int
-     * @return List<UserDTO>
-     */
-    @Override
-    public List<UserDTO> doGetUserList(int offset, int size) {
-        return userDao.dbGetUsers(offset, size);
-    }
-
-    /**
      * <h2>doGetUserCount</h2>
      * <p>
      * Get User Count
@@ -133,5 +105,33 @@ public class UserServiceImpl implements UserService {
     @Override
     public int doGetUserCount() {
         return userDao.dbGetUserCount();
+    }
+
+    /**
+     * <h2>doUpdateUser</h2>
+     * <p>
+     * Update User
+     * </p>
+     * 
+     * @param user int
+     * @param flag int
+     * @return int
+     */
+    @Override
+    public int doUpdateUser(UserForm user, int flag) {
+        userDao.dbUpdateUser(user);
+        return Constant.SUCCESS;
+    }
+
+    /**
+     * <h2>doDeleteUser</h2>
+     * <p>
+     * Delete User
+     * </p>
+     * 
+     */
+    @Override
+    public void doDeleteUser(int id) {
+        userDao.dbDeleteUser(id);
     }
 }

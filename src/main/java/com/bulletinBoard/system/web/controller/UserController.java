@@ -41,8 +41,25 @@ public class UserController {
         return new ModelAndView(HOME_REDIRECT);
     }
 
+    @GetMapping("add")
+    protected ModelAndView getAddUserForm() {
+        return new ModelAndView(ADD_VIEW);
+    }
+
+    @PostMapping("add")
+    protected ModelAndView addUser(@RequestParam("name") String name, @RequestParam("email") String email,
+            @RequestParam("address") String address, @RequestParam String password) {
+        UserForm user = new UserForm(name, email, address, password);
+        ModelAndView mv = new ModelAndView();
+        if (!validate(user, mv, ADD_VIEW)) {
+            return mv;
+        }
+        checkResult(mv, userService.doAddUser(user));
+        return mv;
+    }
+
     @GetMapping("list")
-    protected ModelAndView getPostListView(@RequestParam(defaultValue = "1") int page,
+    protected ModelAndView getUserListView(@RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         // Get List of Post by offset
@@ -62,25 +79,8 @@ public class UserController {
         return mv;
     }
 
-    @GetMapping("add")
-    protected ModelAndView getAddPostForm() {
-        return new ModelAndView(ADD_VIEW);
-    }
-
-    @PostMapping("add")
-    protected ModelAndView addUser(@RequestParam("name") String name, @RequestParam("email") String email,
-            @RequestParam("address") String address, @RequestParam String password) {
-        UserForm user = new UserForm(name, email, address, password);
-        ModelAndView mv = new ModelAndView();
-        if (!validate(user, mv, ADD_VIEW)) {
-            return mv;
-        }
-        checkResult(mv, userService.doAddUser(user));
-        return mv;
-    }
-
     @PostMapping("update")
-    protected ModelAndView updatePost(@RequestParam("id") int id, @RequestParam("name") String name,
+    protected ModelAndView updateUser(@RequestParam("id") int id, @RequestParam("name") String name,
             @RequestParam("email") String email, @RequestParam("address") String address, HttpServletResponse resp) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         UserForm user = new UserForm(id, name, email, address);
@@ -95,7 +95,7 @@ public class UserController {
     }
 
     @PostMapping("delete")
-    protected ModelAndView deletePost(@RequestParam("id") int id) {
+    protected ModelAndView deleteUser(@RequestParam("id") int id) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         if (id <= 0) {
             mv.addObject("msg", "Invalid User ID");

@@ -28,26 +28,16 @@ public interface UserService {
     public int doAddUser(UserForm post);
 
     /**
-     * <h2>doUpdateUser</h2>
+     * <h2>doGetUserList</h2>
      * <p>
-     * Update User
+     * Get User List
      * </p>
      *
-     * @param post UserForm
-     * @param flag int
-     * @return int
+     * @param offset int
+     * @param size int
+     * @return List<UserDTO>
      */
-    public int doUpdateUser(UserForm post, int flag);
-
-    /**
-     * <h2>doDeleteUser</h2>
-     * <p>
-     * Delete User by ID
-     * </p>
-     *
-     * @param id int
-     */
-    public void doDeleteUser(int id);
+    public List<UserDTO> doGetUserList(int offset, int size);
 
     /**
      * <h2>doGetUserById</h2>
@@ -72,18 +62,6 @@ public interface UserService {
     public UserDTO doGetUserByEmail(String email);
 
     /**
-     * <h2>doGetUserList</h2>
-     * <p>
-     * Get User List
-     * </p>
-     *
-     * @param offset int
-     * @param size int
-     * @return List<UserDTO>
-     */
-    public List<UserDTO> doGetUserList(int offset, int size);
-
-    /**
      * <h2>doGetUserCount</h2>
      * <p>
      * Get User Count
@@ -92,4 +70,26 @@ public interface UserService {
      * @return int
      */
     public int doGetUserCount();
+
+    /**
+     * <h2>doUpdateUser</h2>
+     * <p>
+     * Update User
+     * </p>
+     *
+     * @param post UserForm
+     * @param flag int
+     * @return int
+     */
+    public int doUpdateUser(UserForm post, int flag);
+
+    /**
+     * <h2>doDeleteUser</h2>
+     * <p>
+     * Delete User by ID
+     * </p>
+     *
+     * @param id int
+     */
+    public void doDeleteUser(int id);
 }
