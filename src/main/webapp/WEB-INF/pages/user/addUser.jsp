@@ -1,41 +1,39 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-<form method="post">
-  <c:if test="${errors != null }">
-    <div class="alert alert-danger" role="alert">
-
-      <div class="container">
-        <h3 class="display-6">
-          <c:out value="${msg}" />
-        </h3>
-        <hr class="my-4">
-        <ul class="lead">
-          <c:forEach var="error" items="${errors}">
-            <li><c:out value="${error.toString()}" /></li>
-          </c:forEach>
-        </ul>
-      </div>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<form:form method="post" modelAttribute="user">
+  <div class="form-group">
+    <form:label path="name">Name</form:label>
+    <form:input id="txtName" class="form-control" type="text"
+      path="name" placeholder="Name" />
+      <div class="label-error">
+      <c:out value="${errors['name']}" />
     </div>
-  </c:if>
-  <div class="form-group">
-    <label for="title">Name</label> <input id="txtName"
-      class="form-control" type="text" name="name" placeholder="Name">
   </div>
   <div class="form-group">
-    <label for="title">Email</label> <input id="txtEmail"
-      class="form-control" type="text" name="email" placeholder="Email">
+    <form:label path="email">Email</form:label>
+    <form:input id="txtEmail" class="form-control" type="text"
+      path="email" placeholder="Email" />
+    <div class="label-error">
+      <c:out value="${errors['email']}" />
+    </div>
   </div>
   <div class="form-group">
-    <label for="address">Address</label>
-    <textarea id="txtAddress" class="form-control" name="address"
-      rows="3" placeholder="Address"></textarea>
+    <form:label path="address">Address</form:label>
+    <form:textarea id="txtAddress" class="form-control" path="address"
+      rows="3" placeholder="Address"></form:textarea>
+    <div class="label-error">
+      <c:out value="${errors['address']}" />
+    </div>
   </div>
   <div class="form-group">
-    <label for="password">Password</label> <input id="txtPassword"
-      class="form-control" type="text" name="password"
-      placeholder="Password">
+    <form:label path="password">Password</form:label>
+    <form:input id="txtPassword" class="form-control" type="text"
+      path="password" placeholder="Password"/>
+    <div class="label-error">
+      <c:out value="${errors['password']}" />
+    </div>
   </div>
   <input class="btn btn-primary" formaction="add" type="submit"
     value="Submit">
-</form>
+</form:form>

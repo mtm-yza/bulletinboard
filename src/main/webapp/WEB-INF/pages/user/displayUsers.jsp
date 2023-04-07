@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!-- User Display Table -->
 <table class="table table-bordered">
   <thead>
@@ -13,7 +14,7 @@
   <tbody id="tbl-body"></tbody>
 </table>
 <!-- Edit Post Form -->
-<div class="modal fade" id="editUserModal" tabindex="-1" role="dialog"
+<div class="modal" id="editUserModal" tabindex="-1" role="dialog"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -25,35 +26,45 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="userEditForm" method="post">
-          <c:if test="${errors != null }">
-            <div class="alert alert-danger" role="alert">
-              <h6>
-                <c:out value="${msg}" />
-              </h6>
-              <c:forEach var="error" items="${errors}">
-                <li><c:out value="${error.toString()}" /></li>
-              </c:forEach>
-            </div>
-          </c:if>
+        <form:form id="userEditForm" method="post" modelAttribute="user">
           <div class="form-group hidden">
-            <input id="txtId" class="form-control" type="number"
-              name="id" required readonly>
+            <form:input id="txtId" class="form-control" type="number"
+              path="id" readonly="true" />
+            <div class="label-error">
+              <c:out value="${errors['id']}" />
+            </div>
           </div>
           <div class="form-group">
-            <label for="title">Name</label> <input id="txtName"
-              class="form-control" type="text" name="name"
-              placeholder="Name">
+            <form:label path="name">Name</form:label>
+            <form:input id="txtName" class="form-control" type="text"
+              path="name" placeholder="Name" />
+            <div class="label-error">
+              <c:out value="${errors['name']}" />
+            </div>
           </div>
           <div class="form-group">
-            <label for="title">Email</label> <input id="txtEmail"
-              class="form-control" type="text" name="email"
-              placeholder="Email">
+            <form:label path="email">Email</form:label>
+            <form:input id="txtEmail" class="form-control" type="text"
+              path="email" placeholder="Email" />
+            <div class="label-error">
+              <c:out value="${errors['email']}" />
+            </div>
           </div>
           <div class="form-group">
-            <label for="address">Address</label>
-            <textarea id="txtAddress" class="form-control"
-              name="address" rows="3" placeholder="Address"></textarea>
+            <form:label path="address">Address</form:label>
+            <form:textarea id="txtAddress" class="form-control"
+              path="address" rows="3" placeholder="Address"></form:textarea>
+            <div class="label-error">
+              <c:out value="${errors['address']}" />
+            </div>
+          </div>
+          <div class="form-group hidden">
+            <form:label path="password">Password</form:label>
+            <form:input id="txtPassword" class="form-control"
+              path="password" placeholder="Password"></form:input>
+            <div class="label-error">
+              <c:out value="${errors['password']}" />
+            </div>
           </div>
           <div class="container text-center">
             <button class="btn btn-primary" type="submit"
@@ -63,7 +74,7 @@
             <button class="btn btn-primary" type="button"
               data-dismiss="modal">Cancel</button>
           </div>
-        </form>
+        </form:form>
       </div>
     </div>
   </div>
@@ -116,4 +127,5 @@
     var pageCount = ${pageCount}
     var pageSize = ${pageSize}
     var list = ${users}
+    var errors = '${errors}'
 </script>

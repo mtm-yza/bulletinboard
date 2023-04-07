@@ -1,26 +1,24 @@
 package com.bulletinBoard.system.web.controller;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.bl.service.UserService;
 import com.bulletinBoard.system.common.Constant;
+import com.bulletinBoard.system.common.ControllerUtil;
 import com.bulletinBoard.system.web.form.UserForm;
 import com.google.gson.Gson;
 
@@ -43,24 +41,43 @@ public class UserController {
 
     @GetMapping("add")
     protected ModelAndView getAddUserForm() {
-        return new ModelAndView(ADD_VIEW);
+        ModelAndView mv = new ModelAndView(ADD_VIEW);
+        mv.addObject("user", new UserForm());
+        return mv;
     }
 
     @PostMapping("add")
-    protected ModelAndView addUser(@RequestParam("name") String name, @RequestParam("email") String email,
-            @RequestParam("address") String address, @RequestParam String password) {
-        UserForm user = new UserForm(name, email, address, password);
+    protected ModelAndView addUser(@ModelAttribute @Valid UserForm user, BindingResult bindingResult,
+            RedirectAttributes redirectAttribute) {
         ModelAndView mv = new ModelAndView();
-        if (!validate(user, mv, ADD_VIEW)) {
+        // Check Validation Error
+        if (bindingResult.hasErrors()) {
+            mv.setViewName(ADD_VIEW);
+            mv.addObject("user", user);
+            mv.addObject("errors", ControllerUtil.getErrorMessages(bindingResult));
             return mv;
         }
-        checkResult(mv, userService.doAddUser(user));
+        // Check if User is Saved
+        int result = userService.doAddUser(user);
+        if (result != Constant.SUCCESS) {
+            mv.setViewName(ADD_VIEW);
+            mv.addObject("user", user);
+            mv.addObject("msgType", "error");
+            mv.addObject("msgHeader", "Failed to Add User");
+            mv.addObject("msg", this.getMessage(result));
+            return mv;
+        }
+        // Execute if successful
+        mv.setViewName(HOME_REDIRECT);
+        ControllerUtil.addRedirectMessages(redirectAttribute, "success", "Adding User Successfully",
+                "User has been Added Successfully");
         return mv;
     }
 
     @GetMapping("list")
     protected ModelAndView getUserListView(@RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @ModelAttribute("user") UserForm user) {
+        int size = 10;
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         // Get List of Post by offset
         int offset = (page - 1) * size;
@@ -76,21 +93,33 @@ public class UserController {
         mv.addObject("pageIndex", page);
         mv.addObject("pageCount", pageCount);
         mv.addObject("pageSize", size);
+        // User Form to Edit
+        if (user.getId() != 0) {
+            mv.addObject("user", user);
+        } else {
+            mv.addObject("user", new UserForm());
+        }
         return mv;
     }
 
     @PostMapping("update")
-    protected ModelAndView updateUser(@RequestParam("id") int id, @RequestParam("name") String name,
-            @RequestParam("email") String email, @RequestParam("address") String address, HttpServletResponse resp) {
+    protected ModelAndView updateUser(@Valid @ModelAttribute UserForm user, BindingResult bindingResult,
+            RedirectAttributes redirectAttribute) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-        UserForm user = new UserForm(id, name, email, address);
-        System.out.println(user);
-        // Check UserForm Validation
-        if (!validate(user, mv, HOME_REDIRECT)) {
+        // Check Validation
+        if (bindingResult.hasErrors()) {
+            redirectAttribute.addFlashAttribute("errors", ControllerUtil.getErrorMessages(bindingResult));
+            redirectAttribute.addFlashAttribute("user", user);
             return mv;
         }
+        this.userService.doUpdateUser(user, 1);
+        ControllerUtil.addRedirectMessages(redirectAttribute, "success", "Update Success",
+                "User Has Been Updated Successfuly");
+
         // Check UserForm Update Result
-        checkResult(mv, userService.doUpdateUser(user, 1));
+//        checkResult(mv, userService.doUpdateUser(user, 1));
+//        return mv;
+        
         return mv;
     }
 
@@ -105,27 +134,16 @@ public class UserController {
         return mv;
     }
 
-    private boolean validate(UserForm form, ModelAndView mv, String viewName) {
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<UserForm>> violations = validator.validate(form);
-        List<String> errors = violations.stream().map(item -> item.getMessage()).collect(Collectors.toList());
-        if (!errors.isEmpty()) {
-            mv.setViewName(viewName);
-            mv.addObject("msg", "Validation Error");
-            mv.addObject("errors", errors);
-            return false;
-        }
-        return true;
-    }
-
-    private void checkResult(ModelAndView mv, int result) {
+    private String getMessage(int result) {
+        String message = null;
         switch (result) {
         case Constant.SUCCESS:
-            mv.setViewName(HOME_REDIRECT);
+            message = "User is Successfully Added";
             break;
         case Constant.EMAIL_ALREADY_REGISTERED:
-            mv.addObject("msg", "Unable to Save the User");
-            mv.addObject("errors", Arrays.asList("Email is already registered."));
+            message = "Email is Already Registered";
+            break;
         }
+        return message;
     }
 }

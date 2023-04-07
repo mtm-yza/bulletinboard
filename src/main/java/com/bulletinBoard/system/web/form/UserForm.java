@@ -24,6 +24,7 @@ public class UserForm {
     private String email;
     @NotBlank(message = "Address is Required")
     private String address;
+    @NotBlank(message = "Password is Required")
     private String password;
 
     public UserForm(String name, String email, String address, String password) {

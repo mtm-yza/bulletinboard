@@ -1,5 +1,8 @@
 $(document).ready(function() {
 	displayDataList();
+	if (errors) {
+		$('#editUserModal').modal('show');
+	}
 });
 function displayDataList() {
 	var root = $("#tbl-body");
@@ -27,6 +30,7 @@ function setFormValues(index) {
 	$("#txtName").val(user.name);
 	$("#txtEmail").val(user.email);
 	$("#txtAddress").val(user.address);
+	$("#txtPassword").val(user.password);
 }
 function deleteUser(index) {
 	var id = list[index].id;

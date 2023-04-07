@@ -122,13 +122,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public UserDTO dbGetUserByEmail(String email) {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email").toString();
-        return getUserDto(getSession().createNativeQuery(stmt, User.class).setParameter("email", email).uniqueResult());
+        return new UserDTO(getSession().createNativeQuery(stmt, User.class).setParameter("email", email).uniqueResult());
     }
 
     /**
      * <h2>dbGetUserCount</h2>
      * <p>
-     * Get User Cou t
+     * Get User Count
      * </p>
      * 
      * @return int
@@ -211,22 +211,6 @@ public class UserDaoImpl implements UserDao {
      * @return List<UserDTO>
      */
     private List<UserDTO> getUserDtos(List<User> list) {
-        return list.stream().map(item -> getUserDto(item)).collect(Collectors.toList());
-    }
-
-    /**
-     * <h2>getUserDto</h2>
-     * <p>
-     * Get User Entity to User DTO
-     * </p>
-     *
-     * @param user User
-     * @return UserDTO
-     */
-    private UserDTO getUserDto(User user) {
-        if (user == null) {
-            return null;
-        }
-        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getAddress());
+        return list.stream().map(item -> new UserDTO(item)).collect(Collectors.toList());
     }
 }
