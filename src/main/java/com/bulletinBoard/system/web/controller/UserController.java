@@ -114,12 +114,7 @@ public class UserController {
         }
         this.userService.doUpdateUser(user, 1);
         ControllerUtil.addRedirectMessages(redirectAttribute, "success", "Update Success",
-                "User Has Been Updated Successfuly");
-
-        // Check UserForm Update Result
-//        checkResult(mv, userService.doUpdateUser(user, 1));
-//        return mv;
-        
+                "User Has Been Updated Successfuly");        
         return mv;
     }
 

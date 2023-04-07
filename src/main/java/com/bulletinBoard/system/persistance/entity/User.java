@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.web.form.UserForm;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +35,14 @@ public class User {
     private String password;
     
     public User(UserForm user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.address = user.getAddress();
+        this.password = user.getPassword();
+    }
+    
+    public User(UserDTO user) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();

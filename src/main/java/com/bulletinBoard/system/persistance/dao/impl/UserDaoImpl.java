@@ -1,6 +1,5 @@
 package com.bulletinBoard.system.persistance.dao.impl;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,7 +7,6 @@ import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -36,14 +34,14 @@ public class UserDaoImpl implements UserDao {
      * User Table Name
      * </p>
      */
-    private static final String TABLE_NAME = "users";
+    private static final String TABLE_NAME = "User";
     /**
      * <h2>SELECT_STMT</h2>
      * <p>
      * Common SELECT Statement of User
      * </p>
      */
-    private static final String SELECT_STMT = "SELECT * FROM " + TABLE_NAME;
+    private static final String SELECT_STMT = " FROM " + TABLE_NAME;
     /**
      * <h2>COUNT_STMT</h2>
      * <p>
@@ -71,12 +69,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void dbInsertUser(UserForm user) {
-        String stmt = new StringBuilder("INSERT INTO " + TABLE_NAME).append(" (name, email, address, password) VALUES")
-                .append(" (:name, :email, :address, :password)").toString();
-        Query<?> query = getSession().createSQLQuery(stmt);
-        bindToQuery(user, query);
-        query.setParameter("password", user.getPassword());
-        query.executeUpdate();
+        this.getSession().save(new User(user));
     }
 
     /**
@@ -86,14 +79,14 @@ public class UserDaoImpl implements UserDao {
      * </p>
      * 
      * @param offset int
-     * @param limit int
+     * @param limit  int
      * @return List<UserDTO>
      */
+    @SuppressWarnings("unchecked")
     @Override
     public List<UserDTO> dbGetUsers(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY id").append(" LIMIT " + limit)
-                .append(" OFFSET " + offset).toString();
-        return getUserDtos(getSession().createNativeQuery(stmt, User.class).list());
+        return getUserDtos(
+                this.getSession().createQuery(SELECT_STMT).setFirstResult(offset).setMaxResults(limit).list());
     }
 
     /**
@@ -107,22 +100,25 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public UserDTO dbGetUserById(int id) {
-        return null;
+        User user = this.getSession().get(User.class, id);
+        return new UserDTO(user);
     }
 
     /**
      * <h2>dbGetUserByEmail</h2>
      * <p>
-     * Get 
+     * Get
      * </p>
      * 
      * @param email String
      * @return UserDTO
      */
+    @SuppressWarnings("unchecked")
     @Override
     public UserDTO dbGetUserByEmail(String email) {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email").toString();
-        return new UserDTO(getSession().createNativeQuery(stmt, User.class).setParameter("email", email).uniqueResult());
+        List<User> user =  this.getSession().createQuery(stmt).setParameter("email", email).list();            
+        return (!user.isEmpty()) ? new UserDTO(user.get(0)) : null;
     }
 
     /**
@@ -135,7 +131,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public int dbGetUserCount() {
-        BigInteger count = (BigInteger) getSession().createSQLQuery(COUNT_STMT).uniqueResult();
+        Long count = (Long) this.getSession().createQuery(COUNT_STMT).uniqueResult();
         return count.intValue();
     }
 
@@ -149,13 +145,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void dbUpdateUser(UserForm user) {
-        String stmt = new StringBuilder("UPDATE " + TABLE_NAME + " SET ")
-                .append("name = :name, email = :email, address= :address").append(" WHERE id=:id").toString();
-        System.out.println(stmt);
-        Query<?> query = getSession().createSQLQuery(stmt);
-        bindToQuery(user, query);
-        query.setParameter("id", user.getId());
-        query.executeUpdate();
+        this.getSession().update(new User(user));
     }
 
     /**
@@ -168,10 +158,8 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void dbDeleteUser(int id) {
-        String stmt = "DELETE FROM " + TABLE_NAME + " WHERE id=:id";
-        Query<?> query = getSession().createSQLQuery(stmt);
-        query.setParameter("id", id);
-        query.executeUpdate();
+        User user = this.getSession().get(User.class, id);
+        this.getSession().delete(user);
     }
 
     /**
@@ -187,21 +175,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * <h2>bindToQuery</h2>
-     * <p>
-     * Bind User Information To Query
-     * </p>
-     *
-     * @param user UserForm
-     * @param query Query<?>
-     */
-    private void bindToQuery(UserForm user, Query<?> query) {
-        query.setParameter("name", user.getName());
-        query.setParameter("email", user.getEmail());
-        query.setParameter("address", user.getAddress());
-    }
-
-    /**
      * <h2>getUserDtos</h2>
      * <p>
      * Convert User Entity List to User DTO List
@@ -211,6 +184,6 @@ public class UserDaoImpl implements UserDao {
      * @return List<UserDTO>
      */
     private List<UserDTO> getUserDtos(List<User> list) {
-        return list.stream().map(item -> new UserDTO(item)).collect(Collectors.toList());
+        return list.stream().map(item -> (item != null) ? new UserDTO(item) : null).collect(Collectors.toList());
     }
 }
