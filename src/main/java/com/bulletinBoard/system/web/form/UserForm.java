@@ -9,6 +9,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h2>UserForm Class</h2>
+ * <p>
+ * User Form
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 @Data
 @Getter
 @Setter
@@ -17,16 +26,61 @@ import lombok.ToString;
 @ToString
 public class UserForm {
 
+    /**
+     * <h2>id</h2>
+     * <p>
+     * User's ID
+     * </p>
+     */
     private int id;
+
+    /**
+     * <h2>name</h2>
+     * <p>
+     * User's Name
+     * </p>
+     */
     @NotBlank(message = "Name is Required")
     private String name;
+
+    /**
+     * <h2>email</h2>
+     * <p>
+     * User's Email
+     * </p>
+     */
     @NotBlank(message = "Email is Required")
     private String email;
+
+    /**
+     * <h2>address</h2>
+     * <p>
+     * User's Address
+     * </p>
+     */
     @NotBlank(message = "Address is Required")
     private String address;
+
+    /**
+     * <h2>password</h2>
+     * <p>
+     * User's Password
+     * </p>
+     */
     @NotBlank(message = "Password is Required")
     private String password;
 
+    /**
+     * <h2>Constructor for UserForm</h2>
+     * <p>
+     * Constructor for UserForm
+     * </p>
+     * 
+     * @param name     String
+     * @param email    String
+     * @param address  String
+     * @param password String
+     */
     public UserForm(String name, String email, String address, String password) {
         super();
         this.name = name;
@@ -34,7 +88,18 @@ public class UserForm {
         this.address = address;
         this.password = password;
     }
-    
+
+    /**
+     * <h2>Constructor for UserForm</h2>
+     * <p>
+     * Constructor for UserForm
+     * </p>
+     * 
+     * @param id      int
+     * @param name    String
+     * @param email   String
+     * @param address String
+     */
     public UserForm(int id, String name, String email, String address) {
         super();
         this.id = id;

@@ -1,12 +1,17 @@
 package com.bulletinBoard.system.persistance.entity;
 
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.bulletinBoard.system.bl.dto.UserDTO;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import com.bulletinBoard.system.web.form.UserForm;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +21,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * <h2>User</h2>
+ * <p>
+ * User Entity
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 @Data
 @Getter
 @Setter
@@ -26,23 +40,76 @@ import lombok.ToString;
 @Table(name = "users")
 public class User {
 
+    /**
+     * <h2>id</h2>
+     * <p>
+     * User's ID
+     * </p>
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    /**
+     * <h2>name</h2>
+     * <p>
+     * User's Name
+     * </p>
+     */
     private String name;
+
+    /**
+     * <h2>email</h2>
+     * <p>
+     * User's Email
+     * </p>
+     */
     private String email;
+
+    /**
+     * <h2>address</h2>
+     * <p>
+     * User's Address
+     * </p>
+     */
     private String address;
+
+    /**
+     * <h2>password</h2>
+     * <p>
+     * User's Password
+     * </p>
+     */
     private String password;
-    
+
+    /**
+     * <h2>created_at</h2>
+     * <p>
+     * Created Date
+     * </p>
+     */
+    @CreationTimestamp
+    @Column(updatable = false)
+    private Timestamp created_at;
+
+    /**
+     * <h2>updated_at</h2>
+     * <p>
+     * Updated Date
+     * </p>
+     */
+    @UpdateTimestamp
+    private Timestamp updated_at;
+
+    /**
+     * <h2>Constructor for User</h2>
+     * <p>
+     * Constructor for User
+     * </p>
+     * 
+     * @param user UserForm
+     */
     public User(UserForm user) {
-        this.id = user.getId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.address = user.getAddress();
-        this.password = user.getPassword();
-    }
-    
-    public User(UserDTO user) {
         this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();

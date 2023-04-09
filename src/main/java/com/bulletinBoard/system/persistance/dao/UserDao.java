@@ -2,8 +2,7 @@ package com.bulletinBoard.system.persistance.dao;
 
 import java.util.List;
 
-import com.bulletinBoard.system.bl.dto.UserDTO;
-import com.bulletinBoard.system.web.form.UserForm;
+import com.bulletinBoard.system.persistance.entity.User;
 
 /**
  * <h2>UserDao Class</h2>
@@ -21,9 +20,9 @@ public interface UserDao {
      * Insert User
      * </p>
      *
-     * @param user UserForm
+     * @param user User
      */
-    public void dbInsertUser(UserForm user);
+    public void dbInsertUser(User user);
 
     /**
      * <h2>dbGetUsers</h2>
@@ -33,9 +32,9 @@ public interface UserDao {
      *
      * @param offset
      * @param limit
-     * @return List<UserDTO>
+     * @return List<User>
      */
-    public List<UserDTO> dbGetUsers(int offset, int limit);
+    public List<User> dbGetUsers(int offset, int limit);
 
     /**
      * <h2>dbGetUserById</h2>
@@ -44,9 +43,9 @@ public interface UserDao {
      * </p>
      *
      * @param id int
-     * @return UserDTO
+     * @return User
      */
-    public UserDTO dbGetUserById(int id);
+    public User dbGetUserById(int id);
 
     /**
      * <h2>dbGetUserByEmail</h2>
@@ -55,9 +54,9 @@ public interface UserDao {
      * </p>
      *
      * @param email String
-     * @return UserDTO
+     * @return User
      */
-    public UserDTO dbGetUserByEmail(String email);
+    public User dbGetUserByEmail(String email);
 
     /**
      * <h2>dbGetUserCount</h2>
@@ -75,9 +74,9 @@ public interface UserDao {
      * Update User
      * </p>
      *
-     * @param user UserForm
+     * @param user User
      */
-    public void dbUpdateUser(UserForm user);
+    public void dbUpdateUser(User user);
 
     /**
      * <h2>dbDeleteUser</h2>

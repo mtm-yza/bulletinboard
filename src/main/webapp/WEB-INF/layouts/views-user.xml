@@ -6,6 +6,12 @@
         <put-attribute name="title" value="User List" />
         <put-attribute name="body"
             value="/WEB-INF/pages/user/displayUsers.jsp" />
+        <put-list-attribute name="css" inherit="true">
+            <add-attribute value="/resources/css/pagination-2.6.0.css" />
+        </put-list-attribute>
+        <put-list-attribute name="initScripts" inherit="true">
+            <add-attribute value="/resources/js/pagination-2.6.0.min.js" />
+        </put-list-attribute>
         <put-list-attribute name="scripts">
             <add-attribute
                 value="/resources/js/view-user.js" />

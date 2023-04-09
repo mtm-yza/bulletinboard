@@ -1,6 +1,7 @@
 package com.bulletinBoard.system.bl.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.bl.service.UserService;
 import com.bulletinBoard.system.common.Constant;
 import com.bulletinBoard.system.persistance.dao.UserDao;
+import com.bulletinBoard.system.persistance.entity.User;
 import com.bulletinBoard.system.web.form.UserForm;
 
 /**
@@ -43,11 +45,12 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int doAddUser(UserForm user) {
-        UserDTO userDto = doGetUserByEmail(user.getEmail());
-        if (userDto != null) {
+        // Check if the Email is Already Registered. 
+        User userEntity = userDao.dbGetUserByEmail(user.getEmail());
+        if (userEntity != null) {
             return Constant.EMAIL_ALREADY_REGISTERED;
         }
-        userDao.dbInsertUser(user);
+        userDao.dbInsertUser(new User(user));
         return Constant.SUCCESS;
     }
 
@@ -63,7 +66,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<UserDTO> doGetUserList(int offset, int size) {
-        return userDao.dbGetUsers(offset, size);
+        return this.getUsers(userDao.dbGetUsers(offset, size));
     }
 
     /**
@@ -77,7 +80,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDTO doGetUserById(int id) {
-        return userDao.dbGetUserById(id);
+        return new UserDTO(userDao.dbGetUserById(id));
     }
 
     /**
@@ -91,7 +94,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDTO doGetUserByEmail(String email) {
-        return userDao.dbGetUserByEmail(email);
+        return new UserDTO(userDao.dbGetUserByEmail(email));
     }
 
     /**
@@ -113,13 +116,12 @@ public class UserServiceImpl implements UserService {
      * Update User
      * </p>
      * 
-     * @param user int
-     * @param flag int
+     * @param user UserForm
      * @return int
      */
     @Override
-    public int doUpdateUser(UserForm user, int flag) {
-        userDao.dbUpdateUser(user);
+    public int doUpdateUser(UserForm user) {
+        userDao.dbUpdateUser(new User(user));
         return Constant.SUCCESS;
     }
 
@@ -133,5 +135,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void doDeleteUser(int id) {
         userDao.dbDeleteUser(id);
+    }
+
+    /**
+     * <h2>getUsers</h2>
+     * <p>
+     * Get User List from User Entity List
+     * </p>
+     * 
+     */
+    private List<UserDTO> getUsers(List<User> list) {
+        return list.stream().map(item -> new UserDTO(item)).collect(Collectors.toList());
     }
 }

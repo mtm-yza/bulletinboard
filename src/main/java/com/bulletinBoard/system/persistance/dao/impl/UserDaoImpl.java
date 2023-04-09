@@ -1,7 +1,6 @@
 package com.bulletinBoard.system.persistance.dao.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -10,10 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.persistance.dao.UserDao;
 import com.bulletinBoard.system.persistance.entity.User;
-import com.bulletinBoard.system.web.form.UserForm;
 
 /**
  * <h2>UserDaoImpl Class</h2>
@@ -65,11 +62,11 @@ public class UserDaoImpl implements UserDao {
      * Insert User
      * </p>
      * 
-     * @param user UserForm
+     * @param user User
      */
     @Override
-    public void dbInsertUser(UserForm user) {
-        this.getSession().save(new User(user));
+    public void dbInsertUser(User user) {
+        this.getSession().save(user);
     }
 
     /**
@@ -80,13 +77,13 @@ public class UserDaoImpl implements UserDao {
      * 
      * @param offset int
      * @param limit  int
-     * @return List<UserDTO>
+     * @return List<User>
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<UserDTO> dbGetUsers(int offset, int limit) {
-        return getUserDtos(
-                this.getSession().createQuery(SELECT_STMT).setFirstResult(offset).setMaxResults(limit).list());
+    public List<User> dbGetUsers(int offset, int limit) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY created_at DESC").toString();
+        return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
     }
 
     /**
@@ -96,12 +93,11 @@ public class UserDaoImpl implements UserDao {
      * </p>
      * 
      * @param id int
-     * @return UserDTO
+     * @return User
      */
     @Override
-    public UserDTO dbGetUserById(int id) {
-        User user = this.getSession().get(User.class, id);
-        return new UserDTO(user);
+    public User dbGetUserById(int id) {
+        return this.getSession().get(User.class, id);
     }
 
     /**
@@ -111,14 +107,14 @@ public class UserDaoImpl implements UserDao {
      * </p>
      * 
      * @param email String
-     * @return UserDTO
+     * @return User
      */
     @SuppressWarnings("unchecked")
     @Override
-    public UserDTO dbGetUserByEmail(String email) {
+    public User dbGetUserByEmail(String email) {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email").toString();
         List<User> user =  this.getSession().createQuery(stmt).setParameter("email", email).list();            
-        return (!user.isEmpty()) ? new UserDTO(user.get(0)) : null;
+        return (!user.isEmpty()) ? user.get(0) : null;
     }
 
     /**
@@ -141,11 +137,11 @@ public class UserDaoImpl implements UserDao {
      * Update User
      * </p>
      * 
-     * @param user UserForm
+     * @param user User
      */
     @Override
-    public void dbUpdateUser(UserForm user) {
-        this.getSession().update(new User(user));
+    public void dbUpdateUser(User user) {
+        this.getSession().update(user);
     }
 
     /**
@@ -172,18 +168,5 @@ public class UserDaoImpl implements UserDao {
      */
     private Session getSession() {
         return sessionFactory.getCurrentSession();
-    }
-
-    /**
-     * <h2>getUserDtos</h2>
-     * <p>
-     * Convert User Entity List to User DTO List
-     * </p>
-     *
-     * @param list Lists<User>
-     * @return List<UserDTO>
-     */
-    private List<UserDTO> getUserDtos(List<User> list) {
-        return list.stream().map(item -> (item != null) ? new UserDTO(item) : null).collect(Collectors.toList());
     }
 }

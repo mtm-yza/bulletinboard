@@ -8,7 +8,7 @@ import com.bulletinBoard.system.web.form.UserForm;
 /**
  * <h2>UserService Class</h2>
  * <p>
- * Process for User Service
+ * Interface for User Service
  * </p>
  * 
  * @author YeZawAung
@@ -78,10 +78,9 @@ public interface UserService {
      * </p>
      *
      * @param post UserForm
-     * @param flag int
      * @return int
      */
-    public int doUpdateUser(UserForm post, int flag);
+    public int doUpdateUser(UserForm post);
 
     /**
      * <h2>doDeleteUser</h2>
