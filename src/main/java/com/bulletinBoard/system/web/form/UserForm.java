@@ -69,42 +69,4 @@ public class UserForm {
      */
     @NotBlank(message = "Password is Required")
     private String password;
-
-    /**
-     * <h2>Constructor for UserForm</h2>
-     * <p>
-     * Constructor for UserForm
-     * </p>
-     * 
-     * @param name     String
-     * @param email    String
-     * @param address  String
-     * @param password String
-     */
-    public UserForm(String name, String email, String address, String password) {
-        super();
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.password = password;
-    }
-
-    /**
-     * <h2>Constructor for UserForm</h2>
-     * <p>
-     * Constructor for UserForm
-     * </p>
-     * 
-     * @param id      int
-     * @param name    String
-     * @param email   String
-     * @param address String
-     */
-    public UserForm(int id, String name, String email, String address) {
-        super();
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.address = address;
-    }
 }
