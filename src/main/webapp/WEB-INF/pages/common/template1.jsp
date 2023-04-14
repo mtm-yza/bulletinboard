@@ -56,6 +56,26 @@
   <footer class="bg-dark fixed-bottom">
     <tiles:insertAttribute name="footer" />
   </footer>
+  <!-- Confirm Form -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm</h5>
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">Are you sure?</div>
+        <div class="modal-footer">
+          <button id="btnConfirm" class="btn btn-primary" type="button">Confirm</button>
+          <button class="btn" type="button" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <tilesx:useAttribute id="scripts" name="scripts"
     classname="java.util.List" />
   <c:forEach var="item1" items="${scripts}">
