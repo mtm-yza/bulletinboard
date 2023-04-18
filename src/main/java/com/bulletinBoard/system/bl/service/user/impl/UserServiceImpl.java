@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.bl.service.impl;
+package com.bulletinBoard.system.bl.service.user.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
-import com.bulletinBoard.system.bl.service.UserService;
+import com.bulletinBoard.system.bl.service.user.UserService;
 import com.bulletinBoard.system.common.Constant;
-import com.bulletinBoard.system.persistance.dao.UserDao;
+import com.bulletinBoard.system.persistance.dao.user.UserDao;
 import com.bulletinBoard.system.persistance.entity.User;
 import com.bulletinBoard.system.web.form.UserForm;
 

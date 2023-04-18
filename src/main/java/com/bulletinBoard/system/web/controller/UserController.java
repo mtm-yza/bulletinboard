@@ -17,7 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
-import com.bulletinBoard.system.bl.service.UserService;
+import com.bulletinBoard.system.bl.service.user.UserService;
 import com.bulletinBoard.system.common.Constant;
 import com.bulletinBoard.system.common.ControllerUtil;
 import com.bulletinBoard.system.web.form.UserForm;

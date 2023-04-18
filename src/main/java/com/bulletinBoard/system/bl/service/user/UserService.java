@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.bl.service;
+package com.bulletinBoard.system.bl.service.user;
 
 import java.util.List;
 

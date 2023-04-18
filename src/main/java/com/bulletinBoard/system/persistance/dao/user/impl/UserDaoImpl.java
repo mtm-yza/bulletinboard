@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.persistance.dao.impl;
+package com.bulletinBoard.system.persistance.dao.user.impl;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.bulletinBoard.system.persistance.dao.UserDao;
+import com.bulletinBoard.system.persistance.dao.user.UserDao;
 import com.bulletinBoard.system.persistance.entity.User;
 
 /**

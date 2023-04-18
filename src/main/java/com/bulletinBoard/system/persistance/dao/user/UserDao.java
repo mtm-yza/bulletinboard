@@ -1,4 +1,4 @@
-package com.bulletinBoard.system.persistance.dao;
+package com.bulletinBoard.system.persistance.dao.user;
 
 import java.util.List;
 
