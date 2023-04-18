@@ -6,8 +6,9 @@
     <tr>
       <th class="text-center">No</th>
       <th class="text-center">Name</th>
+      <th class="text-center">Role</th>
       <th class="text-center">Email</th>
-      <th class="w-50 text-center">Address</th>
+      <th class="w-25 text-center">Address</th>
       <th class="w-25 text-center" colspan="3">Actions</th>
     </tr>
   </thead>
@@ -40,6 +41,19 @@
               path="name" placeholder="Name" />
             <div class="label-error">
               <c:out value="${errors['name']}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Role</label><br />
+            <div class="form-check form-check-inline">
+              <label class="form-check-label"> <form:radiobutton id="rdoUser"
+                  class="form-check-input" path="role" value="1" /> Normal
+              </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label"> <form:radiobutton id="rdoAdmin"
+                  class="form-check-input" path="role" value="2" />Admin
+              </label>
             </div>
           </div>
           <div class="form-group">
@@ -90,5 +104,6 @@
     var pageSize = ${pageSize}
     var list = ${users}
     var totalCount = ${totalCount}
+    var userRoles = ${userRoles}
     var errors = '${errors}'
 </script>

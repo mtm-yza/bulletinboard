@@ -13,10 +13,10 @@ public class Constant {
     @Getter
     public static enum UserRole {
 
-        GUEST("Guest", 0), NORMAL("Normal User", 1), ADMIN("Admin", 2);
+        GUEST(0, "Guest"), NORMAL(1, "Normal User"), ADMIN(2, "Admin");
 
-        private static final Map<Integer, UserRole> BY_ID = new HashMap<>();
-        private static final Map<String, UserRole> BY_NAME = new HashMap<>();
+        public static final Map<Integer, UserRole> BY_ID = new HashMap<>();
+        public static final Map<String, UserRole> BY_NAME = new HashMap<>();
 
         private String name;
         private int id;
@@ -31,10 +31,10 @@ public class Constant {
                 BY_NAME.put(role.name, role);
             }
         }
-
-        UserRole(String name, int code) {
+        
+        UserRole(int id, String name) {
+            this.id = id;
             this.name = name;
-            this.id = code;
         }
 
         public static UserRole valueOfId(int id) {

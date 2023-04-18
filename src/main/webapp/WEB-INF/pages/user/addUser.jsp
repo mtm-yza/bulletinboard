@@ -11,6 +11,19 @@
     </div>
   </div>
   <div class="form-group">
+    <label>Role</label><br />
+    <div class="form-check form-check-inline">
+      <label class="form-check-label"> <form:radiobutton
+          class="form-check-input" path="role" value="1" checked="true" />User
+      </label>
+    </div>
+    <div class="form-check form-check-inline">
+      <label class="form-check-label"> <form:radiobutton
+          class="form-check-input" path="role" value="2" />Admin
+      </label>
+    </div>
+  </div>
+  <div class="form-group">
     <form:label path="email">Email</form:label>
     <form:input id="txtEmail" class="form-control" type="text"
       path="email" placeholder="Email" />

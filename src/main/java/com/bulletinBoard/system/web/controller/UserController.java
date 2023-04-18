@@ -80,6 +80,7 @@ public class UserController {
      */
     @GetMapping({ "/", "" })
     protected ModelAndView getHomeView(HttpSession session) {
+        session.removeAttribute("userRoles");
         session.removeAttribute("totalCount");
         session.removeAttribute("pageIndex");
         session.removeAttribute("pageSize");
@@ -161,6 +162,8 @@ public class UserController {
         // Get Data for Users
         List<UserDTO> users = this.userService.doGetUserList(offset, ControllerUtil.PAGE_SIZE);
         mv.addObject("users", (new Gson()).toJson(users));
+        // Get User Roles
+        mv.addObject("userRoles", (new Gson()).toJson(Constant.UserRole.BY_ID));
         // User Form to Edit
         if (user.getId() != 0) {
             mv.addObject("user", user);
