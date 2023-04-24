@@ -9,6 +9,7 @@ public class Constant {
 
     public static final int SUCCESS = 1;
     public static final int EMAIL_ALREADY_REGISTERED = 2;
+    public static final int INVALID_CREDENTIAL = 3;
 
     @Getter
     public static enum UserRole {

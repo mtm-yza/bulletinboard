@@ -172,6 +172,26 @@ public class UserController {
         }
         return mv;
     }
+    
+    @GetMapping("login")
+    protected ModelAndView getLoginForm() {
+        ModelAndView mv = new ModelAndView("userLogin");
+        return mv;
+    }
+    
+    @PostMapping("login")
+    protected ModelAndView loginUser(@RequestParam String email, @RequestParam String password) {
+        ModelAndView mv = new ModelAndView();
+        int result = userService.doCheckUserCredential(email, password);
+        if (result != Constant.SUCCESS) {
+          mv.setViewName("userLogin");
+          mv.addObject("msgType", "error");
+          mv.addObject("msgHeader", "Failed to Login");
+          mv.addObject("msg", this.getMessage(result));
+        }
+        return mv;
+    }
+    
 
     /**
      * <h2>updateUser</h2>
@@ -237,6 +257,9 @@ public class UserController {
             break;
         case Constant.EMAIL_ALREADY_REGISTERED:
             message = "Email is Already Registered";
+            break;
+        case Constant.INVALID_CREDENTIAL:
+            message = "Invalid Username or Password";
             break;
         }
         return message;

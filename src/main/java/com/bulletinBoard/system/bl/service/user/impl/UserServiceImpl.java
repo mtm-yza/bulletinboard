@@ -147,4 +147,13 @@ public class UserServiceImpl implements UserService {
     private List<UserDTO> getUsers(List<User> list) {
         return list.stream().map(item -> new UserDTO(item)).collect(Collectors.toList());
     }
+
+    @Override
+    public int doCheckUserCredential(String email, String password) {
+        User user = userDao.dbGetUserByCredential(email, password);
+        if (user == null) {
+            return Constant.INVALID_CREDENTIAL;            
+        }
+        return Constant.SUCCESS;
+    }
 }

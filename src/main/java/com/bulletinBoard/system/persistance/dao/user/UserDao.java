@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bulletinBoard.system.persistance.entity.User;
 
+
 /**
  * <h2>UserDao Class</h2>
  * <p>
@@ -57,6 +58,8 @@ public interface UserDao {
      * @return User
      */
     public User dbGetUserByEmail(String email);
+    
+    public User dbGetUserByCredential(String email, String password);
 
     /**
      * <h2>dbGetUserCount</h2>

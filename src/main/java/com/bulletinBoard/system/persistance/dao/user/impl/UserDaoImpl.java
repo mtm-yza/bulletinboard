@@ -113,7 +113,16 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User dbGetUserByEmail(String email) {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email").toString();
-        List<User> user =  this.getSession().createQuery(stmt).setParameter("email", email).list();            
+        List<User> user = this.getSession().createQuery(stmt).setParameter("email", email).list();
+        return (!user.isEmpty()) ? user.get(0) : null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public User dbGetUserByCredential(String email, String password) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email AND password=:password").toString();
+        List<User> user = this.getSession().createQuery(stmt).setParameter("email", email)
+                .setParameter("password", password).list();
         return (!user.isEmpty()) ? user.get(0) : null;
     }
 

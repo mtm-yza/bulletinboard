@@ -91,4 +91,6 @@ public interface UserService {
      * @param id int
      */
     public void doDeleteUser(int id);
+    
+    public int doCheckUserCredential(String email, String password);
 }
