@@ -1,12 +1,19 @@
 package com.bulletinBoard.system.persistance.entity;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -108,6 +115,19 @@ public class User {
      */
     @UpdateTimestamp
     private Timestamp updated_at;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    private List<Authority> authorities = new ArrayList<>();
+
+    public User(String name, int role, String email, String address, String password, List<Authority> authorities) {
+        this.name = name;
+        this.role = role;
+        this.email = email;
+        this.address = address;
+        this.password = password;
+        this.authorities = authorities;
+    }
 
     /**
      * <h2>Constructor for User</h2>

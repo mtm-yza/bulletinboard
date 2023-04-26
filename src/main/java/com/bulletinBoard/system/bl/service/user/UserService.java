@@ -34,7 +34,7 @@ public interface UserService {
      * </p>
      *
      * @param offset int
-     * @param size int
+     * @param size   int
      * @return List<UserDTO>
      */
     public List<UserDTO> doGetUserList(int offset, int size);
@@ -91,6 +91,16 @@ public interface UserService {
      * @param id int
      */
     public void doDeleteUser(int id);
-    
+
+    /**
+     * <h2>doCheckUserCredential</h2>
+     * <p>
+     * Check User Credential
+     * </p>
+     *
+     * @param email    String
+     * @param password String
+     * @return int
+     */
     public int doCheckUserCredential(String email, String password);
 }

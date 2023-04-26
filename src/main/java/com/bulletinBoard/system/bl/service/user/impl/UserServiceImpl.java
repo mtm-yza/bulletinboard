@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
@@ -23,7 +26,7 @@ import com.bulletinBoard.system.web.form.UserForm;
  *
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     /**
      * <h2>userDao</h2>
@@ -45,7 +48,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int doAddUser(UserForm user) {
-        // Check if the Email is Already Registered. 
+        // Check if the Email is Already Registered.
         User userEntity = userDao.dbGetUserByEmail(user.getEmail());
         if (userEntity != null) {
             return Constant.EMAIL_ALREADY_REGISTERED;
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
      * </p>
      * 
      * @param offset int
-     * @param size int
+     * @param size   int
      * @return List<UserDTO>
      */
     @Override
@@ -148,12 +151,39 @@ public class UserServiceImpl implements UserService {
         return list.stream().map(item -> new UserDTO(item)).collect(Collectors.toList());
     }
 
+    /**
+     * <h2>doCheckUserCredential</h2>
+     * <p>
+     * Check User Credential
+     * </p>
+     * 
+     * @param email String
+     * @param password String
+     */
     @Override
     public int doCheckUserCredential(String email, String password) {
         User user = userDao.dbGetUserByCredential(email, password);
         if (user == null) {
-            return Constant.INVALID_CREDENTIAL;            
+            return Constant.INVALID_CREDENTIAL;
         }
         return Constant.SUCCESS;
+    }
+
+    /**
+     * <h2>loadUserByUsername</h2>
+     * <p>
+     * Load User by Name
+     * </p>
+     * 
+     * @param username String
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User userEntity = this.userDao.dbGetUserByEmail(username);
+        if (userEntity == null) {
+            throw new UsernameNotFoundException("Invalid Username or Password");
+        }
+        return new UserDTO(userEntity);
     }
 }
