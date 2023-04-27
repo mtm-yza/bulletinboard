@@ -81,6 +81,12 @@ public class UserForm {
      */
     @NotBlank(message = "Password is Required")
     private String password;
-    
+
+    /**
+     * <h2>authorities</h2>
+     * <p>
+     * User's Authority List
+     * </p>
+     */
     private List<Authority> authorities;
 }

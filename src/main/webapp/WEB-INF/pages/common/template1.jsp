@@ -23,7 +23,7 @@
 </head>
 <body>
   <header>
-    <tiles:insertAttribute name="header" />
+    <tiles:insertAttribute name="header" ignore="true" />
   </header>
   <main class="py-5">
     <div class="container">

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-    <!-- User Login -->
-    <definition name="userLogin" extends="template1">
-        <put-attribute  name="title" value="User Login" /> 
-        <put-attribute name="body" value="/WEB-INF/pages/user/login.jsp"/>
-    </definition>    
     <!-- User List View -->
     <definition name="userListView" extends="template1">
         <put-attribute name="title" value="User List" />

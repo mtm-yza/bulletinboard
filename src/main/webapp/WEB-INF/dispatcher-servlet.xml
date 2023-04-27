@@ -47,6 +47,7 @@
         <property name="definitions">
             <list>
                 <value>/WEB-INF/layouts/layouts.xml</value>
+                <value>/WEB-INF/layouts/views-common.xml</value>
                 <value>/WEB-INF/layouts/views-post.xml</value>
                 <value>/WEB-INF/layouts/views-user.xml</value>
             </list>
@@ -90,5 +91,10 @@
     <bean id="transactionManager"
         class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="userService" class="com.bulletinBoard.system.bl.service.user.impl.UserServiceImpl"></bean>
+    <bean id="bCryptPasswordEncoder"
+        class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
     </bean>
 </beans>

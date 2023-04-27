@@ -173,12 +173,6 @@ public class UserController {
         return mv;
     }
     
-    @GetMapping("login")
-    protected ModelAndView getLoginForm() {
-        ModelAndView mv = new ModelAndView("userLogin");
-        return mv;
-    }
-    
     @PostMapping("login")
     protected ModelAndView loginUser(@RequestParam String email, @RequestParam String password) {
         ModelAndView mv = new ModelAndView();

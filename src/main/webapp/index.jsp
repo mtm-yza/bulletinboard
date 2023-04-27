@@ -1,3 +1,3 @@
 <%
-  response.sendRedirect("post/");
+  response.sendRedirect("login/");
 %>

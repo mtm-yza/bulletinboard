@@ -89,8 +89,22 @@ public class UserDTO implements UserDetails {
      */
     private String password;
 
+    /**
+     * <h2>authorities</h2>
+     * <p>
+     * Authority List
+     * </p>
+     */
     private List<Authority> authorities;
 
+    /**
+     * <h2>getAuthorities</h2>
+     * <p>
+     * Get Authorities
+     * </p>
+     * 
+     * @return list Collection<? extends GrantedAuthority>
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
@@ -105,6 +119,8 @@ public class UserDTO implements UserDetails {
      * <p>
      * Get User Name
      * </p>
+     * 
+     * @return String
      */
     @Override
     public String getUsername() {
@@ -116,6 +132,8 @@ public class UserDTO implements UserDetails {
      * <p>
      * Check if account is non expired
      * </p>
+     * 
+     * @return boolean
      */
     @Override
     public boolean isAccountNonExpired() {
@@ -127,6 +145,8 @@ public class UserDTO implements UserDetails {
      * <p>
      * Check if account is non locked
      * </p>
+     * 
+     * @return boolean
      */
     @Override
     public boolean isAccountNonLocked() {
@@ -138,6 +158,8 @@ public class UserDTO implements UserDetails {
      * <p>
      * Check if credentials non expired
      * </p>
+     * 
+     * @return boolean
      */
     @Override
     public boolean isCredentialsNonExpired() {
@@ -149,6 +171,8 @@ public class UserDTO implements UserDetails {
      * <p>
      * Check if the account is enabled
      * </p>
+     * 
+     * @return boolean
      */
     @Override
     public boolean isEnabled() {

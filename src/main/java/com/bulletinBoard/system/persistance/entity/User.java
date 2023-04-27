@@ -116,10 +116,29 @@ public class User {
     @UpdateTimestamp
     private Timestamp updated_at;
 
+    /**
+     * <h2>User's Authorities</h2>
+     * <p>
+     * authorities
+     * </p>
+     */
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private List<Authority> authorities = new ArrayList<>();
 
+    /**
+     * <h2>Constructor for User</h2>
+     * <p>
+     * Constructor for User
+     * </p>
+     * 
+     * @param name        String
+     * @param role        int
+     * @param email       email
+     * @param address     String
+     * @param password    String
+     * @param authorities List<Authority>
+     */
     public User(String name, int role, String email, String address, String password, List<Authority> authorities) {
         this.name = name;
         this.role = role;

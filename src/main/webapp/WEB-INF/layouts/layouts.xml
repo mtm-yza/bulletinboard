@@ -27,13 +27,5 @@
     <!-- Template 1 -->
     <definition name="template1" extends="template"
         template="/WEB-INF/pages/common/template1.jsp">
-        <put-attribute name="header"
-            value="/WEB-INF/pages/common/inc/header1.jsp" />
-    </definition>
-    <!-- Template 2 -->
-    <definition name="template2" extends="template"
-        template="/WEB-INF/pages/common/template2.jsp">
-        <put-attribute name="header"
-            value="/WEB-INF/pages/common/inc/header2.jsp" />
     </definition>
 </tiles-definitions>
