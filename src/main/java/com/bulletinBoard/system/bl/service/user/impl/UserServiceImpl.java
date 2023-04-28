@@ -1,5 +1,6 @@
 package com.bulletinBoard.system.bl.service.user.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.bl.service.user.UserService;
 import com.bulletinBoard.system.common.Constant;
+import com.bulletinBoard.system.persistance.dao.authority.AuthorityDao;
 import com.bulletinBoard.system.persistance.dao.user.UserDao;
 import com.bulletinBoard.system.persistance.entity.User;
 import com.bulletinBoard.system.web.form.UserForm;
@@ -38,6 +41,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     UserDao userDao;
 
     /**
+     * <h2>autorityDao</h2>
+     * <p>
+     * autorityDao
+     * </p>
+     */
+    @Autowired
+    private AuthorityDao autorityDao;
+
+    /**
+     * <h2>pwdEncoder</h2>
+     * <p>
+     * Password Encoder
+     * </p>
+     */
+    @Autowired
+    private BCryptPasswordEncoder pwdEncoder;
+
+    /**
      * <h2>doAddUser</h2>
      * <p>
      * Add User
@@ -53,7 +74,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (userEntity != null) {
             return Constant.EMAIL_ALREADY_REGISTERED;
         }
-        userDao.dbInsertUser(new User(user));
+        userEntity = new User(user);
+        int role = (user.getRole() == Constant.UserRole.ADMIN.getId()) ? 2 : 1;
+        userEntity.setAuthorities(Arrays.asList(autorityDao.dbGetAuthorityById(role)));
+        userEntity.setPassword(this.pwdEncoder.encode(user.getPassword()));
+        userDao.dbInsertUser(userEntity);
         return Constant.SUCCESS;
     }
 
@@ -157,7 +182,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * Check User Credential
      * </p>
      * 
-     * @param email String
+     * @param email    String
      * @param password String
      */
     @Override

@@ -58,14 +58,6 @@ public class UserDTO implements UserDetails {
     private String name;
 
     /**
-     * <h2>role</h2>
-     * <p>
-     * User's Role
-     * </p>
-     */
-    private int role;
-
-    /**
      * <h2>email</h2>
      * <p>
      * User's Email
@@ -190,7 +182,6 @@ public class UserDTO implements UserDetails {
     public UserDTO(User user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.role = user.getRole();
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.password = user.getPassword();

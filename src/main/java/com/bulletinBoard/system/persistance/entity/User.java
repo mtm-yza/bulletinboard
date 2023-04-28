@@ -66,19 +66,12 @@ public class User {
     private String name;
 
     /**
-     * <h2>role</h2>
-     * <p>
-     * User's Role
-     * </p>
-     */
-    private int role;
-
-    /**
      * <h2>email</h2>
      * <p>
      * User's Email
      * </p>
      */
+    @Column(unique = true)
     private String email;
 
     /**
@@ -133,15 +126,13 @@ public class User {
      * </p>
      * 
      * @param name        String
-     * @param role        int
      * @param email       email
      * @param address     String
      * @param password    String
      * @param authorities List<Authority>
      */
-    public User(String name, int role, String email, String address, String password, List<Authority> authorities) {
+    public User(String name, String email, String address, String password, List<Authority> authorities) {
         this.name = name;
-        this.role = role;
         this.email = email;
         this.address = address;
         this.password = password;
@@ -159,7 +150,6 @@ public class User {
     public User(UserForm user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.role = user.getRole();
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.password = user.getPassword();

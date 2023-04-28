@@ -104,6 +104,5 @@
     var pageSize = ${pageSize}
     var list = ${users}
     var totalCount = ${totalCount}
-    var userRoles = ${userRoles}
     var errors = '${errors}'
 </script>

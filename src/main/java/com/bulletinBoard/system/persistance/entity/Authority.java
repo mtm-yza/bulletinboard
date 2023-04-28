@@ -46,5 +46,6 @@ public class Authority {
      * Authority Name
      * </p>
      */
+    @Column(unique = true)
     private String name;
 }

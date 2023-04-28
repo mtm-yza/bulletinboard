@@ -24,6 +24,17 @@ public interface AuthorityDao {
     public void dbInsertAuthority(Authority authority);
 
     /**
+     * <h2>dbGetAuthorityById</h2>
+     * <p>
+     * Get AuthorityById
+     * </p>
+     *
+     * @param id int
+     * @return Authority
+     */
+    public Authority dbGetAuthorityById(int id);
+
+    /**
      * <h2>dbGetAuthorityCount</h2>
      * <p>
      * Get Authority Count

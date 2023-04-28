@@ -14,7 +14,7 @@ public class Constant {
     @Getter
     public static enum UserRole {
 
-        GUEST(0, "Guest"), NORMAL(1, "Normal User"), ADMIN(2, "Admin");
+        GUEST(0, "ROLE_GUEST"), NORMAL(1, "ROLE_USER"), ADMIN(2, "ROLE_ADMIN");
 
         public static final Map<Integer, UserRole> BY_ID = new HashMap<>();
         public static final Map<String, UserRole> BY_NAME = new HashMap<>();

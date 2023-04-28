@@ -106,7 +106,8 @@ public class UserDaoImpl implements UserDao {
      * Get
      * </p>
      * 
-     * @param email String
+     * @param email    String
+     * @param password String
      * @return User
      */
     @SuppressWarnings("unchecked")
@@ -117,6 +118,16 @@ public class UserDaoImpl implements UserDao {
         return (!user.isEmpty()) ? user.get(0) : null;
     }
 
+    /**
+     * <h2>dbGetUserByCredential</h2>
+     * <p>
+     * Get User by Credential
+     * </p>
+     * 
+     * @param email    String
+     * @param password String
+     * @return User
+     */
     @SuppressWarnings("unchecked")
     @Override
     public User dbGetUserByCredential(String email, String password) {

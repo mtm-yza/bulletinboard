@@ -1,10 +1,6 @@
 package com.bulletinBoard.system.web.form;
 
-import java.util.List;
-
 import javax.validation.constraints.NotBlank;
-
-import com.bulletinBoard.system.persistance.entity.Authority;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -81,12 +77,4 @@ public class UserForm {
      */
     @NotBlank(message = "Password is Required")
     private String password;
-
-    /**
-     * <h2>authorities</h2>
-     * <p>
-     * User's Authority List
-     * </p>
-     */
-    private List<Authority> authorities;
 }

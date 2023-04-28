@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.bulletinBoard.system.common.Constant.UserRole;
 import com.bulletinBoard.system.persistance.dao.authority.AuthorityDao;
 import com.bulletinBoard.system.persistance.dao.user.UserDao;
 import com.bulletinBoard.system.persistance.entity.Authority;
@@ -55,7 +56,7 @@ public class DeploymentListener {
     /**
      * <h2>addInitialData</h2>
      * <p>
-     * Add Intial Data
+     * Add Initial Data
      * </p>
      *
      */
@@ -65,15 +66,19 @@ public class DeploymentListener {
         if (this.authorityDao.dbGetAuthorityCount() > 0 && this.userDao.dbGetUserCount() > 0) {
             return;
         }
-        // Add Default Admin Account
-        Authority adminAuthority = new Authority(null, "ROLE_ADMIN");
-        authorityDao.dbInsertAuthority(adminAuthority);
-        this.userDao.dbInsertUser(new User("Admin", 2, "admin@gmail.com", "Yangon", this.pwdEncoder.encode("admin"),
-                Arrays.asList(adminAuthority)));
-        // Add Default User Account
-        Authority userAuthority = new Authority(null, "ROLE_USER");
-        authorityDao.dbInsertAuthority(userAuthority);
-        this.userDao.dbInsertUser(new User("User A", 1, "user-a@gmail.com", "Mandalay",
-                this.pwdEncoder.encode("aaaaaa"), Arrays.asList(userAuthority)));
+        // Add Default Authorities
+        UserRole role;
+        role = UserRole.NORMAL;
+        Authority userAuth = new Authority(role.getId(), role.getName());
+        authorityDao.dbInsertAuthority(userAuth);
+        role = UserRole.ADMIN;
+        Authority adminAuth = new Authority(role.getId(), role.getName());
+        authorityDao.dbInsertAuthority(adminAuth);
+        // Add Default User Data
+        this.userDao.dbInsertUser(new User("Admin", "admin@gmail.com", "Yangon", this.pwdEncoder.encode("admin"),
+                Arrays.asList(adminAuth)));
+        // Add Default Normal Account
+        this.userDao.dbInsertUser(new User("User A", "user-a@gmail.com", "Mandalay", this.pwdEncoder.encode("aaaaaa"),
+                Arrays.asList(userAuth)));
     }
 }
