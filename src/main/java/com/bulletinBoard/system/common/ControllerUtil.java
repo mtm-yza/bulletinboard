@@ -9,8 +9,23 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * <h2>ControllerUtil Class</h2>
+ * <p>
+ * Class for Displaying ControllerUtil
+ * </p>
+ * 
+ * @author YeZawAung
+ *
+ */
 public class ControllerUtil {
-    
+
+    /**
+     * <h2>PAGE_SIZE</h2>
+     * <p>
+     * PAGE_SIZE
+     * </p>
+     */
     public final static int PAGE_SIZE = 10;
 
     /**
@@ -47,7 +62,18 @@ public class ControllerUtil {
         redirectAttributes.addFlashAttribute("msgHeader", header);
         redirectAttributes.addFlashAttribute("msg", message);
     }
-    
+
+    /**
+     * <h2>setPaginationData</h2>
+     * <p>
+     * 
+     * </p>
+     *
+     * @param session    HttpSession
+     * @param page       int
+     * @param totalCount int
+     * @return int
+     */
     public static int setPaginationData(HttpSession session, int page, int totalCount) {
         int pageIndex = 0;
         // Calculate offset from Page Index
