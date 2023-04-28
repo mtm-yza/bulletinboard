@@ -2,8 +2,6 @@ package com.bulletinBoard.system.web.form;
 
 import javax.validation.constraints.NotBlank;
 
-import com.bulletinBoard.system.persistance.entity.Post;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -54,17 +52,10 @@ public class PostForm {
     private Boolean isActive;
 
     /**
-     * <h2>Constructor for PostForm</h2>
+     * <h2>userEmail</h2>
      * <p>
-     * Constructor for PostForm
+     * userEmail
      * </p>
-     * 
-     * @param post Posts
      */
-    public PostForm(Post post) {
-        super();
-        this.title = post.getTitle();
-        this.description = post.getDescription();
-        this.isActive = post.getIsActive();
-    }
+    private String userEmail;
 }

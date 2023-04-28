@@ -50,6 +50,7 @@
           </div>
           <div class="form-group">
             <form:input path="isActive" id="chkBxIsActive" type="hidden" />
+            <form:input path="userEmail" id="txtUserEmail" type="hidden" />
             <input name="isStatusUpdate" id="chkBxIsStatusUpdate"
               type="hidden" value=false readonly />
           </div>

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -34,7 +35,7 @@ import com.google.gson.Gson;
  *
  */
 @Controller
-@RequestMapping("/post")
+@RequestMapping(value = { "/post", "/home" })
 public class PostController {
 
     /**
@@ -62,7 +63,7 @@ public class PostController {
     private static final String ADD_VIEW = "addPostView";
 
     /**
-     * <h2>service</h2>
+     * <h2>postService</h2>
      * <p>
      * Post Service
      * </p>
@@ -111,17 +112,19 @@ public class PostController {
      * @param post              PostForm
      * @param bindingResult     BindingResult
      * @param redirectAttribute RedirectAttributes
+     * @param auth              Authentication
      * @return mv ModelAndView
      */
     @PostMapping("add")
     protected ModelAndView addPost(@ModelAttribute @Valid PostForm post, BindingResult bindingResult,
-            RedirectAttributes redirectAttribute) {
+            RedirectAttributes redirectAttribute, Authentication auth) {
         if (bindingResult.hasErrors()) {
             ModelAndView mv = new ModelAndView(ADD_VIEW);
             mv.addObject("post", post);
             mv.addObject("errors", this.getErrorMessages(bindingResult));
             return mv;
         }
+        post.setUserEmail(auth.getName());
         this.postService.doAddPost(post);
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         this.addRedirectMessages(redirectAttribute, "success", "Adding Post Compeleted",

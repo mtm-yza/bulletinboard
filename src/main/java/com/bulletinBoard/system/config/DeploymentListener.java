@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 
 import com.bulletinBoard.system.common.Constant.UserRole;
 import com.bulletinBoard.system.persistance.dao.authority.AuthorityDao;
+import com.bulletinBoard.system.persistance.dao.post.PostDao;
 import com.bulletinBoard.system.persistance.dao.user.UserDao;
 import com.bulletinBoard.system.persistance.entity.Authority;
+import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.persistance.entity.User;
 
 /**
@@ -45,6 +47,15 @@ public class DeploymentListener {
     private UserDao userDao;
 
     /**
+     * <h2>postDao</h2>
+     * <p>
+     * Data Access Object for Post
+     * </p>
+     */
+    @Autowired
+    private PostDao postDao;
+
+    /**
      * <h2>pwdEncoder</h2>
      * <p>
      * Password Encoder
@@ -74,11 +85,13 @@ public class DeploymentListener {
         role = UserRole.ADMIN;
         Authority adminAuth = new Authority(role.getId(), role.getName());
         authorityDao.dbInsertAuthority(adminAuth);
-        // Add Default User Data
-        this.userDao.dbInsertUser(new User("Admin", "admin@gmail.com", "Yangon", this.pwdEncoder.encode("admin"),
-                Arrays.asList(adminAuth)));
-        // Add Default Normal Account
-        this.userDao.dbInsertUser(new User("User A", "user-a@gmail.com", "Mandalay", this.pwdEncoder.encode("aaaaaa"),
-                Arrays.asList(userAuth)));
+        // Add Users
+        User adminUser = new User("Admin", "admin@gmail.com", "Yangon", this.pwdEncoder.encode("admin"), adminAuth);
+        this.userDao.dbInsertUser(adminUser);
+        User userA = new User("User A", "user-a@gmail.com", "Mandalay", this.pwdEncoder.encode("aaaaaa"), userAuth);
+        this.userDao.dbInsertUser(userA);
+        // Add Posts
+        this.postDao.dbInsertPost(new Post("Post from Admin", "This is a post from Admin", false, adminUser));
+        this.postDao.dbInsertPost(new Post("Post from User", "This is a post from User A", false, userA));
     }
 }

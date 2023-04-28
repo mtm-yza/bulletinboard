@@ -1,8 +1,6 @@
 package com.bulletinBoard.system.persistance.entity;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,9 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -115,9 +111,8 @@ public class User {
      * authorities
      * </p>
      */
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "authority_id"))
-    private List<Authority> authorities = new ArrayList<>();
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Authority authority;
 
     /**
      * <h2>Constructor for User</h2>
@@ -125,18 +120,18 @@ public class User {
      * Constructor for User
      * </p>
      * 
-     * @param name        String
-     * @param email       email
-     * @param address     String
-     * @param password    String
-     * @param authorities List<Authority>
+     * @param name      String
+     * @param email     email
+     * @param address   String
+     * @param password  String
+     * @param authority Authority
      */
-    public User(String name, String email, String address, String password, List<Authority> authorities) {
+    public User(String name, String email, String address, String password, Authority authority) {
         this.name = name;
         this.email = email;
         this.address = address;
         this.password = password;
-        this.authorities = authorities;
+        this.authority = authority;
     }
 
     /**

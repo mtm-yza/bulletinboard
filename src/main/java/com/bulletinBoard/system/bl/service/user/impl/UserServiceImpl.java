@@ -1,6 +1,5 @@
 package com.bulletinBoard.system.bl.service.user.impl;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         userEntity = new User(user);
         int role = (user.getRole() == Constant.UserRole.ADMIN.getId()) ? 2 : 1;
-        userEntity.setAuthorities(Arrays.asList(autorityDao.dbGetAuthorityById(role)));
+        userEntity.setAuthority(autorityDao.dbGetAuthorityById(role));
         userEntity.setPassword(this.pwdEncoder.encode(user.getPassword()));
         userDao.dbInsertUser(userEntity);
         return Constant.SUCCESS;

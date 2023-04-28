@@ -1,8 +1,7 @@
 package com.bulletinBoard.system.bl.dto;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -84,10 +83,10 @@ public class UserDTO implements UserDetails {
     /**
      * <h2>authorities</h2>
      * <p>
-     * Authority List
+     * User's Authority
      * </p>
      */
-    private List<Authority> authorities;
+    private Authority authority;
 
     /**
      * <h2>getAuthorities</h2>
@@ -99,11 +98,7 @@ public class UserDTO implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-        for (Authority authority : this.authorities) {
-            list.add(new SimpleGrantedAuthority(authority.getName()));
-        }
-        return list;
+        return Arrays.asList(new SimpleGrantedAuthority(authority.getName()));
     }
 
     /**
@@ -185,6 +180,6 @@ public class UserDTO implements UserDetails {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.password = user.getPassword();
-        this.authorities = user.getAuthorities();
+        this.authority = user.getAuthority();
     }
 }

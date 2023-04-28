@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
 import com.bulletinBoard.system.persistance.dao.post.PostDao;
+import com.bulletinBoard.system.persistance.dao.user.UserDao;
 import com.bulletinBoard.system.persistance.entity.Post;
+import com.bulletinBoard.system.persistance.entity.User;
 import com.bulletinBoard.system.web.form.PostForm;
 
 /**
@@ -32,6 +34,15 @@ public class PostServiceImpl implements PostService {
      */
     @Autowired
     private PostDao postDao;
+    
+    /**
+     * <h2>userDao</h2>
+     * <p>
+     * userDao
+     * </p>
+     */
+    @Autowired
+    private UserDao userDao;
 
     /**
      * <h2>doAddPost</h2>
@@ -48,7 +59,9 @@ public class PostServiceImpl implements PostService {
         if ((!list.isEmpty())) {
             return false;
         }
-        this.postDao.dbInsertPost(new Post(post));
+        Post postEntity = new Post(post);
+        postEntity.setUser(this.getUserByEmail(post.getUserEmail()));
+        this.postDao.dbInsertPost(postEntity);
         return true;
     }
 
@@ -103,7 +116,9 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void doUpdatePost(PostForm postForm) {
-        this.postDao.dbUpdatePost(new Post(postForm));
+        Post post = new Post(postForm); 
+        post.setUser(this.getUserByEmail(postForm.getUserEmail()));
+        this.postDao.dbUpdatePost(post);
     }
 
     /**
@@ -117,6 +132,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void doEnableDisablePost(PostForm postForm) {
         Post post = new Post(postForm);
+        post.setUser(this.getUserByEmail(postForm.getUserEmail()));
         post.setIsActive(!post.getIsActive());
         this.postDao.dbUpdatePost(post);
     }
@@ -145,5 +161,9 @@ public class PostServiceImpl implements PostService {
      */
     private List<PostDTO> getPostDto(List<Post> postList) {
         return postList.stream().map(item -> new PostDTO(item)).collect(Collectors.toList());
+    }
+    
+    private User getUserByEmail(String email) {
+        return this.userDao.dbGetUserByEmail(email);
     }
 }

@@ -11,7 +11,7 @@ function displayDataList() {
 		var dataRow = "<tr>"
 			+ '<td class="text-left">' + (index + 1) + '</td>'
 			+ '<td class="text-left">' + item.name + "</td>"
-			+ '<td class="text-left">' + item.authorities[0].name + "</td>"
+			+ '<td class="text-left">' + item.authority.name + "</td>"
 			+ '<td class="text-left">' + item.email + "</td>"
 			+ '<td class="text-left" style="word-break: break-all;"><p style="margin: 0;">' + item.address + "</p></td>";
 		// Controls
@@ -47,9 +47,9 @@ function setFormValues(index) {
 	$("#txtEmail").val(user.email);
 	$("#txtAddress").val(user.address);
 	$("#txtPassword").val(user.password);
-	var authority = user.authorities[0].id;
-	$("#rdoUser").prop("checked", authority == 1);
-	$("#rdoAdmin").prop("checked", authority == 2);
+	var authId = user.authority.id;
+	$("#rdoUser").prop("checked", authId == 1);
+	$("#rdoAdmin").prop("checked", authId == 2);
 }
 function deleteUser(index) {
 	var id = list[index].id;

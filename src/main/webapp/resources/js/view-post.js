@@ -55,6 +55,7 @@ function setFormValues(index) {
 	$("#txtTitle").val(post.title);
 	$("#txtDescription").val(post.description);
 	$("#chkBxIsActive").val(post.isActive);
+	$("#txtUserEmail").val(post.user.email);
 	$("#chkBxIsActive").prop("checked", post.isActive);
 }
 function deletePost(index) {

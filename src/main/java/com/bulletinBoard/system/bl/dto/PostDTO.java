@@ -57,6 +57,14 @@ public class PostDTO {
     private Boolean isActive;
 
     /**
+     * <h2>user</h2>
+     * <p>
+     * User of Post
+     * </p>
+     */
+    private UserDTO user;
+
+    /**
      * <h2>Constructor for PostDTO</h2>
      * <p>
      * Constructor for PostDTO
@@ -69,5 +77,6 @@ public class PostDTO {
         this.title = post.getTitle();
         this.isActive = post.getIsActive();
         this.description = post.getDescription();
+        this.user = new UserDTO(post.getUser());
     }
 }
