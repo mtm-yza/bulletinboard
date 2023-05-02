@@ -2,22 +2,16 @@ package com.bulletinBoard.system.persistance.entity;
 
 import java.sql.Timestamp;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.bulletinBoard.system.web.form.PostForm;
@@ -30,7 +24,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * <h2> Post Class</h2>
+ * <h2>Post Class</h2>
  * <p>
  * Process for Displaying Post
  * </p>
@@ -91,15 +85,15 @@ public class Post {
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp created_at;
-    
+
     /**
      * <h2>user</h2>
      * <p>
      * user
      * </p>
      */
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
-    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     /**
@@ -110,7 +104,7 @@ public class Post {
      */
     @UpdateTimestamp
     private Timestamp updated_at;
-    
+
     public Post(String title, String description, boolean isActive, User user) {
         super();
         this.title = title;

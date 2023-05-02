@@ -1,6 +1,7 @@
 package com.bulletinBoard.system.persistance.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,10 +10,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.bulletinBoard.system.web.form.UserForm;
@@ -111,8 +116,18 @@ public class User {
      * authorities
      * </p>
      */
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
     private Authority authority;
+
+    /**
+     * <h2>posts</h2>
+     * <p>
+     * posts
+     * </p>
+     */
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "user")
+    private List<Post> posts;
 
     /**
      * <h2>Constructor for User</h2>

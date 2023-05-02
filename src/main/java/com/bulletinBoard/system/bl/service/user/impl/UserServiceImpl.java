@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * </p>
      */
     @Autowired
-    UserDao userDao;
+    private UserDao userDao;
 
     /**
      * <h2>autorityDao</h2>
@@ -148,7 +148,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      */
     @Override
     public int doUpdateUser(UserForm user) {
-        userDao.dbUpdateUser(new User(user));
+        User userEntity = new User(user);
+        int role = (user.getRole() == Constant.UserRole.ADMIN.getId()) ? 2 : 1;
+        userEntity.setAuthority(autorityDao.dbGetAuthorityById(role));
+        userEntity.setPassword(user.getPassword());
+        userDao.dbUpdateUser(userEntity);
         return Constant.SUCCESS;
     }
 
