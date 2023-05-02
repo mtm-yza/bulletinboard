@@ -84,7 +84,7 @@ public class PostDaoImpl implements PostDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Post> dbGetPosts(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY created_at DESC").toString();
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE isActive=true ORDER BY created_at DESC").toString();
         return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
     }
 
@@ -102,9 +102,25 @@ public class PostDaoImpl implements PostDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Post> dbGetUserPosts(int offset, int limit, int userId) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE user_Id=:userId ORDER BY created_at DESC").toString();
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE user_Id=:userId ORDER BY created_at DESC")
+                .toString();
         return this.getSession().createQuery(stmt).setParameter("userId", userId).setFirstResult(offset)
                 .setMaxResults(limit).list();
+    }
+
+    /**
+     * <h2>getByActiveStatus</h2>
+     * <p>
+     * Get Active Posts
+     * </p>
+     * 
+     * @return List<Post>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Post> dbGetPostsByActiveStatus(int offset, int limit) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE isActive=true ORDER BY created_at DESC").toString();
+        return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
     }
 
     /**
@@ -120,21 +136,6 @@ public class PostDaoImpl implements PostDao {
     public List<Post> dbGetPostsByTitle(String title) {
         String stmt = new StringBuilder(SELECT_STMT).append(" WHERE title = :title ORDER BY id").toString();
         return this.getSession().createQuery(stmt).setParameter("title", title).list();
-    }
-
-    /**
-     * <h2>getByActiveStatus</h2>
-     * <p>
-     * Get Active Posts
-     * </p>
-     * 
-     * @return List<Post>
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<Post> dbGetPostByActiveStatus() {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE status = 1 ORDER BY id").toString();
-        return this.getSession().createQuery(stmt).list();
     }
 
     /**
@@ -162,6 +163,21 @@ public class PostDaoImpl implements PostDao {
     @Override
     public int dbGetPostCount() {
         Long count = (Long) this.getSession().createQuery(COUNT_STMT).uniqueResult();
+        return count.intValue();
+    }
+
+    /**
+     * <h2>dbGetPostCountByActiveStatus</h2>
+     * <p>
+     * Get Total Number of Active Post
+     * </p>
+     * 
+     * @return
+     */
+    @Override
+    public int dbGetPostCountByActiveStatus() {
+        String stmt = new StringBuilder(COUNT_STMT).append(" WHERE isActive=true").toString();
+        Long count = (Long) this.getSession().createQuery(stmt).uniqueResult();
         return count.intValue();
     }
 

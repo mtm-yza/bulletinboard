@@ -34,7 +34,7 @@ public class PostServiceImpl implements PostService {
      */
     @Autowired
     private PostDao postDao;
-    
+
     /**
      * <h2>userDao</h2>
      * <p>
@@ -106,8 +106,8 @@ public class PostServiceImpl implements PostService {
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> doGetPostListByActiveStatus() {
-        return this.getPostDto(this.postDao.dbGetPostByActiveStatus());
+    public List<PostDTO> doGetActivePosts(int offset, int size) {
+        return this.getPostDto(this.postDao.dbGetPostsByActiveStatus(offset, size));
     }
 
     /**
@@ -121,6 +121,19 @@ public class PostServiceImpl implements PostService {
     @Override
     public int doGetPostCount() {
         return this.postDao.dbGetPostCount();
+    }
+
+    /**
+     * <h2> doGetActivePostCount </h2>
+     * <p>
+     * Get Total Number of Active Posts
+     * </p>
+     * 
+     * @return int
+     */
+    @Override
+    public int doGetActivePostCount() {
+        return this.postDao.dbGetPostCountByActiveStatus();
     }
 
     /**

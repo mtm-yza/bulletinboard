@@ -151,7 +151,7 @@ public class PostController {
         // Get Page Count for Pagination
         int pageIndex = 0;
         int pageSize = 10;
-        int postTotalCount = this.postService.doGetPostCount();
+        int postTotalCount = this.postService.doGetActivePostCount();
         // Calculate offset from Page Index
         if (page != 0) {
             pageIndex = page;
@@ -164,7 +164,7 @@ public class PostController {
         session.setAttribute("pageSize", pageSize);
         // Get Data for Posts
         int offset = (pageIndex - 1) * pageSize;
-        List<PostDTO> posts = this.postService.doGetPostList(offset, pageSize);
+        List<PostDTO> posts = this.postService.doGetActivePosts(offset, pageSize);
         mv.addObject("posts", (new Gson()).toJson(posts));
         // Post Form to Edit
         if (post.getId() != 0) {

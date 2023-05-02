@@ -58,7 +58,7 @@ public interface PostDao {
      *
      * @return List<Post>
      */
-    public List<Post> dbGetPostByActiveStatus();
+    public List<Post> dbGetPostsByActiveStatus(int offset, int limit);
 
     /**
      * <h2>dbGetPostsByTitle</h2>
@@ -91,6 +91,16 @@ public interface PostDao {
      * @return int
      */
     public int dbGetPostCount();
+    
+    /**
+     * <h2>dbGetPostCountByActiveStatus</h2>
+     * <p>
+     * Get Total Number of Active Post
+     * </p>
+     *
+     * @return int
+     */
+    public int dbGetPostCountByActiveStatus();
 
     /**
      * <h2>dbUpdatePost</h2>

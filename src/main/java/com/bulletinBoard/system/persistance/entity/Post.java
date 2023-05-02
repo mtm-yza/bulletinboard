@@ -14,6 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -96,7 +98,7 @@ public class Post {
      * user
      * </p>
      */
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     private User user;
 

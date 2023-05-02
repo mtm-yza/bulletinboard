@@ -40,6 +40,16 @@ public interface PostService {
     public List<PostDTO> doGetPostList(int offset, int size);
 
     /**
+     * <h2>doGetPostListByActiveStatus</h2>
+     * <p>
+     * Get A List Of Post By Active Status
+     * </p>
+     *
+     * @return List<PostDTO>
+     */
+    public List<PostDTO> doGetActivePosts(int offset, int size);
+
+    /**
      * <h2>doGetUserPosts</h2>
      * <p>
      * Get User's Post
@@ -53,16 +63,6 @@ public interface PostService {
     public List<PostDTO> doGetUserPosts(int offset, int size, String email);
 
     /**
-     * <h2>doGetPostListByActiveStatus</h2>
-     * <p>
-     * Get A List Of Post By Active Status
-     * </p>
-     *
-     * @return List<PostDTO>
-     */
-    public List<PostDTO> doGetPostListByActiveStatus();
-
-    /**
      * <h2>doGetPostCount</h2>
      * <p>
      * Get Total Number Of Posts
@@ -71,6 +71,16 @@ public interface PostService {
      * @return int
      */
     public int doGetPostCount();
+
+    /**
+     * <h2>doGetPostCount</h2>
+     * <p>
+     * Get Total Number of Active Posts
+     * </p>
+     *
+     * @return int
+     */
+    public int doGetActivePostCount();
 
     /**
      * <h2>doUpdatePost</h2>
