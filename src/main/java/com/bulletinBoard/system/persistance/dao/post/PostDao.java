@@ -38,6 +38,19 @@ public interface PostDao {
     public List<Post> dbGetPosts(int offset, int limit);
 
     /**
+     * <h2>dbGetUserPosts</h2>
+     * <p>
+     * Get User Posts
+     * </p>
+     *
+     * @param offset int
+     * @param limit  int
+     * @param userId int
+     * @return List<Post>
+     */
+    public List<Post> dbGetUserPosts(int offset, int limit, int userId);
+
+    /**
      * <h2>dbGetPostByActiveStatus</h2>
      * <p>
      * Get Active Posts

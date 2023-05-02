@@ -89,6 +89,25 @@ public class PostDaoImpl implements PostDao {
     }
 
     /**
+     * <h2>dbGetUserPosts</h2>
+     * <p>
+     * Get User's Posts
+     * </p>
+     * 
+     * @param offset int
+     * @param limit  int
+     * @param userId int
+     * @return List<Post>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Post> dbGetUserPosts(int offset, int limit, int userId) {
+        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE user_Id=:userId ORDER BY created_at DESC").toString();
+        return this.getSession().createQuery(stmt).setParameter("userId", userId).setFirstResult(offset)
+                .setMaxResults(limit).list();
+    }
+
+    /**
      * <h2>getByTitle</h2>
      * <p>
      * Get Posts By Title

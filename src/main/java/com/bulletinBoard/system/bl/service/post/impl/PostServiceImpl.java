@@ -81,6 +81,23 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
+     * <h2>doGetUserPosts</h2>
+     * <p>
+     * Get User Posts
+     * </p>
+     * 
+     * @param offset int
+     * @param size   int
+     * @param email  String
+     * @return List<PostDTO>
+     */
+    @Override
+    public List<PostDTO> doGetUserPosts(int offset, int size, String email) {
+        int userId = this.userDao.dbGetUserByEmail(email).getId();
+        return this.getPostDto(this.postDao.dbGetUserPosts(offset, size, userId));
+    }
+
+    /**
      * <h2>doGetPostListByActiveStatus</h2>
      * <p>
      * Get A List of Post by Active Status
@@ -116,7 +133,7 @@ public class PostServiceImpl implements PostService {
      */
     @Override
     public void doUpdatePost(PostForm postForm) {
-        Post post = new Post(postForm); 
+        Post post = new Post(postForm);
         post.setUser(this.getUserByEmail(postForm.getUserEmail()));
         this.postDao.dbUpdatePost(post);
     }

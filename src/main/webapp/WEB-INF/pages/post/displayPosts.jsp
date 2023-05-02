@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!-- Post Display Table -->
 <table class="table table-bordered">
@@ -73,7 +74,10 @@
     class="pagination justify-content-center"></div>
 </nav>
 <!-- Data -->
+<c:set var="userName"><security:authentication property="principal.username"/></c:set>
 <script>
+	var username = new DOMParser().parseFromString('<!doctype html><body>'
+            + "${userName}", 'text/html').body.textContent;
     var pageIndex = ${pageIndex}
     var pageSize = ${pageSize}
     var list = ${posts}

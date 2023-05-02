@@ -5,7 +5,8 @@
     <ul class="navbar-nav mr-auto">
       <security:authorize access="isAuthenticated()">
         <li class="nav-item"><a class="nav-link" href="/Demo/post">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/Demo/post/add">Add Post</a></li>      
+        <li class="nav-item"><a class="nav-link" href="/Demo/post/me">My Posts</a></li>
+        <li class="nav-item"><a class="nav-link" href="/Demo/post/add">Add Post</a></li>
       </security:authorize>
       <security:authorize access="hasRole('ROLE_ADMIN')">
         <li class="nav-item"><a class="nav-link" href="/Demo/user">Users</a></li>

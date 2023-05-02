@@ -13,9 +13,11 @@ function displayPostList() {
 			+ '<td>' + item.title + "</td>"
 			+ '<td style="word-break: break-all;"><p style="margin: 0;">' + item.description + "</p></td>";
 		// Controls
-		dataRow += getStatusBtn(index);
-		dataRow += '<td><button class="btn btn-primary w-100" type="button" data-toggle="modal" data-target="#editPostModal" onclick="openEditForm(' + index + ')">Edit</button></td>'
-			+ '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deletePost(' + index + ')">Delete</button></td>';
+		if (username == item.user.email) {
+			dataRow += getStatusBtn(index);
+			dataRow += '<td><button class="btn btn-primary w-100" type="button" data-toggle="modal" data-target="#editPostModal" onclick="openEditForm(' + index + ')">Edit</button></td>'
+				+ '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deletePost(' + index + ')">Delete</button></td>';			
+		}
 		dataRow += "</tr>";
 		root.append(dataRow);
 	})

@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
+import com.bulletinBoard.system.common.ControllerUtil;
 import com.bulletinBoard.system.web.form.PostForm;
 import com.google.gson.Gson;
 
@@ -164,6 +165,35 @@ public class PostController {
         // Get Data for Posts
         int offset = (pageIndex - 1) * pageSize;
         List<PostDTO> posts = this.postService.doGetPostList(offset, pageSize);
+        mv.addObject("posts", (new Gson()).toJson(posts));
+        // Post Form to Edit
+        if (post.getId() != 0) {
+            mv.addObject("post", post);
+        } else {
+            mv.addObject("post", new PostForm());
+        }
+        return mv;
+    }
+
+    /**
+     * <h2>getUserPostListView</h2>
+     * <p>
+     * Get User Post Lis View
+     * </p>
+     *
+     * @param page    int
+     * @param post    PostForm
+     * @param session HttpSession
+     * @return ModelAndView
+     */
+    @GetMapping("me")
+    protected ModelAndView getUserPostListView(@RequestParam(defaultValue = "0") int page,
+            @ModelAttribute("post") PostForm post, HttpSession session, Authentication auth) {
+        ModelAndView mv = new ModelAndView(HOME_VIEW);
+        int count = postService.doGetPostCount();
+        int offset = ControllerUtil.setPaginationData(session, page, count);
+        // Get Post Data
+        List<PostDTO> posts = this.postService.doGetUserPosts(offset, ControllerUtil.PAGE_SIZE, auth.getName());
         mv.addObject("posts", (new Gson()).toJson(posts));
         // Post Form to Edit
         if (post.getId() != 0) {

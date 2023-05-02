@@ -40,6 +40,19 @@ public interface PostService {
     public List<PostDTO> doGetPostList(int offset, int size);
 
     /**
+     * <h2>doGetUserPosts</h2>
+     * <p>
+     * Get User's Post
+     * </p>
+     *
+     * @param offset int
+     * @param size   int
+     * @param email  String
+     * @return List<PostDTO>
+     */
+    public List<PostDTO> doGetUserPosts(int offset, int size, String email);
+
+    /**
      * <h2>doGetPostListByActiveStatus</h2>
      * <p>
      * Get A List Of Post By Active Status
