@@ -103,9 +103,12 @@ public class PostDaoImpl implements PostDao {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public List<Post> dbGetUserPosts(int offset, int limit, int userId) {
+    public List<Post> dbGetUserPosts(int offset, int limit, int userId, boolean includePublicPosts) {
         StringBuilder stmt = new StringBuilder(SELECT_STMT);
         stmt.append(" WHERE user_Id = :userId");
+        if (includePublicPosts) {
+            stmt.append(" OR isActive = true");
+        }
         stmt.append(" ORDER BY created_at DESC");
         return this.getSession().createQuery(stmt.toString()).setParameter("userId", userId).setFirstResult(offset)
                 .setMaxResults(limit).list();
@@ -171,6 +174,26 @@ public class PostDaoImpl implements PostDao {
     public int dbGetPostCount() {
         Long count = (Long) this.getSession().createQuery(COUNT_STMT).uniqueResult();
         return count.intValue();
+    }
+
+    /**
+     * <h2>dbGetUserPostCount</h2>
+     * <p>
+     * Get User Post Count
+     * </p>
+     * 
+     * @param includePublicPosts
+     * @return
+     */
+    @Override
+    public int dbGetUserPostCount(int userId, boolean includePublicPosts) {
+        StringBuilder stmt = new StringBuilder(COUNT_STMT);
+        stmt.append(" WHERE user_id = :userId");
+        if (includePublicPosts) {
+            stmt.append(" OR isActive = true");
+        }
+        return ((Long) this.getSession().createQuery(stmt.toString()).setParameter("userId", userId).uniqueResult())
+                .intValue();
     }
 
     /**

@@ -80,6 +80,23 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
+     * <h2>doGetPublicPosts</h2>
+     * <p>
+     * Get Public Posts
+     * </p>
+     * 
+     * @param offset int
+     * @param size   int
+     * @param email  String
+     * @return
+     */
+    @Override
+    public List<PostDTO> doGetPublicPosts(int offset, int size, String email) {
+        int userId = this.userDao.dbGetUserByEmail(email).getId();
+        return this.getPostDto(this.postDao.dbGetUserPosts(offset, size, userId, true));
+    }
+
+    /**
      * <h2>doGetUserPosts</h2>
      * <p>
      * Get User Posts
@@ -93,16 +110,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDTO> doGetUserPosts(int offset, int size, String email) {
         int userId = this.userDao.dbGetUserByEmail(email).getId();
-        return this.getPostDto(this.postDao.dbGetUserPosts(offset, size, userId));
+        return this.getPostDto(this.postDao.dbGetUserPosts(offset, size, userId, false));
     }
 
     /**
-     * <h2>doGetPostListByActiveStatus</h2>
+     * <h2>doGetActivePosts</h2>
      * <p>
-     * Get A List of Post by Active Status
+     * Get Active Posts
      * </p>
      * 
-     * @return List<PostDTO>
+     * @param offset int
+     * @param size   int
+     * @return
      */
     @Override
     public List<PostDTO> doGetActivePosts(int offset, int size) {
@@ -123,7 +142,37 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
-     * <h2> doGetActivePostCount </h2>
+     * <h2>doGetPublicPostCount</h2>
+     * <p>
+     * Get Total Number of Public Posts
+     * </p>
+     * 
+     * @param email String
+     * @return int
+     */
+    @Override
+    public int doGetPublicPostCount(String email) {
+        int userId = this.userDao.dbGetUserByEmail(email).getId();
+        return this.postDao.dbGetUserPostCount(userId, true);
+    }
+
+    /**
+     * <h2>doGetUserPostCount</h2>
+     * <p>
+     * Get Total Number of User Posts
+     * </p>
+     * 
+     * @param email String
+     * @return int
+     */
+    @Override
+    public int doGetUserPostCount(String email) {
+        int userId = this.userDao.dbGetUserByEmail(email).getId();
+        return this.postDao.dbGetUserPostCount(userId, false);
+    }
+
+    /**
+     * <h2>doGetActivePostCount</h2>
      * <p>
      * Get Total Number of Active Posts
      * </p>

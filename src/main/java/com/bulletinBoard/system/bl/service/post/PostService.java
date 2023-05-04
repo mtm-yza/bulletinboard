@@ -50,6 +50,19 @@ public interface PostService {
     public List<PostDTO> doGetActivePosts(int offset, int size);
 
     /**
+     * <h2>doGetPublicPosts</h2>
+     * <p>
+     * Get Public Posts including User's Private Posts
+     * </p>
+     *
+     * @param offset int
+     * @param size   int
+     * @param email  String
+     * @return List<PostDTO>
+     */
+    public List<PostDTO> doGetPublicPosts(int offset, int size, String email);
+
+    /**
      * <h2>doGetUserPosts</h2>
      * <p>
      * Get User's Post
@@ -71,6 +84,26 @@ public interface PostService {
      * @return int
      */
     public int doGetPostCount();
+
+    /**
+     * <h2>doGetPublicPostCount</h2>
+     * <p>
+     * Get Total Number of Public Post
+     * </p>
+     *
+     * @return int
+     */
+    public int doGetPublicPostCount(String email);
+
+    /**
+     * <h2>doGetUserPostCount</h2>
+     * <p>
+     * Get Total Number of User Post
+     * </p>
+     *
+     * @return int
+     */
+    public int doGetUserPostCount(String email);
 
     /**
      * <h2>doGetPostCount</h2>

@@ -43,12 +43,13 @@ public interface PostDao {
      * Get User Posts
      * </p>
      *
-     * @param offset int
-     * @param limit  int
-     * @param userId int
+     * @param offset             int
+     * @param limit              int
+     * @param userId             int
+     * @param includePublicPosts boolean
      * @return List<Post>
      */
-    public List<Post> dbGetUserPosts(int offset, int limit, int userId);
+    public List<Post> dbGetUserPosts(int offset, int limit, int userId, boolean includePublicPosts);
 
     /**
      * <h2>dbGetPostByActiveStatus</h2>
@@ -91,7 +92,18 @@ public interface PostDao {
      * @return int
      */
     public int dbGetPostCount();
-    
+
+    /**
+     * <h2>dbGetUsesrPostCount</h2>
+     * <p>
+     * Get Total Number of User Post including Public Posts
+     * </p>
+     *
+     * @param includePublicPosts boolean
+     * @return int
+     */
+    public int dbGetUserPostCount(int userId, boolean includePublicPosts);
+
     /**
      * <h2>dbGetPostCountByActiveStatus</h2>
      * <p>
