@@ -151,7 +151,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User userEntity = new User(user);
         int role = (user.getRole() == Constant.UserRole.ADMIN.getId()) ? 2 : 1;
         userEntity.setAuthority(autorityDao.dbGetAuthorityById(role));
-        userEntity.setPassword(user.getPassword());
         userDao.dbUpdateUser(userEntity);
         return Constant.SUCCESS;
     }

@@ -103,7 +103,7 @@ public class UserDaoImpl implements UserDao {
     /**
      * <h2>dbGetUserByEmail</h2>
      * <p>
-     * Get
+     * Get User by Email
      * </p>
      * 
      * @param email    String
@@ -161,7 +161,14 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void dbUpdateUser(User user) {
-        this.getSession().update(user);
+        User oldUser = this.dbGetUserById(user.getId());
+        if (user.getAuthority() == null) {
+            user.setAuthority(oldUser.getAuthority());
+        }
+        if (user.getPassword() == null) {
+            user.setPassword(oldUser.getPassword());
+        }
+        this.getSession().merge(user);
     }
 
     /**
