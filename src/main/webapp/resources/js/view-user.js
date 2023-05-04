@@ -16,9 +16,7 @@ function displayDataList() {
 			+ '<td class="text-left" style="word-break: break-all;"><p style="margin: 0;">' + item.address + "</p></td>";
 		// Controls
 		dataRow += '<td><button class="btn btn-primary w-100" type="button" data-toggle="modal" data-target="#editUserModal" onclick="openEditForm(' + index + ')">Edit</button></td>'
-		dataRow	+= '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deleteUser(' + index + ')"'
-		dataRow += (userEmail == item.email)? " disabled": ""
-		dataRow += '>Delete</button></td>';
+		dataRow	+= '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deleteUser(' + index + ')">Delete</button></td>';
 		////
 		dataRow += "</tr>";
 		root.append(dataRow);
@@ -54,9 +52,8 @@ function setFormValues(index) {
 	$("#rdoAdmin").prop("checked", authId == 2);
 }
 function deleteUser(index) {
-	var id = list[index].id;
 	$("#btnConfirm").off("click").click(function() {
-		$("#txtId").val(id);
+		$("#txtEmail").val(list[index].email);
 		$('#userEditForm [formaction="delete"]').click();
 		$("#confirmModal").modal("hide");
 	});

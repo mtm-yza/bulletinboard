@@ -2,6 +2,8 @@ package com.bulletinBoard.system.web.controller;
 
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -152,7 +154,7 @@ public class UserController {
      * @param user    UserForm
      * @param session HttpSession
      * @param auth    Authentications
-     * @return mv ModelAndView
+     * @return ModelAndView mv
      */
     @GetMapping("list")
     protected ModelAndView getUserListView(@RequestParam(defaultValue = "0") int page,
@@ -182,11 +184,11 @@ public class UserController {
      * @param user              UserForm
      * @param bindingResult     BindingResult
      * @param redirectAttribute RedirectAttribute
-     * @return ModelAndView
+     * @return ModelAndView mv
      */
     @PostMapping("update")
     protected ModelAndView updateUser(@Valid @ModelAttribute UserForm user, BindingResult bindingResult,
-            RedirectAttributes redirectAttribute) {
+            RedirectAttributes redirectAttribute, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         // Check Validation
         if (bindingResult.hasErrors()) {
@@ -207,16 +209,17 @@ public class UserController {
      * </p>
      *
      * @param id int
-     * @return ModelAndView
+     * @return ModelAndView mv
+     * @throws ServletException
      */
     @PostMapping("delete")
-    protected ModelAndView deleteUser(@RequestParam("id") int id) {
+    protected ModelAndView deleteUser(@RequestParam("email") String email, Authentication auth,
+            HttpServletRequest request) throws ServletException {
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
-        if (id <= 0) {
-            mv.addObject("msg", "Invalid User ID");
-            return mv;
+        userService.doDeleteUser(userService.doGetUserByEmail(email).getId());
+        if (email.equals(auth.getName())) {
+            request.logout();
         }
-        userService.doDeleteUser(id);
         return mv;
     }
 
