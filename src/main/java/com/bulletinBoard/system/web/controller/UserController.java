@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,7 +68,7 @@ public class UserController {
      * </p>
      */
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     /**
      * <h2>getHomeView</h2>
@@ -150,11 +151,12 @@ public class UserController {
      * @param page    int
      * @param user    UserForm
      * @param session HttpSession
+     * @param auth    Authentications
      * @return mv ModelAndView
      */
     @GetMapping("list")
     protected ModelAndView getUserListView(@RequestParam(defaultValue = "0") int page,
-            @ModelAttribute("user") UserForm user, HttpSession session) {
+            @ModelAttribute("user") UserForm user, HttpSession session, Authentication auth) {
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         int count = userService.doGetUserCount();
         int offset = ControllerUtil.setPaginationData(session, page, count);
@@ -167,6 +169,7 @@ public class UserController {
         } else {
             mv.addObject("user", new UserForm());
         }
+        mv.addObject("userEmail", auth.getName());
         return mv;
     }
 

@@ -104,5 +104,6 @@
     var pageSize = ${pageSize}
     var list = ${users}
     var totalCount = ${totalCount}
+    var userEmail = "${userEmail}"
     var errors = '${errors}'
 </script>
