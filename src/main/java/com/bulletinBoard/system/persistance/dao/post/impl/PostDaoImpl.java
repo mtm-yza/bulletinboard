@@ -84,8 +84,10 @@ public class PostDaoImpl implements PostDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Post> dbGetPosts(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE isActive=true ORDER BY created_at DESC").toString();
-        return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE isActive = true");
+        stmt.append(" ORDER BY created_at DESC");
+        return this.getSession().createQuery(stmt.toString()).setFirstResult(offset).setMaxResults(limit).list();
     }
 
     /**
@@ -102,9 +104,10 @@ public class PostDaoImpl implements PostDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Post> dbGetUserPosts(int offset, int limit, int userId) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE user_Id=:userId ORDER BY created_at DESC")
-                .toString();
-        return this.getSession().createQuery(stmt).setParameter("userId", userId).setFirstResult(offset)
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE user_Id = :userId");
+        stmt.append(" ORDER BY created_at DESC");
+        return this.getSession().createQuery(stmt.toString()).setParameter("userId", userId).setFirstResult(offset)
                 .setMaxResults(limit).list();
     }
 
@@ -119,8 +122,10 @@ public class PostDaoImpl implements PostDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Post> dbGetPostsByActiveStatus(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE isActive=true ORDER BY created_at DESC").toString();
-        return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE isActive = true");
+        stmt.append(" ORDER BY created_at DESC");
+        return this.getSession().createQuery(stmt.toString()).setFirstResult(offset).setMaxResults(limit).list();
     }
 
     /**
@@ -134,8 +139,10 @@ public class PostDaoImpl implements PostDao {
      */
     @SuppressWarnings("unchecked")
     public List<Post> dbGetPostsByTitle(String title) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE title = :title ORDER BY id").toString();
-        return this.getSession().createQuery(stmt).setParameter("title", title).list();
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE title = :title");
+        stmt.append(" ORDER BY id");
+        return this.getSession().createQuery(stmt.toString()).setParameter("title", title).list();
     }
 
     /**
@@ -176,8 +183,9 @@ public class PostDaoImpl implements PostDao {
      */
     @Override
     public int dbGetPostCountByActiveStatus() {
-        String stmt = new StringBuilder(COUNT_STMT).append(" WHERE isActive=true").toString();
-        Long count = (Long) this.getSession().createQuery(stmt).uniqueResult();
+        StringBuilder stmt = new StringBuilder(COUNT_STMT);
+        stmt.append(" WHERE isActive = true");
+        Long count = (Long) this.getSession().createQuery(stmt.toString()).uniqueResult();
         return count.intValue();
     }
 

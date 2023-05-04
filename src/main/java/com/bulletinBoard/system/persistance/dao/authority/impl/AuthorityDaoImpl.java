@@ -92,8 +92,9 @@ public class AuthorityDaoImpl implements AuthorityDao {
     @SuppressWarnings("unchecked")
     @Override
     public Authority dbGetAuthorityById(int id) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE id=:id").toString();
-        List<Authority> list = this.getSession().createQuery(stmt).setParameter("id", id).list();
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE id= :id");
+        List<Authority> list = this.getSession().createQuery(stmt.toString()).setParameter("id", id).list();
         return (!list.isEmpty()) ? list.get(0) : null;
     }
 

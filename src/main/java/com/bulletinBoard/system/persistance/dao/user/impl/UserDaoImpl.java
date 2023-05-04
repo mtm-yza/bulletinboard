@@ -82,8 +82,9 @@ public class UserDaoImpl implements UserDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<User> dbGetUsers(int offset, int limit) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" ORDER BY created_at DESC").toString();
-        return this.getSession().createQuery(stmt).setFirstResult(offset).setMaxResults(limit).list();
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" ORDER BY created_at");
+        return this.getSession().createQuery(stmt.toString()).setFirstResult(offset).setMaxResults(limit).list();
     }
 
     /**
@@ -113,8 +114,9 @@ public class UserDaoImpl implements UserDao {
     @SuppressWarnings("unchecked")
     @Override
     public User dbGetUserByEmail(String email) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email").toString();
-        List<User> user = this.getSession().createQuery(stmt).setParameter("email", email).list();
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE email= :email");
+        List<User> user = this.getSession().createQuery(stmt.toString()).setParameter("email", email).list();
         return (!user.isEmpty()) ? user.get(0) : null;
     }
 
@@ -131,8 +133,10 @@ public class UserDaoImpl implements UserDao {
     @SuppressWarnings("unchecked")
     @Override
     public User dbGetUserByCredential(String email, String password) {
-        String stmt = new StringBuilder(SELECT_STMT).append(" WHERE email=:email AND password=:password").toString();
-        List<User> user = this.getSession().createQuery(stmt).setParameter("email", email)
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" WHERE email = :email");
+        stmt.append(" AND password = :password");
+        List<User> user = this.getSession().createQuery(stmt.toString()).setParameter("email", email)
                 .setParameter("password", password).list();
         return (!user.isEmpty()) ? user.get(0) : null;
     }
