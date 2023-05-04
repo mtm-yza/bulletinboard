@@ -13,11 +13,14 @@ function displayPostList() {
 			+ '<td>' + item.title + "</td>"
 			+ '<td style="word-break: break-all;"><p style="margin: 0;">' + item.description + "</p></td>";
 		// Controls
-		if (username == item.user.email) {
-			dataRow += getStatusBtn(index);
-			dataRow += '<td><button class="btn btn-primary w-100" type="button" data-toggle="modal" data-target="#editPostModal" onclick="openEditForm(' + index + ')">Edit</button></td>'
-				+ '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deletePost(' + index + ')">Delete</button></td>';			
-		}
+		dataRow += getStatusBtn(index);
+		dataRow += '<td><button class="btn btn-primary w-100" type="button" data-toggle="modal" data-target="#editPostModal" onclick="openEditForm(' + index + ')"'
+		dataRow += (username != item.user.email)? " disabled": ""
+		dataRow	+= '>Edit</button></td>'
+		dataRow	+= '<td><button class="btn btn-danger w-100" type="button" data-toggle="modal" data-target="#confirmModal" onclick="deletePost(' + index + ')"'
+		dataRow += (username != item.user.email)? " disabled": ""
+		dataRow += '>Delete</button></td>';		
+		//	
 		dataRow += "</tr>";
 		root.append(dataRow);
 	})
@@ -41,7 +44,10 @@ function getStatusBtn(index) {
 	var status = list[index].isActive;
 	var btnStyle = 'btn-status btn w-100 ' + (status ? 'btn-success' : "") + '';
 	var btnText = status ? "Active" : "Disable";
-	return '<td><button type="button" class="' + btnStyle + '" onclick="updatePostStatus(' + index + ')">' + btnText + '</button></td>';
+	var button = '<td><button type="button" class="' + btnStyle + '" onclick="updatePostStatus(' + index + ')"';
+	button += (username != list[index].user.email)? " disabled": "";
+	button += '>' + btnText + '</button></td>'; 
+	return button;
 }
 function openEditForm(index) {
 	setFormValues(index);
