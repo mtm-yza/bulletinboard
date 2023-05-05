@@ -1,6 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<!-- SelectBox for Public or Private -->
+<form id="frmList" class="w-25 mb-3 ml-auto" method="post"
+  action="/Demo/post/list">
+  <select class="form-control ml-auto"
+    onChange="gotToList(this.selectedIndex)">
+    <option <c:if test="${!isPrivate}">selected</c:if>>Public</option>
+    <option <c:if test="${isPrivate}">selected</c:if>>My Post</option>
+  </select>
+  <input id="txtIsPrivate" type="hidden" name="isPrivate"/>
+  <input type="hidden"
+    name="${_csrf.parameterName}" value="${_csrf.token}" />
+</form>
 <!-- Post Display Table -->
 <table class="table table-bordered">
   <thead>
@@ -82,5 +94,6 @@
     var pageSize = ${pageSize}
     var list = ${posts}
     var totalCount = ${totalCount}
+    var isPrivate = ${isPrivate}
     var errors = '${errors}'
 </script>

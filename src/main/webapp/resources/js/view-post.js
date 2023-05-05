@@ -24,6 +24,7 @@ function displayPostList() {
 		dataRow += "</tr>";
 		root.append(dataRow);
 	})
+	var path = isPrivate? "me": "list";
 	$('#pagination-container').pagination({
 		className: "paginationjs-big",
 		pageNumber: pageIndex,
@@ -33,7 +34,7 @@ function displayPostList() {
 		callback: function() {
 			$('.paginationjs-pages ul li:not(.disabled)').each(function() {
 				var btnLink = $(this).children('a');
-				var link = 'list?page=' + $(this).attr('data-num');
+				var link = path + '?page=' + $(this).attr('data-num');
 				btnLink.attr("href", link);
 				btnLink.click(function() { location.href = link; });
 			});
@@ -73,4 +74,8 @@ function deletePost(index) {
     	$('#postEditForm [formaction="delete"]').click();
 		$("#confirmModal").modal("hide");	
 	});
-} 
+}
+function gotToList(isPrivate) {
+	$('#txtIsPrivate').val(Boolean(isPrivate));
+	$('#frmList').submit();
+}

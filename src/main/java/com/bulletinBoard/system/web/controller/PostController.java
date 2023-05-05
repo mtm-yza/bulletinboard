@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -56,6 +57,14 @@ public class PostController {
     private static final String HOME_REDIRECT = "redirect:/post/list";
 
     /**
+     * <h2> PRIVATE_POST_REDIRECT</h2>
+     * <p>
+     * Redirect Link of My Post from PostController
+     * </p>
+     */
+    private static final String PRIVATE_POST_REDIRECT = "redirect:/post/me";
+
+    /**
      * <h2>ADD_VIEW</h2>
      * <p>
      * Redirect Link of Home from PostConteroller
@@ -83,9 +92,7 @@ public class PostController {
      */
     @GetMapping({ "/", "" })
     protected ModelAndView getHomeView(HttpSession session) {
-        session.removeAttribute("totalCount");
-        session.removeAttribute("pageIndex");
-        session.removeAttribute("pageSize");
+        this.removeSessionAttributes(session);
         return new ModelAndView(HOME_REDIRECT);
     }
 
@@ -136,6 +143,22 @@ public class PostController {
     /**
      * <h2>getPostListView</h2>
      * <p>
+     * Redirect Post List View
+     * </p>
+     *
+     * @param page      int
+     * @param isPrivate boolean
+     * @return ModelAndView
+     */
+    @PostMapping("list")
+    protected ModelAndView redirectPostListView(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "false") boolean isPrivate) {
+        return new ModelAndView(isPrivate ? PRIVATE_POST_REDIRECT : HOME_REDIRECT);
+    }
+
+    /**
+     * <h2>getPostListView</h2>
+     * <p>
      * Get Post List View
      * </p>
      *
@@ -146,20 +169,46 @@ public class PostController {
      */
     @GetMapping("list")
     protected ModelAndView getPostListView(@RequestParam(defaultValue = "0") int page,
-            @ModelAttribute("post") PostForm post, HttpSession session, Authentication auth) {
+            @ModelAttribute("post") PostForm post, HttpSession session, Authentication auth,
+            HttpServletRequest request) {
+        if (Boolean.TRUE.equals(session.getAttribute("isPrivate"))) {
+            this.removeSessionAttributes(session);
+        }
         String email = auth.getName();
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         int count = postService.doGetPublicPostCount(email);
         int offset = ControllerUtil.setPaginationData(session, page, count);
         // Get Post Data
         List<PostDTO> posts = this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
-        mv.addObject("posts", (new Gson()).toJson(posts));
-        // Post Form to Edit
-        if (post.getId() != 0) {
-            mv.addObject("post", post);
-        } else {
-            mv.addObject("post", new PostForm());
+        this.setListData(mv, session, posts, post, false);
+        return mv;
+    }
+
+    /**
+     * <h2>getUserPostListView</h2>
+     * <p>
+     * Get User Post Lis View
+     * </p>
+     *
+     * @param page    int
+     * @param post    PostForm
+     * @param session HttpSession
+     * @return ModelAndView
+     */
+    @GetMapping("me")
+    protected ModelAndView getUserPostListView(@RequestParam(defaultValue = "0") int page,
+            @ModelAttribute("post") PostForm post, HttpSession session, Authentication auth,
+            HttpServletRequest request) {
+        if (Boolean.FALSE.equals(session.getAttribute("isPrivate"))) {
+            this.removeSessionAttributes(session);
         }
+        String email = auth.getName();
+        ModelAndView mv = new ModelAndView(HOME_VIEW);
+        int count = postService.doGetUserPostCount(email);
+        int offset = ControllerUtil.setPaginationData(session, page, count);
+        // Get Post Data
+        List<PostDTO> posts = this.postService.doGetUserPosts(offset, ControllerUtil.PAGE_SIZE, email);
+        this.setListData(mv, session, posts, post, true);
         return mv;
     }
 
@@ -177,8 +226,9 @@ public class PostController {
      */
     @PostMapping("update")
     protected ModelAndView updatePost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
-            @RequestParam Boolean isStatusUpdate, RedirectAttributes redirectAttributes) {
-        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
+            @RequestParam Boolean isStatusUpdate, RedirectAttributes redirectAttributes, HttpSession session,
+            HttpServletRequest request) {
+        ModelAndView mv = this.getRedirectListModelAndView(session);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", this.getErrorMessages(bindingResult));
             redirectAttributes.addFlashAttribute("post", post);
@@ -205,8 +255,9 @@ public class PostController {
      * @return mv ModelAndView
      */
     @PostMapping("delete")
-    protected ModelAndView deletePost(@RequestParam int id, RedirectAttributes redirectAttributes) {
-        ModelAndView mv = new ModelAndView(HOME_REDIRECT);
+    protected ModelAndView deletePost(@RequestParam int id, RedirectAttributes redirectAttributes, HttpSession session,
+            HttpServletRequest request) {
+        ModelAndView mv = this.getRedirectListModelAndView(session);
         if (id <= 0) {
             this.addRedirectMessages(redirectAttributes, "error", "Invalid ID", "Your Post ID Is Invalid");
             return mv;
@@ -215,6 +266,59 @@ public class PostController {
         this.addRedirectMessages(redirectAttributes, "success", "Deleting Post Completed",
                 "Your Post Was Successfuly Deleted");
         return mv;
+    }
+
+    /**
+     * <h2>getRedirectListModelAndView</h2>
+     * <p>
+     * 
+     * </p>
+     *
+     * @param session HttpSession
+     * @return ModelAndView
+     */
+    private ModelAndView getRedirectListModelAndView(HttpSession session) {
+        boolean isPrivate = (boolean) session.getAttribute("isPrivate");
+        return new ModelAndView(isPrivate ? PRIVATE_POST_REDIRECT : HOME_REDIRECT);
+    }
+
+    /**
+     * <h2>setListData</h2>
+     * <p>
+     * Set Post List Data
+     * </p>
+     *
+     * @param mv        ModelAndView
+     * @param session   HttpSession
+     * @param posts     List<PostDTO>
+     * @param postForm  PostForm
+     * @param isPrivate Boolean
+     */
+    private void setListData(ModelAndView mv, HttpSession session, List<PostDTO> posts, PostForm postForm,
+            Boolean isPrivate) {
+        session.setAttribute("isPrivate", isPrivate);
+        mv.addObject("posts", (new Gson()).toJson(posts));
+        // Post Form to Edit
+        if (postForm.getId() != 0) {
+            mv.addObject("post", postForm);
+        } else {
+            mv.addObject("post", new PostForm());
+        }
+    }
+
+    /**
+     * <h2>removeSessionAttributes</h2>
+     * <p>
+     * Remove Session Attributes
+     * </p>
+     *
+     * @param session HttpSession
+     */
+    private void removeSessionAttributes(HttpSession session) {
+        session.removeAttribute("totalCount");
+        session.removeAttribute("pageIndex");
+        session.removeAttribute("pageSize");
+        session.removeAttribute("isPrivate");
     }
 
     /**
