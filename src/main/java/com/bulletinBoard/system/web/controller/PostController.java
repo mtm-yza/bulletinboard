@@ -164,36 +164,6 @@ public class PostController {
     }
 
     /**
-     * <h2>getUserPostListView</h2>
-     * <p>
-     * Get User Post Lis View
-     * </p>
-     *
-     * @param page    int
-     * @param post    PostForm
-     * @param session HttpSession
-     * @return ModelAndView
-     */
-    @GetMapping("me")
-    protected ModelAndView getUserPostListView(@RequestParam(defaultValue = "0") int page,
-            @ModelAttribute("post") PostForm post, HttpSession session, Authentication auth) {
-        String email = auth.getName();
-        ModelAndView mv = new ModelAndView(HOME_VIEW);
-        int count = postService.doGetUserPostCount(email);
-        int offset = ControllerUtil.setPaginationData(session, page, count);
-        // Get Post Data
-        List<PostDTO> posts = this.postService.doGetUserPosts(offset, ControllerUtil.PAGE_SIZE, email);
-        mv.addObject("posts", (new Gson()).toJson(posts));
-        // Post Form to Edit
-        if (post.getId() != 0) {
-            mv.addObject("post", post);
-        } else {
-            mv.addObject("post", new PostForm());
-        }
-        return mv;
-    }
-
-    /**
      * <h2>updatePost</h2>
      * <p>
      * Update Post
