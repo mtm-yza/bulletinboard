@@ -147,25 +147,12 @@ public class PostController {
     @GetMapping("list")
     protected ModelAndView getPostListView(@RequestParam(defaultValue = "0") int page,
             @ModelAttribute("post") PostForm post, HttpSession session, Authentication auth) {
-        ModelAndView mv = new ModelAndView(HOME_VIEW);
         String email = auth.getName();
-        // Get Page Count for Pagination
-        int pageIndex = 0;
-        int pageSize = 10;
-        int postTotalCount = this.postService.doGetPublicPostCount(email);
-        // Calculate offset from Page Index
-        if (page != 0) {
-            pageIndex = page;
-        } else {
-            Object indexSession = session.getAttribute("pageIndex");
-            pageIndex = (indexSession != null) ? (int) indexSession : 1;
-        }
-        session.setAttribute("totalCount", postTotalCount);
-        session.setAttribute("pageIndex", pageIndex);
-        session.setAttribute("pageSize", pageSize);
-        // Get Data for Posts
-        int offset = (pageIndex - 1) * pageSize;
-        List<PostDTO> posts = this.postService.doGetPublicPosts(offset, pageSize, email);
+        ModelAndView mv = new ModelAndView(HOME_VIEW);
+        int count = postService.doGetPublicPostCount(email);
+        int offset = ControllerUtil.setPaginationData(session, page, count);
+        // Get Post Data
+        List<PostDTO> posts = this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
         mv.addObject("posts", (new Gson()).toJson(posts));
         // Post Form to Edit
         if (post.getId() != 0) {
