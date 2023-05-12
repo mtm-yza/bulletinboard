@@ -1,18 +1,31 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<!-- SelectBox for Public or Private -->
-<form id="frmList" class="w-25 mb-3 ml-auto" method="post"
-  action="/Demo/post/list">
-  <select class="form-control ml-auto"
-    onChange="gotToList(this.selectedIndex)">
-    <option <c:if test="${!isPrivate}">selected</c:if>>Public</option>
-    <option <c:if test="${isPrivate}">selected</c:if>>My Post</option>
-  </select>
-  <input id="txtIsPrivate" type="hidden" name="isPrivate"/>
-  <input type="hidden"
-    name="${_csrf.parameterName}" value="${_csrf.token}" />
-</form>
+<div class="d-flex justify-content-between mb-3">
+  <!-- SelectBox for Public or Private -->
+  <form id="frmList" class="w-25 mb-3" method="post"
+    action="/Demo/post/list">
+    <select class="form-control"
+      onChange="gotToList(this.selectedIndex)">
+      <option <c:if test="${!isPrivate}">selected</c:if>>Public</option>
+      <option <c:if test="${isPrivate}">selected</c:if>>My Post</option>
+    </select> <input id="txtIsPrivate" type="hidden" name="isPrivate" /> <input
+      type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+  </form>
+  <!-- Search Form -->
+  <form id="frmSearch" class="w-25 ml-auto" method="get"
+    <c:if test="${!isPrivate}">action="/Demo/post/list/search"</c:if>
+    <c:if test="${isPrivate}">action="/Demo/post/me/search"</c:if>
+    >
+      <input class="form-control" type="text" name="postTitle"
+        placeholder="Post Title" />
+      <input class="form-control mt-2" type="text" name="authorName"
+        placeholder="Author Name"
+      <c:if test="${isPrivate}">hidden="true"</c:if>
+      />
+    <input class="btn btn-primary mt-2" type="submit" value="Search" />
+  </form>
+</div>
 <!-- Post Display Table -->
 <table class="table table-bordered">
   <thead>
@@ -69,9 +82,9 @@
           </div>
           <div class="container text-center">
             <button class="btn btn-primary" type="submit"
-              formaction="update">Update</button>
+              formaction="/Demo/post/update">Update</button>
             <button class="btn btn-primary hidden" type="submit"
-              formaction="delete">Delete</button>
+              formaction="/Demo/post/delete">Delete</button>
             <button class="btn btn-primary" type="button"
               data-dismiss="modal">Cancel</button>
           </div>
@@ -95,5 +108,9 @@
     var list = ${posts}
     var totalCount = ${totalCount}
     var isPrivate = ${isPrivate}
+    var searchPostTitle = "<%=request.getParameter("postTitle")%>";
+    searchPostTitle = (searchPostTitle != "null")? searchPostTitle: "";
+    var searchAuthorName = "<%= request.getParameter("authorName")%>";
+    searchAuthorName = (searchAuthorName != "null")? searchAuthorName: "";
     var errors = '${errors}'
 </script>

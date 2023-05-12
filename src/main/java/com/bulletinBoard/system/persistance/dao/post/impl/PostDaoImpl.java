@@ -149,6 +149,32 @@ public class PostDaoImpl implements PostDao {
     }
 
     /**
+     * <h2>dbGetPublicPostsByTitleAndAuthorName</h2>
+     * <p>
+     * Get Public Posts by Title and Author Name
+     * </p>
+     * 
+     * @param offset     int
+     * @param limit      int
+     * @param title      String
+     * @param authorName String
+     * @return List<Post>
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Post> dbGetPublicPostsByTitleAndAuthorName(int offset, int limit, String title, String authorName) {
+        StringBuilder stmt = new StringBuilder(SELECT_STMT);
+        stmt.append(" AS P");
+        stmt.append(" LEFT JOIN FETCH P.user AS U");
+        stmt.append(" WHERE P.title LIKE :postTitle");
+        stmt.append(" AND (U.name LIKE :authorName OR U.email LIKE :authorName)");
+        stmt.append(" AND P.isActive = " + true);
+        stmt.append(" ORDER BY P.created_at DESC");
+        return this.getSession().createQuery(stmt.toString()).setParameter("postTitle", "%" + title + "%")
+                .setParameter("authorName", "%" + authorName + "%").setFirstResult(offset).setMaxResults(limit).list();
+    }
+
+    /**
      * <h2>dbGetPostById</h2>
      * <p>
      * Get Post By ID
@@ -173,6 +199,31 @@ public class PostDaoImpl implements PostDao {
     @Override
     public int dbGetPostCount() {
         Long count = (Long) this.getSession().createQuery(COUNT_STMT).uniqueResult();
+        return count.intValue();
+    }
+
+    /**
+     * <h2>dbGetPublicPostsByTitleAndAuthorName</h2>
+     * <p>
+     * Get Public Posts by Title and Author Name
+     * </p>
+     * 
+     * @param postTitle  String
+     * @param authorName String
+     * @return int
+     */
+    @Override
+    public int dbGetPublicPostsByTitleAndAuthorName(String postTitle, String authorName) {
+        StringBuilder stmt = new StringBuilder("SELECT Count(P.id) FROM " + TABLE_NAME);
+        stmt.append(" AS P");
+        stmt.append(" LEFT OUTER JOIN P.user AS U");
+        stmt.append(" WHERE P.title LIKE :postTitle");
+        stmt.append(" AND (U.name LIKE :authorName OR U.email LIKE :authorName)");
+        stmt.append(" AND isActive = " + true);
+        stmt.append(" ORDER BY P.created_at DESC");
+        Long count = (Long) this.getSession().createQuery(stmt.toString())
+                .setParameter("postTitle", "%" + postTitle + "%").setParameter("authorName", "%" + authorName + "%")
+                .uniqueResult();
         return count.intValue();
     }
 

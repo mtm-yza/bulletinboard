@@ -63,6 +63,21 @@ public interface PostService {
     public List<PostDTO> doGetPublicPosts(int offset, int size, String email);
 
     /**
+     * <h2>doGetPublicPostsByTitleAndAuthorName</h2>
+     * <p>
+     * Get Public Posts By Title And Author Name (Name or Email)
+     * </p>
+     *
+     * @param offset     int
+     * @param size       int
+     * @param postTitle  String
+     * @param authorName String
+     * @return List<PostDTO>
+     */
+    public List<PostDTO> doGetPublicPostsByTitleAndAuthorName(int offset, int size, String postTitle,
+            String authorName);
+
+    /**
      * <h2>doGetUserPosts</h2>
      * <p>
      * Get User's Post
@@ -94,6 +109,18 @@ public interface PostService {
      * @return int
      */
     public int doGetPublicPostCount(String email);
+
+    /**
+     * <h2>doGetPublicPostCountByTitleAndAuthorName</h2>
+     * <p>
+     * Get Total Number of Public Post by Title and Author's Name
+     * </p>
+     *
+     * @param postTitle  String
+     * @param authorName String
+     * @return int
+     */
+    public int doGetPublicPostCountByTitleAndAuthorName(String postTitle, String authorName);
 
     /**
      * <h2>doGetUserPostCount</h2>

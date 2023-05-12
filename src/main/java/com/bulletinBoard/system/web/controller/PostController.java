@@ -57,7 +57,7 @@ public class PostController {
     private static final String HOME_REDIRECT = "redirect:/post/list";
 
     /**
-     * <h2> PRIVATE_POST_REDIRECT</h2>
+     * <h2>PRIVATE_POST_REDIRECT</h2>
      * <p>
      * Redirect Link of My Post from PostController
      * </p>
@@ -185,6 +185,42 @@ public class PostController {
     }
 
     /**
+     * <h2>searchPostListView</h2>
+     * <p>
+     * Search Public Posts
+     * </p>
+     *
+     * @param page       int
+     * @param postTitle  String
+     * @param authorName String
+     * @param post       PostForm
+     * @param session    HttpSession
+     * @param request    HttpRequest
+     * @param auth       Authentication
+     * @return ModelAndView mv
+     */
+    @GetMapping("list/search")
+    protected ModelAndView searchPostListView(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "") String postTitle, @RequestParam(defaultValue = "") String authorName,
+            @ModelAttribute("post") PostForm post, HttpSession session, HttpServletRequest request,
+            Authentication auth) {
+        if (postTitle.isEmpty() && authorName.isEmpty()) {
+            this.removeSessionAttributes(session);
+            return new ModelAndView(HOME_REDIRECT);
+        }
+        if (Boolean.TRUE.equals(session.getAttribute("isPrivate"))) {
+            this.removeSessionAttributes(session);
+        }
+        ModelAndView mv = new ModelAndView(HOME_VIEW);
+        int count = postService.doGetPublicPostCountByTitleAndAuthorName(postTitle, authorName);
+        int offset = ControllerUtil.setPaginationData(session, page, count);
+        List<PostDTO> posts = this.postService.doGetPublicPostsByTitleAndAuthorName(offset, ControllerUtil.PAGE_SIZE,
+                postTitle, authorName);
+        this.setListData(mv, session, posts, post, false);
+        return mv;
+    }
+
+    /**
      * <h2>getUserPostListView</h2>
      * <p>
      * Get User Post Lis View
@@ -208,6 +244,42 @@ public class PostController {
         int offset = ControllerUtil.setPaginationData(session, page, count);
         // Get Post Data
         List<PostDTO> posts = this.postService.doGetUserPosts(offset, ControllerUtil.PAGE_SIZE, email);
+        this.setListData(mv, session, posts, post, true);
+        return mv;
+    }
+
+    /**
+     * <h2>searchUserPostListView</h2>
+     * <p>
+     * Search User's Post
+     * </p>
+     *
+     * @param page      int
+     * @param post      PostForm
+     * @param postTitle String
+     * @param session   HttpSession
+     * @param auth      Authentication
+     * @param request   HttpServletRequest
+     * @return ModelAndView mv
+     */
+    @GetMapping("me/search")
+    protected ModelAndView searchUserPostListView(@RequestParam(defaultValue = "0") int page,
+            @ModelAttribute("post") PostForm post, @RequestParam(defaultValue = "") String postTitle,
+            HttpSession session, Authentication auth, HttpServletRequest request) {
+        if (postTitle.isEmpty()) {
+            this.removeSessionAttributes(session);
+            return new ModelAndView(HOME_REDIRECT);
+        }
+        if (Boolean.FALSE.equals(session.getAttribute("isPrivate"))) {
+            this.removeSessionAttributes(session);
+        }
+        String email = auth.getName();
+        ModelAndView mv = new ModelAndView(HOME_VIEW);
+        int count = postService.doGetPublicPostCountByTitleAndAuthorName(postTitle, email);
+        int offset = ControllerUtil.setPaginationData(session, page, count);
+        // Get Post Data
+        List<PostDTO> posts = this.postService.doGetPublicPostsByTitleAndAuthorName(offset, ControllerUtil.PAGE_SIZE,
+                postTitle, email);
         this.setListData(mv, session, posts, post, true);
         return mv;
     }

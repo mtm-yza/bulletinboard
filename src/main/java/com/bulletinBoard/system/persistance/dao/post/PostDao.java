@@ -73,6 +73,20 @@ public interface PostDao {
     public List<Post> dbGetPostsByTitle(String title);
 
     /**
+     * <h2>dbGetPublicPostsByTitleAndAuthorName</h2>
+     * <p>
+     * Get Public Posts By Title and Author Name
+     * </p>
+     *
+     * @param offset     int
+     * @param limit      int
+     * @param title      String
+     * @param authorName String
+     * @return List<Post>
+     */
+    public List<Post> dbGetPublicPostsByTitleAndAuthorName(int offset, int limit, String title, String authorName);
+
+    /**
      * <h2>dbGetPostById</h2>
      * <p>
      * Get Post By ID
@@ -92,6 +106,18 @@ public interface PostDao {
      * @return int
      */
     public int dbGetPostCount();
+
+    /**
+     * <h2>dbGetPublicPostsByTitleAndAuthorName</h2>
+     * <p>
+     * Get Total Number of Public Posts by Title and Author's Name
+     * </p>
+     *
+     * @param postTitle  String
+     * @param authorName String
+     * @return int
+     */
+    public int dbGetPublicPostsByTitleAndAuthorName(String postTitle, String authorName);
 
     /**
      * <h2>dbGetUsesrPostCount</h2>

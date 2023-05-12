@@ -24,7 +24,9 @@ function displayPostList() {
 		dataRow += "</tr>";
 		root.append(dataRow);
 	})
-	var path = isPrivate? "me": "list";
+	var path = "?";
+	path += searchPostTitle? "postTitle=" + searchPostTitle + "&": "";
+	path += searchAuthorName? "authorName=" + searchAuthorName + "&": "";
 	$('#pagination-container').pagination({
 		className: "paginationjs-big",
 		pageNumber: pageIndex,
@@ -34,7 +36,7 @@ function displayPostList() {
 		callback: function() {
 			$('.paginationjs-pages ul li:not(.disabled)').each(function() {
 				var btnLink = $(this).children('a');
-				var link = path + '?page=' + $(this).attr('data-num');
+				var link = path + 'page=' + $(this).attr('data-num');
 				btnLink.attr("href", link);
 				btnLink.click(function() { location.href = link; });
 			});
@@ -56,7 +58,7 @@ function openEditForm(index) {
 function updatePostStatus(index) {
 	setFormValues(index);
 	$('#chkBxIsStatusUpdate').val(true)
-	$('#postEditForm [formaction="update"]').click();
+	$('#postEditForm [formaction="/Demo/post/update"]').click();
 }
 function setFormValues(index) {
 	var post = list[index];
@@ -71,7 +73,7 @@ function deletePost(index) {
 	var id = list[index].id;
 	$("#btnConfirm").off("click").click(function() {		
 		$("#txtId").val(id);
-    	$('#postEditForm [formaction="delete"]').click();
+    	$('#postEditForm [formaction="/Demo/post/delete"]').click();
 		$("#confirmModal").modal("hide");	
 	});
 }

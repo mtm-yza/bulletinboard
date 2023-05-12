@@ -97,6 +97,24 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
+     * <h2>doGetPublicPostsByTitleAndAuthorName</h2>
+     * <p>
+     * Get Public Posts by Title and Author's Name
+     * </p>
+     * 
+     * @param offset     int
+     * @param size       int
+     * @param postTitle  String
+     * @param authorName String
+     * @return List<PostDTO>
+     */
+    @Override
+    public List<PostDTO> doGetPublicPostsByTitleAndAuthorName(int offset, int size, String postTitle,
+            String authorName) {
+        return this.getPostDto(this.postDao.dbGetPublicPostsByTitleAndAuthorName(offset, size, postTitle, authorName));
+    }
+
+    /**
      * <h2>doGetUserPosts</h2>
      * <p>
      * Get User Posts
@@ -154,6 +172,21 @@ public class PostServiceImpl implements PostService {
     public int doGetPublicPostCount(String email) {
         int userId = this.userDao.dbGetUserByEmail(email).getId();
         return this.postDao.dbGetUserPostCount(userId, true);
+    }
+
+    /**
+     * <h2>doGetPublicPostCountByTitleAndAuthorName</h2>
+     * <p>
+     * Get Total Count of Public Post by Title and Author Name
+     * </p>
+     * 
+     * @param postTitle  String
+     * @param authorName String
+     * @return int
+     */
+    @Override
+    public int doGetPublicPostCountByTitleAndAuthorName(String postTitle, String authorName) {
+        return this.postDao.dbGetPublicPostsByTitleAndAuthorName(postTitle, authorName);
     }
 
     /**
@@ -235,6 +268,9 @@ public class PostServiceImpl implements PostService {
      * @return List<PostDTO>
      */
     private List<PostDTO> getPostDto(List<Post> postList) {
+        if (postList == null) {
+            return null;
+        }
         return postList.stream().map(item -> new PostDTO(item)).collect(Collectors.toList());
     }
 }
