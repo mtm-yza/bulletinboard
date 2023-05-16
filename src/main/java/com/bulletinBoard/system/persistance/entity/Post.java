@@ -107,7 +107,6 @@ public class Post {
     private Timestamp updated_at;
 
     public Post(String title, String description, boolean isActive, User user) {
-        super();
         this.title = title;
         this.description = description;
         this.isActive = isActive;
@@ -123,7 +122,6 @@ public class Post {
      * @param post PostForm
      */
     public Post(PostForm post) {
-        super();
         this.id = post.getId();
         this.title = post.getTitle();
         this.description = post.getDescription();
