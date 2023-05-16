@@ -147,6 +147,19 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
+     * <h2>doGetPostById</h2>
+     * <p>
+     * Get Post by ID
+     * </p>
+     * 
+     * @param id int
+     * @return PostDTO
+     */
+    public PostDTO doGetPostById(int id) {
+        return new PostDTO(this.postDao.dbGetPostById(id));
+    }
+
+    /**
      * <h2>doGetPostCount</h2>
      * <p>
      * Get Total Number of Posts

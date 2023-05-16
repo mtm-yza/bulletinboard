@@ -91,6 +91,17 @@ public interface PostService {
     public List<PostDTO> doGetUserPosts(int offset, int size, String email);
 
     /**
+     * <h2>doGetPostById</h2>
+     * <p>
+     * Get Post By ID
+     * </p>
+     *
+     * @param id int
+     * @return PostDTO
+     */
+    public PostDTO doGetPostById(int id);
+
+    /**
      * <h2>doGetPostCount</h2>
      * <p>
      * Get Total Number Of Posts

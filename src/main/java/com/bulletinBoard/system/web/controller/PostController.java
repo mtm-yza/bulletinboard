@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
+import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
 import com.bulletinBoard.system.common.ControllerUtil;
 import com.bulletinBoard.system.web.form.PostForm;
@@ -299,11 +300,17 @@ public class PostController {
     @PostMapping("update")
     protected ModelAndView updatePost(@Valid @ModelAttribute PostForm post, BindingResult bindingResult,
             @RequestParam Boolean isStatusUpdate, RedirectAttributes redirectAttributes, HttpSession session,
-            HttpServletRequest request) {
+            HttpServletRequest request, Authentication auth) {
         ModelAndView mv = this.getRedirectListModelAndView(session);
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("errors", this.getErrorMessages(bindingResult));
             redirectAttributes.addFlashAttribute("post", post);
+            return mv;
+        }
+        String postUserName = this.postService.doGetPostById(post.getId()).getUser().getUsername();
+        if (!postUserName.equals(auth.getName())) {
+            this.addRedirectMessages(redirectAttributes, "error", "Forbidden Request",
+                    "Unable to Update Post from Other Users");
             return mv;
         }
         if (isStatusUpdate) {
@@ -328,10 +335,16 @@ public class PostController {
      */
     @PostMapping("delete")
     protected ModelAndView deletePost(@RequestParam int id, RedirectAttributes redirectAttributes, HttpSession session,
-            HttpServletRequest request) {
+            HttpServletRequest request, Authentication auth) {
         ModelAndView mv = this.getRedirectListModelAndView(session);
         if (id <= 0) {
             this.addRedirectMessages(redirectAttributes, "error", "Invalid ID", "Your Post ID Is Invalid");
+            return mv;
+        }
+        String postUserName = this.postService.doGetPostById(id).getUser().getUsername();
+        if (!postUserName.equals(auth.getName())) {
+            this.addRedirectMessages(redirectAttributes, "error", "Forbidden Request",
+                    "Unable to Delete Post from Other Users");
             return mv;
         }
         this.postService.doDeletePostById(id);
