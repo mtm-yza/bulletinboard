@@ -205,12 +205,9 @@ public class PostController {
             @RequestParam(defaultValue = "") String postTitle, @RequestParam(defaultValue = "") String authorName,
             @ModelAttribute("post") PostForm post, HttpSession session, HttpServletRequest request,
             Authentication auth) {
+        this.removeSessionAttributes(session);
         if (postTitle.isEmpty() && authorName.isEmpty()) {
-            this.removeSessionAttributes(session);
             return new ModelAndView(HOME_REDIRECT);
-        }
-        if (Boolean.TRUE.equals(session.getAttribute("isPrivate"))) {
-            this.removeSessionAttributes(session);
         }
         ModelAndView mv = new ModelAndView(HOME_VIEW);
         int count = postService.doGetPublicPostCountByTitleAndAuthorName(postTitle, authorName);
