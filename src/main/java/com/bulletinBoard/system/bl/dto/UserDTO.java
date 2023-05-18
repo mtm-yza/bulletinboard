@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.bulletinBoard.system.persistance.entity.Authority;
 import com.bulletinBoard.system.persistance.entity.User;
 
 import lombok.AllArgsConstructor;
@@ -86,7 +85,7 @@ public class UserDTO implements UserDetails {
      * User's Authority
      * </p>
      */
-    private Authority authority;
+    private AuthorityDTO authority;
 
     /**
      * <h2>getAuthorities</h2>
@@ -180,6 +179,6 @@ public class UserDTO implements UserDetails {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.password = user.getPassword();
-        this.authority = user.getAuthority();
+        this.authority = new AuthorityDTO(user.getAuthority());
     }
 }
