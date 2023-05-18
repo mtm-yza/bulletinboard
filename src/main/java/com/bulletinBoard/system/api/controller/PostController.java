@@ -3,6 +3,7 @@ package com.bulletinBoard.system.api.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bulletinBoard.system.api.common.ControllerUtil;
 import com.bulletinBoard.system.api.response.MessageResponse;
+import com.bulletinBoard.system.api.response.PostResponse;
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
 import com.bulletinBoard.system.web.form.PostForm;
@@ -78,11 +80,12 @@ public class PostController {
      * @return List<PostDTO>
      */
     @GetMapping({ "", "/" })
-    public List<PostDTO> getPublicPosts(@RequestParam(defaultValue = "0") int page) {
+    public List<PostResponse> getPublicPosts(@RequestParam(defaultValue = "0") int page) {
         String email = "admin@gmail.com";
         int count = this.postService.doGetPublicPostCount(email);
         int offset = ControllerUtil.getOffset(page, count);
-        return this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
+        List<PostDTO> list = this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
+        return this.getPostResponses(list);
     }
 
     /**
@@ -96,9 +99,9 @@ public class PostController {
      * @return PostDTO post
      */
     @GetMapping("/{id}")
-    public PostDTO getPostById(@PathVariable int id) {
+    public PostResponse getPostById(@PathVariable int id) {
         PostDTO post = this.postService.doGetPostById(id);
-        return post;
+        return new PostResponse(post);
     }
 
     /**
@@ -135,5 +138,21 @@ public class PostController {
     public MessageResponse deletePost(@PathVariable int id) {
         this.postService.doDeletePostById(id);
         return new MessageResponse("Deleted Successfully");
+    }
+
+    /**
+     * <h2>getPostResponses</h2>
+     * <p>
+     * Convert PostDTOs to PostResponses
+     * </p>
+     *
+     * @param posts List<PostDTO>
+     *
+     * @return List<PostResponse>
+     */
+    private List<PostResponse> getPostResponses(List<PostDTO> posts) {
+        if (posts.isEmpty())
+            return null;
+        return posts.stream().map(it -> new PostResponse(it)).collect(Collectors.toList());
     }
 }
