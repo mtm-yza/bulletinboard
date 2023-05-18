@@ -9,6 +9,7 @@
     http://www.springframework.org/schema/security 
     http://www.springframework.org/schema/security/spring-security.xsd">
     <security:http>
+        <intercept-url pattern="/api/*" access="permitAll()" />
         <intercept-url pattern="/user/*" access="hasRole('ADMIN')" />
         <intercept-url pattern="/post/*" access="hasAnyRole('ADMIN', 'USER')" />
         <form-login login-page='/login'
@@ -16,6 +17,7 @@
             username-parameter="username" password-parameter="password" />
         <access-denied-handler error-page="/error" />
         <logout logout-url="/logout" logout-success-url="/login" />
+        <security:csrf disabled="true"/>
     </security:http>
     <authentication-manager>
         <authentication-provider

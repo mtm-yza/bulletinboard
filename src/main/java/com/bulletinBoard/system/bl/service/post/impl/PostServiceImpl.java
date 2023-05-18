@@ -156,7 +156,8 @@ public class PostServiceImpl implements PostService {
      * @return PostDTO
      */
     public PostDTO doGetPostById(int id) {
-        return new PostDTO(this.postDao.dbGetPostById(id));
+        Post post = this.postDao.dbGetPostById(id);
+        return (post != null)? new PostDTO(post): null;
     }
 
     /**

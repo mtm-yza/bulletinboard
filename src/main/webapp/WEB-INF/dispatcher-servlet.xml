@@ -93,6 +93,7 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
+    <bean id="requestMatcher" class="com.bulletinBoard.system.config.CsrfMatcher" />
     <bean id="userService" class="com.bulletinBoard.system.bl.service.user.impl.UserServiceImpl"></bean>
     <bean id="bCryptPasswordEncoder"
         class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
