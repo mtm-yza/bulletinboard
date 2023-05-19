@@ -61,8 +61,8 @@ public class MainResponse {
      * @param message   String
      */
     public MainResponse(Boolean isSuccess, String message) {
+        this.isSuccess = isSuccess;
         this.message = message;
-        this.isSuccess = true;
     }
 
     /**
