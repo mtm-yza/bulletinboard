@@ -132,6 +132,9 @@ public class UserController {
             List<Map<String, String>> errorList = ControllerUtil.getErrors(bindingResult);
             return new ResponseEntity<>(new ErrorResponse("Failed To Update User", errorList), HttpStatus.BAD_REQUEST);
         }
+        if (this.userService.doGetUserById(user.getId()) == null) {
+            return new ResponseEntity<>(new ErrorResponse("User Not Found"), HttpStatus.OK);
+        }
         this.userService.doUpdateUser(user);
         UserResponse userResponse = new UserResponse(this.userService.doGetUserById(user.getId()));
         return new ResponseEntity<>(new MainResponse("Update Successful", userResponse), HttpStatus.OK);
