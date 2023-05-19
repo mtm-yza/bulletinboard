@@ -107,7 +107,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      */
     @Override
     public UserDTO doGetUserById(int id) {
-        return new UserDTO(userDao.dbGetUserById(id));
+        User user = userDao.dbGetUserById(id);
+        return (user != null)? new UserDTO(user): null;
     }
 
     /**

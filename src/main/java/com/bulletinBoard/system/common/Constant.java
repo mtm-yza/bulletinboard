@@ -10,6 +10,7 @@ public class Constant {
     public static final int SUCCESS = 1;
     public static final int EMAIL_ALREADY_REGISTERED = 2;
     public static final int INVALID_CREDENTIAL = 3;
+    public static final int NOT_FOUND = 4;
 
     @Getter
     public static enum UserRole {
@@ -32,7 +33,7 @@ public class Constant {
                 BY_NAME.put(role.name, role);
             }
         }
-        
+
         UserRole(int id, String name) {
             this.id = id;
             this.name = name;
@@ -45,5 +46,21 @@ public class Constant {
         public static UserRole valueOfName(String name) {
             return BY_NAME.get(name);
         }
+    }
+
+    public static String getMessage(int result) {
+        String message = null;
+        switch (result) {
+        case Constant.SUCCESS:
+            message = "Successfully Added";
+            break;
+        case Constant.EMAIL_ALREADY_REGISTERED:
+            message = "Email is Already Registered";
+            break;
+        case Constant.INVALID_CREDENTIAL:
+            message = "Invalid Username or Password";
+            break;
+        }
+        return message;
     }
 }
