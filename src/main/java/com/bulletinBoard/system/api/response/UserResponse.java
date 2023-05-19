@@ -2,7 +2,10 @@ package com.bulletinBoard.system.api.response;
 
 import com.bulletinBoard.system.bl.dto.UserDTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Data
 public class UserResponse {
 
     /**
@@ -46,6 +50,15 @@ public class UserResponse {
     private String address;
 
     /**
+     * <h2>password</h2>
+     * <p>
+     * User's Password
+     * </p>
+     */
+    @JsonIgnore
+    private String password;
+
+    /**
      * <h2>role</h2>
      * <p>
      * User's Role
@@ -66,6 +79,7 @@ public class UserResponse {
         this.name = user.getName();
         this.email = user.getEmail();
         this.address = user.getAddress();
+        this.password = user.getPassword();
         this.role = user.getAuthority().getId();
     }
 }

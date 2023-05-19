@@ -55,14 +55,6 @@ public class PostResponse {
     private Boolean isActive;
 
     /**
-     * <h2>password</h2>
-     * <p>
-     * password
-     * </p>
-     */
-    private String password;
-
-    /**
      * <h2>user</h2>
      * <p>
      * User Response
