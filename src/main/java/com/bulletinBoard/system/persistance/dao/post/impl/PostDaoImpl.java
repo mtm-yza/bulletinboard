@@ -290,7 +290,9 @@ public class PostDaoImpl implements PostDao {
     @Override
     public void dbDeletePost(int id) {
         Post post = this.dbGetPostById(id);
-        this.getSession().delete(post);
+        if (post != null) {            
+            this.getSession().delete(post);
+        }
     }
 
     /**

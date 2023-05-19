@@ -67,9 +67,9 @@ public class PostController {
             List<Map<String, String>> errorList = ControllerUtil.getErrors(bindingResult);
             return new ResponseEntity<>(new ErrorResponse("Failed to Add Post", errorList), HttpStatus.BAD_REQUEST);
         }
-        post.setId(1);
+        post.setUserEmail("admin@gmail.com");
         this.postService.doAddPost(post);
-        return new ResponseEntity<>(new MainResponse("Saving Successfully"), HttpStatus.OK);
+        return new ResponseEntity<>(new MainResponse("Saving Successfully"), HttpStatus.CREATED);
     }
 
     /**
@@ -103,8 +103,14 @@ public class PostController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<MainResponse> getPostById(@PathVariable int id) {
+        if (id == 0) {
+            return new ResponseEntity<>(new ErrorResponse("Invalid ID"), HttpStatus.BAD_REQUEST);
+        }
         PostDTO post = this.postService.doGetPostById(id);
-        return new ResponseEntity<>(new MainResponse(post), HttpStatus.OK);
+        if (post == null) {
+            return new ResponseEntity<>(new ErrorResponse("Post ID Not Found"), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new MainResponse(new PostResponse(post)), HttpStatus.OK);
     }
 
     /**
@@ -126,7 +132,7 @@ public class PostController {
         }
         this.postService.doUpdatePost(post);
         PostResponse postResponse = new PostResponse(this.postService.doGetPostById(post.getId()));
-        return new ResponseEntity<>(new MainResponse("Update Successful", postResponse), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new MainResponse("Update Successful", postResponse), HttpStatus.OK);
     }
 
     /**

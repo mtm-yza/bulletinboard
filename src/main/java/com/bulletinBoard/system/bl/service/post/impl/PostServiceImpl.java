@@ -283,7 +283,7 @@ public class PostServiceImpl implements PostService {
      */
     private List<PostDTO> getPostDto(List<Post> postList) {
         if (postList == null) {
-            return null;
+            return List.of();
         }
         return postList.stream().map(item -> new PostDTO(item)).collect(Collectors.toList());
     }
