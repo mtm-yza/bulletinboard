@@ -1,8 +1,6 @@
 package com.bulletinBoard.system.api.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bulletinBoard.system.api.common.ControllerUtil;
-import com.bulletinBoard.system.api.response.MessageResponse;
+import com.bulletinBoard.system.api.common.response.MainResponse;
 import com.bulletinBoard.system.api.response.PostResponse;
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
@@ -60,13 +58,13 @@ public class PostController {
      * @return MessageResponse
      */
     @PostMapping({ "", "/" })
-    public MessageResponse addPost(@Valid @RequestBody PostForm post, BindingResult bindingResult) {
+    public MainResponse addPost(@Valid @RequestBody PostForm post, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new MessageResponse("Failed to Add Post");
+            return new MainResponse("Failed to Add Post");
         }
         post.setId(1);
         this.postService.doAddPost(post);
-        return new MessageResponse("Saving Successfully");
+        return new MainResponse("Saving Successfully");
     }
 
     /**
@@ -80,12 +78,12 @@ public class PostController {
      * @return List<PostDTO>
      */
     @GetMapping({ "", "/" })
-    public List<PostResponse> getPublicPosts(@RequestParam(defaultValue = "0") int page) {
+    public MainResponse getPublicPosts(@RequestParam(defaultValue = "0") int page) {
         String email = "admin@gmail.com";
         int count = this.postService.doGetPublicPostCount(email);
         int offset = ControllerUtil.getOffset(page, count);
         List<PostDTO> list = this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
-        return this.getPostResponses(list);
+        return new MainResponse(this.getPostResponses(list));
     }
 
     /**
@@ -99,9 +97,9 @@ public class PostController {
      * @return PostDTO post
      */
     @GetMapping("/{id}")
-    public PostResponse getPostById(@PathVariable int id) {
+    public MainResponse getPostById(@PathVariable int id) {
         PostDTO post = this.postService.doGetPostById(id);
-        return new PostResponse(post);
+        return new MainResponse(post);
     }
 
     /**
@@ -116,12 +114,9 @@ public class PostController {
      * @return Map<String,Object>
      */
     @PutMapping("/{id}")
-    public Map<String, Object> updatePost(@RequestBody PostForm post, BindingResult bindingResult) {
-        Map<String, Object> map = new HashMap<>();
+    public MainResponse updatePost(@RequestBody PostForm post, BindingResult bindingResult) {
         this.postService.doUpdatePost(post);
-        map.put("post", this.postService.doGetPostById(post.getId()));
-        map.put("message", "Update Successful");
-        return map;
+        return new MainResponse("Update Successful", new PostResponse(this.postService.doGetPostById(post.getId())));
     }
 
     /**
@@ -135,9 +130,9 @@ public class PostController {
      * @return MessageResponse
      */
     @DeleteMapping("/{id}")
-    public MessageResponse deletePost(@PathVariable int id) {
+    public MainResponse deletePost(@PathVariable int id) {
         this.postService.doDeletePostById(id);
-        return new MessageResponse("Deleted Successfully");
+        return new MainResponse("Deleted Successfully");
     }
 
     /**
