@@ -93,7 +93,8 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <bean id="requestMatcher" class="com.bulletinBoard.system.config.CsrfMatcher" />
+    <bean id="jwtTokenFilter" class="com.bulletinBoard.system.api.common.JwtTokenFilter"/>
+    <bean id="apiAccessDeniedHandler" class="com.bulletinBoard.system.api.common.ApiAccessDeniedHandler"/>
     <bean id="userService" class="com.bulletinBoard.system.bl.service.user.impl.UserServiceImpl"></bean>
     <bean id="bCryptPasswordEncoder"
         class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">

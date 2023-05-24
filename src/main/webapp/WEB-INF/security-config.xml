@@ -8,8 +8,15 @@
     http://www.springframework.org/schema/beans/spring-beans.xsd 
     http://www.springframework.org/schema/security 
     http://www.springframework.org/schema/security/spring-security.xsd">
-    <security:http pattern="/api/**" auto-config="true">
-        <security:csrf disabled="true"/>
+    <security:http pattern="/api/**" auto-config="true"
+        create-session="stateless">
+        <security:csrf disabled="true" />
+        <security:custom-filter ref="jwtTokenFilter"
+            before="FORM_LOGIN_FILTER" />
+        <intercept-url pattern="/api/user/**" access="hasRole('ADMIN')" />
+        <form-login login-page='/api/accessDenied'/>
+        <security:access-denied-handler error-page="/api/accessDenied"/>
+        <logout logout-url="api/logout"/>
     </security:http>
     <security:http>
         <intercept-url pattern="/user/**" access="hasRole('ADMIN')" />
@@ -20,7 +27,7 @@
         <access-denied-handler error-page="/error" />
         <logout logout-url="/logout" logout-success-url="/login" />
     </security:http>
-    <authentication-manager>
+    <authentication-manager id="authManager">
         <authentication-provider
             user-service-ref="userService">
             <password-encoder ref="bCryptPasswordEncoder" />

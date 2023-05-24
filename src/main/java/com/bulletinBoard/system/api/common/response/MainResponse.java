@@ -79,6 +79,18 @@ public class MainResponse {
         this.isSuccess = true;
         this.data = data;
     }
+    
+    /**
+     * <h2>Constructor for MainResponse</h2>
+     * <p>
+     * Constructor for MainResponse
+     * </p>
+     * 
+     * @param message String
+     */
+    public MainResponse(Boolean isSuccessful) {
+        this.isSuccess = isSuccessful;;
+    }
 
     /**
      * <h2>Constructor for MainResponse</h2>
