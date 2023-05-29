@@ -67,6 +67,14 @@ public class UserResponse {
     private int role;
 
     /**
+     * <h2>profilePhoto</h2>
+     * <p>
+     * profilePhoto
+     * </p>
+     */
+    private String profilePhoto;
+
+    /**
      * <h2>Constructor for UserResponse</h2>
      * <p>
      * Constructor for UserResponse
@@ -80,6 +88,7 @@ public class UserResponse {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.password = user.getPassword();
+        this.profilePhoto = user.getProfilePhotoName();
         this.role = user.getAuthority().getId();
     }
 }

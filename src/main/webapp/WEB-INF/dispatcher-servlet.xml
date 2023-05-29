@@ -21,8 +21,8 @@
     <context:component-scan
         base-package="com.bulletinBoard.system" />
     <mvc:annotation-driven />
-    <mvc:resources mapping="/resources/**"
-        location="/resources/" />
+    <mvc:resources mapping="api/resources/**" location="/resources/" />
+    <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <bean id="propertyConfigurer"
         class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">

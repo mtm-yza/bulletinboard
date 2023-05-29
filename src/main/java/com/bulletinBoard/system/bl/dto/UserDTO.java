@@ -80,6 +80,14 @@ public class UserDTO implements UserDetails {
     private String password;
 
     /**
+     * <h2> profilePhotoName</h2>
+     * <p>
+     * profilePhotoName
+     * </p>
+     */
+    private String profilePhotoName;
+
+    /**
      * <h2>authorities</h2>
      * <p>
      * User's Authority
@@ -179,6 +187,7 @@ public class UserDTO implements UserDetails {
         this.email = user.getEmail();
         this.address = user.getAddress();
         this.password = user.getPassword();
+        this.profilePhotoName = user.getProfilePhotoName();
         this.authority = new AuthorityDTO(user.getAuthority());
     }
 }

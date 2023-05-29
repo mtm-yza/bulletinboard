@@ -13,7 +13,9 @@
         <security:csrf disabled="true" />
         <security:custom-filter ref="jwtTokenFilter"
             before="FORM_LOGIN_FILTER" />
+        <intercept-url pattern="/api/user/profile/**" access="hasAnyRole('ADMIN', 'USER')" />
         <intercept-url pattern="/api/user/**" access="hasRole('ADMIN')" />
+        <intercept-url pattern="/resources/asset/profile/*" access="hasAnyRole('ADMIN', 'USER')" />
         <form-login login-page='/api/accessDenied'/>
         <security:access-denied-handler error-page="/api/accessDenied"/>
         <logout logout-url="api/logout"/>
@@ -21,6 +23,7 @@
     <security:http>
         <intercept-url pattern="/user/**" access="hasRole('ADMIN')" />
         <intercept-url pattern="/post/**" access="hasAnyRole('ADMIN', 'USER')" />
+        <intercept-url pattern="/resources/asset/profile/*" access="hasAnyRole('ADMIN', 'USER')" />
         <form-login login-page='/login'
             login-processing-url="/login" default-target-url="/post"
             username-parameter="username" password-parameter="password" />

@@ -90,6 +90,14 @@ public class User {
     private String password;
 
     /**
+     * <h2>photoFileName</h2>
+     * <p>
+     * photoFileName
+     * </p>
+     */
+    private String profilePhotoName;
+
+    /**
      * <h2>created_at</h2>
      * <p>
      * Created Date

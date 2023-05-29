@@ -83,6 +83,19 @@ public interface UserService {
     public int doUpdateUser(UserForm post);
 
     /**
+     * <h2>doUpdateProfilePhoto</h2>
+     * <p>
+     * Upload User Profile Photo
+     * </p>
+     *
+     * @param userId        int
+     * @param photoFileName String
+     *
+     * @return int
+     */
+    public int doUpdateProfilePhoto(int userId, String profilePhotoName);
+
+    /**
      * <h2>doDeleteUser</h2>
      * <p>
      * Delete User by ID

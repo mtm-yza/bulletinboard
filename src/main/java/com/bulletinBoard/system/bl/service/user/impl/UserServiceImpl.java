@@ -162,6 +162,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     /**
+     * <h2>doUpdateProfilePhoto</h2>
+     * <p>
+     * 
+     * </p>
+     * 
+     * @param userId           int
+     * @param profilePhotoName String
+     * @return int
+     */
+    @Override
+    public int doUpdateProfilePhoto(int userId, String profilePhotoName) {
+        User user = this.userDao.dbGetUserById(userId);
+        if (user == null) {
+            return Constant.NOT_FOUND;
+        }
+        user.setProfilePhotoName(profilePhotoName);
+        userDao.dbUpdateUser(user);
+        return Constant.SUCCESS;
+    }
+
+    /**
      * <h2>doDeleteUser</h2>
      * <p>
      * Delete User
