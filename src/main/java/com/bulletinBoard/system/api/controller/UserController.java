@@ -1,6 +1,6 @@
 package com.bulletinBoard.system.api.controller;
 
-import java.util.Date;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,6 +30,7 @@ import com.bulletinBoard.system.api.common.response.ErrorResponse;
 import com.bulletinBoard.system.api.common.response.MainResponse;
 import com.bulletinBoard.system.api.response.UserResponse;
 import com.bulletinBoard.system.bl.dto.UserDTO;
+import com.bulletinBoard.system.bl.service.asset.AssetService;
 import com.bulletinBoard.system.bl.service.user.UserService;
 import com.bulletinBoard.system.common.Constant;
 import com.bulletinBoard.system.web.form.UserForm;
@@ -48,6 +49,14 @@ import com.bulletinBoard.system.web.form.UserForm;
 public class UserController {
 
     /**
+     * <h2>PROFILE_RESOURCE_URL</h2>
+     * <p>
+     * PROFILE_RESOURCE_URL
+     * </p>
+     */
+    private static final String PROFILE_RESOURCE_URL = "/api/resources/";
+
+    /**
      * <h2>userService</h2>
      * <p>
      * userService
@@ -57,13 +66,13 @@ public class UserController {
     private UserService userService;
 
     /**
-     * <h2>assetController</h2>
+     * <h2>assetService</h2>
      * <p>
-     * assetController
+     * assetService
      * </p>
      */
     @Autowired
-    private AssetController assetController;
+    private AssetService assetService;
 
     /**
      * <h2>addUser</h2>
@@ -177,33 +186,11 @@ public class UserController {
     }
 
     /**
-     * <h2>getProfile</h2>
-     * <p>
-     * Get Profile
-     * </p>
-     *
-     * @param request HttpServletRequest
-     * @param auth    Authentication
-     *
-     * @return ResponseEntity<MainResponse>
-     */
-    @GetMapping(value = "/profile")
-    public ResponseEntity<MainResponse> getProfile(HttpServletRequest request, HttpServletRequest response,
-            Authentication auth) {
-        UserDTO user = userService.doGetUserByEmail(auth.getName());
-        if (user.getProfilePhotoName() != null) {
-            user.setProfilePhotoName(assetController.getProfilePic(user.getProfilePhotoName(), request, auth));
-        }
-        return new ResponseEntity<>(new MainResponse(new UserResponse(user)), HttpStatus.OK);
-    }
-
-    /**
      * <h2>uploadPicture</h2>
      * <p>
      * Upload Picture
      * </p>
      *
-     * @param id      int
      * @param pic     MultipartFile
      * @param request HttpServletRequest
      *
@@ -221,24 +208,69 @@ public class UserController {
             return new ResponseEntity<>(new ErrorResponse("Unsupported File Extension"),
                     HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         }
-        // Get File Name
-        String[] fileNames = pic.getOriginalFilename().split("\\.");
-        String fileExt = fileNames[fileNames.length - 1];
-        String fileName = (new Date()).getTime() + "." + fileExt;
-        // Redirect to AssetController
-        ResponseEntity<MainResponse> response = assetController.saveProfilePic(fileName, pic, request);
-        if (response.getStatusCode() != HttpStatus.OK) {
-            return response;
+        // Save Profile Picture
+        byte[] picByte = null;
+        try {
+            picByte = pic.getBytes();
+        } catch (IOException e) {
+            return new ResponseEntity<>(new ErrorResponse("Unable to Fetch File"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        // Save File Name in Database
-        UserDTO user = userService.doGetUserByEmail(auth.getName());
-        userService.doUpdateProfilePhoto(user.getId(), fileName);
+        this.assetService.doSaveProfilePic(this.getRootDir(request), auth.getName(), pic.getOriginalFilename(),
+                picByte);
         return new ResponseEntity<>(new MainResponse("Saving Successfully", pic.getOriginalFilename()), HttpStatus.OK);
     }
-    
+
+    /**
+     * <h2>getProfile</h2>
+     * <p>
+     * Get Profile
+     * </p>
+     *
+     * @param request HttpServletRequest
+     * @param auth    Authentication
+     *
+     * @return ResponseEntity<MainResponse>
+     */
+    @GetMapping(value = "/profile")
+    public ResponseEntity<MainResponse> getProfile(HttpServletRequest request, HttpServletRequest response,
+            Authentication auth) {
+        UserDTO user = userService.doGetUserByEmail(auth.getName());
+        if (user.getProfilePhotoName() != null) {
+            String profileUrl = this.assetService.doGetProfileUrl(auth.getName());
+            user.setProfilePhotoName(PROFILE_RESOURCE_URL + profileUrl);
+        }
+        return new ResponseEntity<>(new MainResponse(new UserResponse(user)), HttpStatus.OK);
+    }
+
+    /**
+     * <h2>deleteProfile</h2>
+     * <p>
+     * Delete Profile Photo
+     * </p>
+     *
+     * @param request HttpServletRequest
+     * @param auth    Authentication
+     *
+     * @return ResponseEntity<MainResponse>
+     */
     @DeleteMapping("/profile/photo")
-    public ResponseEntity<MainResponse> deleteProfile(HttpServletRequest request) {
-        return null;
+    public ResponseEntity<MainResponse> deleteProfile(HttpServletRequest request, Authentication auth) {
+        this.assetService.doDeleteProfilePic(this.getRootDir(request), auth.getName());
+        return new ResponseEntity<>(new MainResponse("Delete Successfully"), HttpStatus.OK);
+    }
+
+    /**
+     * <h2>getRootDir</h2>
+     * <p>
+     * Get Root Directory
+     * </p>
+     *
+     * @param request HttpServletRequest
+     *
+     * @return String
+     */
+    private String getRootDir(HttpServletRequest request) {
+        return new StringBuilder(request.getServletContext().getRealPath("resources")).toString();
     }
 
     /**
