@@ -174,6 +174,18 @@ public interface PostService {
     public void doEnableDisablePost(PostForm postForm);
 
     /**
+     * <h2>doUpdateImages</h2>
+     * <p>
+     * Update Images
+     * </p>
+     *
+     * @param id     int
+     * @param images List<String>
+     * @return void
+     */
+    public void doUpdateImages(int id, List<String> images);
+
+    /**
      * <h2>doDeletePost</h2>
      * <p>
      * Delete Post By ID

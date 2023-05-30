@@ -215,7 +215,7 @@ public class UserController {
         } catch (IOException e) {
             return new ResponseEntity<>(new ErrorResponse("Unable to Fetch File"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        this.assetService.doSaveProfilePic(this.getRootDir(request), auth.getName(), pic.getOriginalFilename(),
+        this.assetService.doSaveProfilePic(ControllerUtil.getRootDir(request), auth.getName(), pic.getOriginalFilename(),
                 picByte);
         return new ResponseEntity<>(new MainResponse("Saving Successfully", pic.getOriginalFilename()), HttpStatus.OK);
     }
@@ -255,22 +255,8 @@ public class UserController {
      */
     @DeleteMapping("/profile/photo")
     public ResponseEntity<MainResponse> deleteProfile(HttpServletRequest request, Authentication auth) {
-        this.assetService.doDeleteProfilePic(this.getRootDir(request), auth.getName());
+        this.assetService.doDeleteProfilePic(ControllerUtil.getRootDir(request), auth.getName());
         return new ResponseEntity<>(new MainResponse("Delete Successfully"), HttpStatus.OK);
-    }
-
-    /**
-     * <h2>getRootDir</h2>
-     * <p>
-     * Get Root Directory
-     * </p>
-     *
-     * @param request HttpServletRequest
-     *
-     * @return String
-     */
-    private String getRootDir(HttpServletRequest request) {
-        return new StringBuilder(request.getServletContext().getRealPath("resources")).toString();
     }
 
     /**

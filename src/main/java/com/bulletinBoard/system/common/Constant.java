@@ -11,7 +11,6 @@ public class Constant {
     public static final int EMAIL_ALREADY_REGISTERED = 2;
     public static final int INVALID_CREDENTIAL = 3;
     public static final int NOT_FOUND = 4;
-    public static final String DIRECTORY_FORMAT = "%1$s%2$s";
 
     @Getter
     public static enum UserRole {

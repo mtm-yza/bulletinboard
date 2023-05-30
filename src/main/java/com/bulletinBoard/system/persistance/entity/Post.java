@@ -1,10 +1,13 @@
 package com.bulletinBoard.system.persistance.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -76,6 +79,15 @@ public class Post {
      * </p>
      */
     private Boolean isActive;
+
+    /**
+     * <h2>imageNames</h2>
+     * <p>
+     * Image Names
+     * </p>
+     */
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> imageNames;
 
     /**
      * <h2>created_at</h2>

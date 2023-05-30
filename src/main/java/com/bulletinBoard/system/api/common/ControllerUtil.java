@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -65,5 +67,19 @@ public class ControllerUtil {
             }
         });
         return list;
+    }
+    
+    /**
+     * <h2>getRootDir</h2>
+     * <p>
+     * Get Root Directory
+     * </p>
+     *
+     * @param request HttpServletRequest
+     *
+     * @return String
+     */
+    public static String getRootDir(HttpServletRequest request) {
+        return new StringBuilder(request.getServletContext().getRealPath("resources")).toString();
     }
 }

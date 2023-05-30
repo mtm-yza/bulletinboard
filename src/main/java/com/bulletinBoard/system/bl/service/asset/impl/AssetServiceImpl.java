@@ -5,15 +5,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.bl.service.asset.AssetService;
+import com.bulletinBoard.system.bl.service.post.PostService;
 import com.bulletinBoard.system.bl.service.user.UserService;
-import com.bulletinBoard.system.common.Constant;
 
 /**
  * <h2>AssetServiceImpl Class</h2>
@@ -35,6 +44,15 @@ public class AssetServiceImpl implements AssetService {
      */
     @Autowired
     private UserService userService;
+
+    /**
+     * <h2>postService</h2>
+     * <p>
+     * postService
+     * </p>
+     */
+    @Autowired
+    private PostService postService;
 
     /**
      * <h2>doGetProfileUrl</h2>
@@ -101,6 +119,86 @@ public class AssetServiceImpl implements AssetService {
     }
 
     /**
+     * <h2>doGetImageUrls</h2>
+     * <p>
+     * Get Image URLs
+     * </p>
+     * 
+     * @param postId int
+     * @return List<String>
+     */
+    @Override
+    public List<String> doGetImageUrls(int postId) {
+        PostDTO post = this.postService.doGetPostById(postId);
+        return post.getImageNames().stream().map(item -> "/asset/post/img/" + item).collect(Collectors.toList());
+    }
+
+    /**
+     * <h2>doUploadPostImages</h2>
+     * <p>
+     * Upload Post Images
+     * </p>
+     * 
+     * @param rootDir           String
+     * @param postId            int
+     * @param originalFileNames List<String>
+     * @param images            List<byte[]>
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean doUploadPostImages(String rootDir, int postId, List<String> originalFileNames, List<byte[]> images) {
+        // Create Directory
+        this.createDirectoryIfNotExist(this.getPostImgFile(rootDir, ""));
+        // Save in Asset Directory
+        List<String> newFileNames = new ArrayList<>();
+        ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+        IntStream.range(0, images.size()).forEach(index -> {
+            String fileName = new StringBuilder(Integer.toString(postId)).append("-")
+                    .append(this.getFileNameByMilliSeconds(originalFileNames.get(index))).toString();
+            this.createFile(this.getPostImgFile(rootDir, fileName), images.get(index));
+            newFileNames.add(fileName);
+            // Wait to Avoid Duplicate Name
+            try {
+                executorService.awaitTermination(10, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        // Update Database
+        PostDTO post = this.postService.doGetPostById(postId);
+        if (!post.getImageNames().isEmpty()) {
+            post.getImageNames().forEach(item -> {
+                this.deleteFile(this.getPostImgFile(rootDir, item));
+                System.out.println("Deleted File " + item);
+            });
+        }
+        this.postService.doUpdateImages(postId, newFileNames);
+        return true;
+    }
+
+    /**
+     * <h2>doDeletePostImages</h2>
+     * <p>
+     * Delete Post Images
+     * </p>
+     * 
+     * @param rootDir  String
+     * @param postId   int
+     * @param fileName String
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean doDeletePostImages(String rootDir, int postId, String fileName) {
+        PostDTO post = this.postService.doGetPostById(postId);
+        this.deleteFile(this.getPostImgFile(rootDir, fileName));
+        post.getImageNames().remove(fileName);
+        this.postService.doUpdateImages(postId, post.getImageNames());
+        return true;
+    }
+
+    /**
      * <h2>getProfileFile</h2>
      * <p>
      * Get the File of Profile
@@ -112,10 +210,22 @@ public class AssetServiceImpl implements AssetService {
      * @return File
      */
     private File getProfileFile(String rootDir, String fileName) {
-        String profileFileName = new StringBuilder(this.getAssetDir(rootDir))
-                .append(String.format(Constant.DIRECTORY_FORMAT, File.separator, "profile"))
-                .append(String.format(Constant.DIRECTORY_FORMAT, File.separator, fileName)).toString();
-        return new File(profileFileName);
+        return Paths.get(this.getAssetDir(rootDir), "profile", fileName).toFile();
+    }
+
+    /**
+     * <h2>getPostImgFile</h2>
+     * <p>
+     * Get Post Image File
+     * </p>
+     *
+     * @param rootDir  String
+     * @param fileName String
+     *
+     * @return File
+     */
+    private File getPostImgFile(String rootDir, String fileName) {
+        return Paths.get(this.getAssetDir(rootDir), "post", "img", fileName).toFile();
     }
 
     /**
@@ -129,8 +239,7 @@ public class AssetServiceImpl implements AssetService {
      * @return String
      */
     private String getAssetDir(String rootDir) {
-        return new StringBuilder(rootDir).append(String.format(Constant.DIRECTORY_FORMAT, File.separator, "asset"))
-                .toString();
+        return Paths.get(rootDir, "asset").toString();
     }
 
     /**

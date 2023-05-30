@@ -157,7 +157,7 @@ public class PostServiceImpl implements PostService {
      */
     public PostDTO doGetPostById(int id) {
         Post post = this.postDao.dbGetPostById(id);
-        return (post != null)? new PostDTO(post): null;
+        return (post != null) ? new PostDTO(post) : null;
     }
 
     /**
@@ -256,6 +256,22 @@ public class PostServiceImpl implements PostService {
     public void doEnableDisablePost(PostForm postForm) {
         Post post = new Post(postForm);
         post.setIsActive(!post.getIsActive());
+        this.postDao.dbUpdatePost(post);
+    }
+
+    /**
+     * <h2>doUpdateImages</h2>
+     * <p>
+     * Update Images
+     * </p>
+     * 
+     * @param id     int
+     * @param images List<String>
+     */
+    @Override
+    public void doUpdateImages(int id, List<String> images) {
+        Post post = this.postDao.dbGetPostById(id);
+        post.setImageNames(images);
         this.postDao.dbUpdatePost(post);
     }
 

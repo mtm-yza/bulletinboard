@@ -1,5 +1,7 @@
 package com.bulletinBoard.system.bl.dto;
 
+import java.util.List;
+
 import com.bulletinBoard.system.persistance.entity.Post;
 
 import lombok.AllArgsConstructor;
@@ -55,6 +57,15 @@ public class PostDTO {
      * </p>
      */
     private Boolean isActive;
+    
+    
+    /**
+     * <h2> imageNames</h2>
+     * <p>
+     * Image Names
+     * </p>
+     */
+    private List<String> imageNames;
 
     /**
      * <h2>user</h2>
@@ -77,6 +88,7 @@ public class PostDTO {
         this.title = post.getTitle();
         this.isActive = post.getIsActive();
         this.description = post.getDescription();
+        this.imageNames = post.getImageNames();
         this.user = new UserDTO(post.getUser());
     }
 }
