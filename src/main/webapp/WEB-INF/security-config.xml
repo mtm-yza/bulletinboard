@@ -15,7 +15,9 @@
             before="FORM_LOGIN_FILTER" />
         <intercept-url pattern="/api/user/profile/**" access="hasAnyRole('ADMIN', 'USER')" />
         <intercept-url pattern="/api/user/**" access="hasRole('ADMIN')" />
-        <intercept-url pattern="/resources/asset/profile/*" access="hasAnyRole('ADMIN', 'USER')" />
+        <intercept-url pattern="/api/post/**" access="hasAnyRole('ADMIN', 'USER')" />
+        <intercept-url pattern="/api/resources/asset/profile/**" access="hasAnyRole('ADMIN', 'USER')" />
+        <intercept-url pattern="/api/resources/asset/post/**" access="hasAnyRole('ADMIN', 'USER')" />
         <form-login login-page='/api/accessDenied'/>
         <security:access-denied-handler error-page="/api/accessDenied"/>
         <logout logout-url="api/logout"/>
