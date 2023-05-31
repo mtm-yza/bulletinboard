@@ -10,6 +10,7 @@
     http://www.springframework.org/schema/security/spring-security.xsd">
     <security:http pattern="/api/**" auto-config="true"
         create-session="stateless">
+        <security:cors configuration-source-ref="customCorsConfigurationSource" /> 
         <security:csrf disabled="true" />
         <security:custom-filter ref="jwtTokenFilter"
             before="FORM_LOGIN_FILTER" />
