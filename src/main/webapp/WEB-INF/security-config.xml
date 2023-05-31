@@ -12,8 +12,7 @@
         create-session="stateless">
         <security:cors configuration-source-ref="customCorsConfigurationSource" /> 
         <security:csrf disabled="true" />
-        <security:custom-filter ref="jwtTokenFilter"
-            before="FORM_LOGIN_FILTER" />
+        <security:custom-filter ref="jwtTokenFilter" before="FORM_LOGIN_FILTER" />
         <intercept-url pattern="/api/user/profile/**" access="hasAnyRole('ADMIN', 'USER')" />
         <intercept-url pattern="/api/user/**" access="hasRole('ADMIN')" />
         <intercept-url pattern="/api/post/**" access="hasAnyRole('ADMIN', 'USER')" />
