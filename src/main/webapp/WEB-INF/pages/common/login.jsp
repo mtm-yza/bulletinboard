@@ -23,6 +23,12 @@
     <label>Password</label> <input class="form-control" name="password"
       type="password" placeholder="Password">
   </div>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="rememberMe" id="chkRememberMe">
+      <label class="form-check-label" for="chkRememberMe">Remember Me</label>
+    </div>
+  </div>
   <input class="btn btn-primary" type="submit" value="Login"> <input
     type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 </form>

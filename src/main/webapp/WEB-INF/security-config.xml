@@ -31,6 +31,9 @@
             username-parameter="username" password-parameter="password" />
         <access-denied-handler error-page="/error" />
         <logout logout-url="/logout" logout-success-url="/login" />
+        <security:remember-me remember-me-parameter="rememberMe"
+            user-service-ref="userService" key="ThisIsUniqueKey"
+            token-validity-seconds="#{30 * 24 * 60 * 60}" />
     </security:http>
     <authentication-manager id="authManager">
         <authentication-provider
