@@ -92,22 +92,4 @@
         class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
-
-    <bean id="jwtTokenFilter" class="com.bulletinBoard.system.api.common.JwtTokenFilter" />
-    <bean id="apiAccessDeniedHandler" class="com.bulletinBoard.system.api.common.ApiAccessDeniedHandler" />
-    <bean id="userService" class="com.bulletinBoard.system.bl.service.user.impl.UserServiceImpl" />
-    <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-    <bean id="customCorsConfigurationSource"
-        class="org.springframework.web.cors.UrlBasedCorsConfigurationSource">
-        <property name="corsConfigurations">
-            <map>
-                <entry key="/**">
-                    <bean class="org.springframework.web.cors.CorsConfiguration">
-                        <property name="allowedOrigins"><list><value>*</value></list></property>
-                        <property name="allowCredentials"><value>true</value></property>
-                    </bean>
-                </entry>
-            </map>
-        </property>
-    </bean>
 </beans>
