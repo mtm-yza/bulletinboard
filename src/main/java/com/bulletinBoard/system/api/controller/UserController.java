@@ -110,9 +110,7 @@ public class UserController {
      */
     @GetMapping({ "", "/" })
     public ResponseEntity<MainResponse> getUsers(@RequestParam(defaultValue = "0") int page) {
-        int count = userService.doGetUserCount();
-        int offset = ControllerUtil.getOffset(page, count);
-        List<UserDTO> users = this.userService.doGetUserList(offset, ControllerUtil.PAGE_SIZE);
+        List<UserDTO> users = this.userService.doGetUserList(page, ControllerUtil.PAGE_SIZE);
         return new ResponseEntity<>(new MainResponse(this.getUserResponses(users)), HttpStatus.OK);
     }
 

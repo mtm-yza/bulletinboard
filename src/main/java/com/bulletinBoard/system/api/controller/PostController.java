@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,12 +86,13 @@ public class PostController {
      * @return MessageResponse
      */
     @PostMapping({ "", "/" })
-    public ResponseEntity<MainResponse> addPost(@Valid @RequestBody PostForm post, BindingResult bindingResult) {
+    public ResponseEntity<MainResponse> addPost(@Valid @RequestBody PostForm post, BindingResult bindingResult,
+            Authentication auth) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> errorList = ControllerUtil.getErrors(bindingResult);
             return new ResponseEntity<>(new ErrorResponse("Failed to Add Post", errorList), HttpStatus.BAD_REQUEST);
         }
-        post.setUserEmail("admin@gmail.com");
+        post.setUserEmail(auth.getName());
         this.postService.doAddPost(post);
         return new ResponseEntity<>(new MainResponse("Saving Successfully"), HttpStatus.CREATED);
     }
@@ -106,11 +108,9 @@ public class PostController {
      * @return List<PostDTO>
      */
     @GetMapping({ "", "/" })
-    public ResponseEntity<MainResponse> getPublicPosts(@RequestParam(defaultValue = "0") int page) {
-        String email = "admin@gmail.com";
-        int count = this.postService.doGetPublicPostCount(email);
-        int offset = ControllerUtil.getOffset(page, count);
-        List<PostDTO> list = this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
+    public ResponseEntity<MainResponse> getPublicPosts(@RequestParam(defaultValue = "0") int page,
+            Authentication auth) {
+        List<PostDTO> list = this.postService.doGetPublicPosts(page, ControllerUtil.PAGE_SIZE, auth.getName());
         return new ResponseEntity<>(new MainResponse(this.getPostResponses(list)), HttpStatus.OK);
     }
 
@@ -148,11 +148,17 @@ public class PostController {
      * @return ResponseEntity<MainResponse>
      */
     @PutMapping("/{id}")
-    public ResponseEntity<MainResponse> updatePost(@RequestBody PostForm post, BindingResult bindingResult) {
+    public ResponseEntity<MainResponse> updatePost(@PathVariable int id, @RequestBody PostForm post,
+            BindingResult bindingResult, Authentication auth) {
         if (bindingResult.hasErrors()) {
             List<Map<String, String>> errorList = ControllerUtil.getErrors(bindingResult);
             return new ResponseEntity<>(new ErrorResponse("Failed To Update Post", errorList), HttpStatus.BAD_REQUEST);
         }
+        if (id == 0) {
+            return new ResponseEntity<>(new ErrorResponse("Invalid Post ID"), HttpStatus.BAD_REQUEST);
+        }
+        post.setId(id);
+        post.setUserEmail(auth.getName());
         this.postService.doUpdatePost(post);
         PostResponse postResponse = new PostResponse(this.postService.doGetPostById(post.getId()));
         return new ResponseEntity<>(new MainResponse("Update Successful", postResponse), HttpStatus.OK);
@@ -261,8 +267,9 @@ public class PostController {
      * @return List<PostResponse>
      */
     private List<PostResponse> getPostResponses(List<PostDTO> posts) {
-        if (posts.isEmpty())
-            return null;
+        if (posts.isEmpty()) {
+            return List.of();
+        }
         return posts.stream().map(it -> new PostResponse(it)).collect(Collectors.toList());
     }
 }

@@ -33,11 +33,11 @@ public interface UserService {
      * Get User List
      * </p>
      *
-     * @param offset int
-     * @param size   int
+     * @param page int
+     * @param size int
      * @return List<UserDTO>
      */
-    public List<UserDTO> doGetUserList(int offset, int size);
+    public List<UserDTO> doGetUserList(int page, int size);
 
     /**
      * <h2>doGetUserById</h2>
