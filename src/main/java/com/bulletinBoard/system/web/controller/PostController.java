@@ -122,6 +122,7 @@ public class PostController {
      * @param bindingResult     BindingResult
      * @param redirectAttribute RedirectAttributes
      * @param auth              Authentication
+     *
      * @return mv ModelAndView
      */
     @PostMapping("add")
@@ -149,6 +150,7 @@ public class PostController {
      *
      * @param page      int
      * @param isPrivate boolean
+     *
      * @return ModelAndView
      */
     @PostMapping("list")
@@ -166,6 +168,7 @@ public class PostController {
      * @param page    int
      * @param post    PostForm
      * @param session HttpSession
+     *
      * @return mv ModelAndView
      */
     @GetMapping("list")
@@ -197,6 +200,7 @@ public class PostController {
      * @param session    HttpSession
      * @param request    HttpRequest
      * @param auth       Authentication
+     *
      * @return ModelAndView mv
      */
     @GetMapping("list/search")
@@ -226,6 +230,7 @@ public class PostController {
      * @param page    int
      * @param post    PostForm
      * @param session HttpSession
+     *
      * @return ModelAndView
      */
     @GetMapping("me")
@@ -256,6 +261,7 @@ public class PostController {
      * @param session   HttpSession
      * @param auth      Authentication
      * @param request   HttpServletRequest
+     *
      * @return ModelAndView mv
      */
     @GetMapping("me/search")
@@ -289,6 +295,7 @@ public class PostController {
      * @param bindingResult      BindingResult
      * @param isStatusUpdate     Boolean
      * @param redirectAttributes RedirectAttributes
+     *
      * @return mv ModelAndView
      */
     @PostMapping("update")
@@ -325,6 +332,7 @@ public class PostController {
      *
      * @param id                 int
      * @param redirectAttributes RedirectAttributes
+     *
      * @return mv ModelAndView
      */
     @PostMapping("delete")
@@ -354,6 +362,7 @@ public class PostController {
      * </p>
      *
      * @param session HttpSession
+     *
      * @return ModelAndView
      */
     private ModelAndView getRedirectListModelAndView(HttpSession session) {
@@ -407,6 +416,7 @@ public class PostController {
      * </p>
      *
      * @param bindingResult BindingResult
+     *
      * @return errors Map<String, String>
      */
     private Map<String, String> getErrorMessages(BindingResult bindingResult) {
