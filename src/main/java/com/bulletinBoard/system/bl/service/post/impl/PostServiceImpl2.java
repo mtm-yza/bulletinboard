@@ -1,16 +1,16 @@
 package com.bulletinBoard.system.bl.service.post.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.bl.service.ServiceUtil;
-import com.bulletinBoard.system.bl.service.post.PostService;
+import com.bulletinBoard.system.bl.service.post.PostService2;
 import com.bulletinBoard.system.persistance.entity.Post;
 import com.bulletinBoard.system.persistance.repository.PostRepository;
 import com.bulletinBoard.system.persistance.repository.UserRepository;
@@ -26,7 +26,7 @@ import com.bulletinBoard.system.web.form.PostForm;
  *
  */
 @Service
-public class PostServiceImpl implements PostService {
+public class PostServiceImpl2 implements PostService2 {
 
     /**
      * <h2>postRepository</h2>
@@ -53,6 +53,7 @@ public class PostServiceImpl implements PostService {
      * </p>
      * 
      * @param post PostForm
+     *
      * @return boolean
      */
     @Override
@@ -76,12 +77,13 @@ public class PostServiceImpl implements PostService {
      * 
      * @param page int
      * @param size int
+     *
      * @return Page<PostDTO>
      */
     @Override
-    public List<PostDTO> doGetPostList(int page, int size) {
+    public Page<PostDTO> doGetPostList(int page, int size) {
         Pageable paging = ServiceUtil.getPagable(page, size);
-        return postRepository.findAll(paging).map(item -> new PostDTO(item)).getContent();
+        return postRepository.findAll(paging).map(item -> new PostDTO(item));
     }
 
     @Override
@@ -98,13 +100,14 @@ public class PostServiceImpl implements PostService {
      * @param page  int
      * @param size  int
      * @param email String
+     *
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> doGetPublicPosts(int page, int size, String email) {
+    public Page<PostDTO> doGetPublicPosts(int page, int size, String email) {
         int userId = this.userRepository.dbGetUserByEmail(email).get().getId();
         Pageable pageable = ServiceUtil.getPagable(page, size);
-        return this.getPostDto(this.postRepository.dbGetUserPosts(userId, pageable).getContent());
+        return this.mapToDto(this.postRepository.dbGetUserPosts(userId, pageable));
     }
 
     /**
@@ -117,13 +120,13 @@ public class PostServiceImpl implements PostService {
      * @param size       int
      * @param postTitle  String
      * @param authorName String
+     *
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> doGetPublicPostsByTitleAndAuthorName(int page, int size, String postTitle, String authorName) {
+    public Page<PostDTO> doGetPublicPostsByTitleAndAuthorName(int page, int size, String postTitle, String authorName) {
         Pageable pageable = ServiceUtil.getPagable(page, size);
-        return this.getPostDto(
-                this.postRepository.dbGetPublicPostsByTitleAndAuthorName(postTitle, authorName, pageable).getContent());
+        return mapToDto(this.postRepository.dbGetPublicPostsByTitleAndAuthorName(postTitle, authorName, pageable));
     }
 
     /**
@@ -135,13 +138,14 @@ public class PostServiceImpl implements PostService {
      * @param page  int
      * @param size  int
      * @param email String
+     *
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> doGetUserPosts(int page, int size, String email) {
-        int userId = this.userRepository.dbGetUserByEmail(email).get().getId();
+    public Page<PostDTO> doGetUserPosts(int page, int size, String email) {
         Pageable pageable = ServiceUtil.getPagable(page, size);
-        return this.getPostDto(this.postRepository.dbGetUserPosts(userId, pageable).getContent());
+        int userId = this.userRepository.dbGetUserByEmail(email).get().getId();
+        return mapToDto(postRepository.dbGetUserPosts(userId, pageable));
     }
 
     /**
@@ -152,12 +156,13 @@ public class PostServiceImpl implements PostService {
      * 
      * @param offset int
      * @param size   int
+     *
      * @return List<PostDTO>
      */
     @Override
-    public List<PostDTO> doGetActivePosts(int page, int size) {
+    public Page<PostDTO> doGetActivePosts(int page, int size) {
         Pageable pageable = ServiceUtil.getPagable(page, size);
-        return this.getPostDto(this.postRepository.dbGetPostsByActiveStatus(pageable).getContent());
+        return mapToDto((this.postRepository.dbGetPostsByActiveStatus(pageable)));
     }
 
     /**
@@ -222,18 +227,16 @@ public class PostServiceImpl implements PostService {
     }
 
     /**
-     * <h2>getPostDto</h2>
+     * <h2>mapToDto</h2>
      * <p>
-     * Convert And Get A List Of Post from Post Entity List
+     * Map Entity to DTO
      * </p>
      *
-     * @param postList List<Post>
-     * @return List<PostDTO>
+     * @param page Page<Post>
+     *
+     * @return Page<PostDTO>
      */
-    private List<PostDTO> getPostDto(List<Post> postList) {
-        if (postList == null) {
-            return List.of();
-        }
-        return postList.stream().map(item -> new PostDTO(item)).collect(Collectors.toList());
+    private Page<PostDTO> mapToDto(Page<Post> page) {
+        return page.map(item -> new PostDTO(item));
     }
 }

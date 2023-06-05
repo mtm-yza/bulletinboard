@@ -2,6 +2,8 @@ package com.bulletinBoard.system.bl.service.post;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.bulletinBoard.system.bl.dto.PostDTO;
 import com.bulletinBoard.system.web.form.PostForm;
 
@@ -14,7 +16,7 @@ import com.bulletinBoard.system.web.form.PostForm;
  * @author YeZawAung
  *
  */
-public interface PostService {
+public interface PostService2 {
 
     /**
      * <h2>doAddPost</h2>
@@ -23,6 +25,7 @@ public interface PostService {
      * </p>
      *
      * @param post PostForm
+     *
      * @return boolean
      */
     public boolean doAddPost(PostForm post);
@@ -35,9 +38,10 @@ public interface PostService {
      *
      * @param page int
      * @param size int
-     * @return List<PostDTO>
+     *
+     * @return Page<PostDTO>
      */
-    public List<PostDTO> doGetPostList(int page, int size);
+    public Page<PostDTO> doGetPostList(int page, int size);
 
     /**
      * <h2>doGetPostListByActiveStatus</h2>
@@ -45,9 +49,9 @@ public interface PostService {
      * Get A List Of Post By Active Status
      * </p>
      *
-     * @return List<PostDTO>
+     * @return Page<PostDTO>
      */
-    public List<PostDTO> doGetActivePosts(int page, int size);
+    public Page<PostDTO> doGetActivePosts(int page, int size);
 
     /**
      * <h2>doGetPublicPosts</h2>
@@ -58,9 +62,10 @@ public interface PostService {
      * @param page  int
      * @param size  int
      * @param email String
-     * @return List<PostDTO>
+     *
+     * @return Page<PostDTO>
      */
-    public List<PostDTO> doGetPublicPosts(int page, int size, String email);
+    public Page<PostDTO> doGetPublicPosts(int page, int size, String email);
 
     /**
      * <h2>doGetPublicPostsByTitleAndAuthorName</h2>
@@ -72,9 +77,10 @@ public interface PostService {
      * @param size       int
      * @param postTitle  String
      * @param authorName String
-     * @return List<PostDTO>
+     *
+     * @return Page<PostDTO>
      */
-    public List<PostDTO> doGetPublicPostsByTitleAndAuthorName(int page, int size, String postTitle, String authorName);
+    public Page<PostDTO> doGetPublicPostsByTitleAndAuthorName(int page, int size, String postTitle, String authorName);
 
     /**
      * <h2>doGetUserPosts</h2>
@@ -85,9 +91,10 @@ public interface PostService {
      * @param page  int
      * @param size  int
      * @param email String
-     * @return List<PostDTO>
+     *
+     * @return Page<PostDTO>
      */
-    public List<PostDTO> doGetUserPosts(int page, int size, String email);
+    public Page<PostDTO> doGetUserPosts(int page, int size, String email);
 
     /**
      * <h2>doGetPostById</h2>
@@ -129,6 +136,7 @@ public interface PostService {
      *
      * @param id     int
      * @param images List<String>
+     *
      * @return void
      */
     public void doUpdateImages(int id, List<String> images);

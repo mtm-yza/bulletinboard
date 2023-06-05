@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -87,5 +88,21 @@ public class ControllerUtil {
         session.setAttribute("pageIndex", pageIndex);
         session.setAttribute("pageSize", PAGE_SIZE);
         return (pageIndex - 1) * PAGE_SIZE;
+    }
+
+    /**
+     * <h2>setPagingData</h2>
+     * <p>
+     * Set Pagination Data
+     * </p>
+     *
+     * @param session HttpSession
+     * @param page    Page<?>
+     */
+    public static void setPagingData(HttpSession session, Page<?> page) {
+        int index = page.getNumber();
+        session.setAttribute("pageIndex", index + 1);
+        session.setAttribute("pageSize", page.getSize());
+        session.setAttribute("totalCount", page.getTotalElements());
     }
 }

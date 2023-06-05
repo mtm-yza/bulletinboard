@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -22,8 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
-import com.bulletinBoard.system.bl.dto.UserDTO;
-import com.bulletinBoard.system.bl.service.post.PostService;
+import com.bulletinBoard.system.bl.service.post.PostService2;
 import com.bulletinBoard.system.common.ControllerUtil;
 import com.bulletinBoard.system.web.form.PostForm;
 import com.google.gson.Gson;
@@ -74,13 +74,13 @@ public class PostController {
     private static final String ADD_VIEW = "addPostView";
 
     /**
-     * <h2>postService</h2>
+     * <h2>postService2</h2>
      * <p>
-     * Post Service
+     * postService2
      * </p>
      */
     @Autowired
-    private PostService postService;
+    private PostService2 postService2;
 
     /**
      * <h2>getHomeView</h2>
@@ -134,7 +134,7 @@ public class PostController {
             return mv;
         }
         post.setUserEmail(auth.getName());
-        this.postService.doAddPost(post);
+        this.postService2.doAddPost(post);
         ModelAndView mv = new ModelAndView(HOME_REDIRECT);
         this.addRedirectMessages(redirectAttribute, "success", "Adding Post Compeleted",
                 "Your Post Was Successfully Added");
@@ -177,11 +177,10 @@ public class PostController {
         }
         String email = auth.getName();
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        int count = postService.doGetPublicPostCount(email);
-        int offset = ControllerUtil.setPaginationData(session, page, count);
         // Get Post Data
-        List<PostDTO> posts = this.postService.doGetPublicPosts(offset, ControllerUtil.PAGE_SIZE, email);
-        this.setListData(mv, session, posts, post, false);
+        Page<PostDTO> postPage = this.postService2.doGetPublicPosts(page, ControllerUtil.PAGE_SIZE, email);
+        ControllerUtil.setPagingData(session, postPage);
+        this.setListData(mv, session, postPage.getContent(), post, false);
         return mv;
     }
 
@@ -210,11 +209,11 @@ public class PostController {
             return new ModelAndView(HOME_REDIRECT);
         }
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        int count = postService.doGetPublicPostCountByTitleAndAuthorName(postTitle, authorName);
-        int offset = ControllerUtil.setPaginationData(session, page, count);
-        List<PostDTO> posts = this.postService.doGetPublicPostsByTitleAndAuthorName(offset, ControllerUtil.PAGE_SIZE,
+        Page<PostDTO> postPage = this.postService2.doGetPublicPostsByTitleAndAuthorName(page, ControllerUtil.PAGE_SIZE,
                 postTitle, authorName);
-        this.setListData(mv, session, posts, post, false);
+        System.out.println("Total: " + postPage.getTotalElements());
+        ControllerUtil.setPagingData(session, postPage);
+        this.setListData(mv, session, postPage.getContent(), post, false);
         return mv;
     }
 
@@ -238,11 +237,10 @@ public class PostController {
         }
         String email = auth.getName();
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        int count = postService.doGetUserPostCount(email);
-        int offset = ControllerUtil.setPaginationData(session, page, count);
-        // Get Post Data
-        List<PostDTO> posts = this.postService.doGetUserPosts(offset, ControllerUtil.PAGE_SIZE, email);
-        this.setListData(mv, session, posts, post, true);
+        // Get Post Data        
+        Page<PostDTO> postPage = this.postService2.doGetUserPosts(page, ControllerUtil.PAGE_SIZE, email);
+        ControllerUtil.setPagingData(session, postPage);
+        this.setListData(mv, session, postPage.getContent(), post, true);
         return mv;
     }
 
@@ -273,12 +271,11 @@ public class PostController {
         }
         String email = auth.getName();
         ModelAndView mv = new ModelAndView(HOME_VIEW);
-        int count = postService.doGetPublicPostCountByTitleAndAuthorName(postTitle, email);
-        int offset = ControllerUtil.setPaginationData(session, page, count);
         // Get Post Data
-        List<PostDTO> posts = this.postService.doGetPublicPostsByTitleAndAuthorName(offset, ControllerUtil.PAGE_SIZE,
+        Page<PostDTO> postPage = this.postService2.doGetPublicPostsByTitleAndAuthorName(page, ControllerUtil.PAGE_SIZE,
                 postTitle, email);
-        this.setListData(mv, session, posts, post, true);
+        ControllerUtil.setPagingData(session, postPage);
+        this.setListData(mv, session, postPage.getContent(), post, true);
         return mv;
     }
 
@@ -304,16 +301,16 @@ public class PostController {
             redirectAttributes.addFlashAttribute("post", post);
             return mv;
         }
-        String postUserName = this.postService.doGetPostById(post.getId()).getUser().getUsername();
+        String postUserName = this.postService2.doGetPostById(post.getId()).getUser().getUsername();
         if (!postUserName.equals(auth.getName())) {
             this.addRedirectMessages(redirectAttributes, "error", "Forbidden Request",
                     "Unable to Update Post from Other Users");
             return mv;
         }
         if (isStatusUpdate) {
-            this.postService.doEnableDisablePost(post);
+            this.postService2.doEnableDisablePost(post);
         } else {
-            this.postService.doUpdatePost(post);
+            this.postService2.doUpdatePost(post);
         }
         this.addRedirectMessages(redirectAttributes, "success", "Updating Post Completed",
                 "Your Post Was Successfully Updated");
@@ -338,13 +335,13 @@ public class PostController {
             this.addRedirectMessages(redirectAttributes, "error", "Invalid ID", "Your Post ID Is Invalid");
             return mv;
         }
-        String postUserName = this.postService.doGetPostById(id).getUser().getUsername();
+        String postUserName = this.postService2.doGetPostById(id).getUser().getUsername();
         if (!postUserName.equals(auth.getName())) {
             this.addRedirectMessages(redirectAttributes, "error", "Forbidden Request",
                     "Unable to Delete Post from Other Users");
             return mv;
         }
-        this.postService.doDeletePostById(id);
+        this.postService2.doDeletePostById(id);
         this.addRedirectMessages(redirectAttributes, "success", "Deleting Post Completed",
                 "Your Post Was Successfuly Deleted");
         return mv;
