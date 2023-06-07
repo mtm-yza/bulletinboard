@@ -107,7 +107,7 @@ public class PostServiceImpl2 implements PostService2 {
     public Page<PostDTO> doGetPublicPosts(int page, int size, String email) {
         int userId = this.userRepository.dbGetUserByEmail(email).get().getId();
         Pageable pageable = ServiceUtil.getPagable(page, size);
-        return this.mapToDto(this.postRepository.dbGetUserPosts(userId, pageable));
+        return this.mapToDto(this.postRepository.dbGetUserPublicPost(userId, pageable));
     }
 
     /**

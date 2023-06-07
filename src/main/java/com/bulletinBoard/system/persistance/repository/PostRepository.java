@@ -61,6 +61,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
      */
     @Query("SELECT p FROM Post p WHERE p.user.id = :userId")
     public Page<Post> dbGetUserPosts(@Param("userId") int userId, Pageable pageable);
+    
+    @Query("SELECT p FROM Post p WHERE p.user.id = :userId OR p.isActive = true")
+    public Page<Post> dbGetUserPublicPost(@Param("userId") int userId, Pageable pageable);
 
     /**
      * <h2>dbGetPublicPostsByTitleAndAuthorName</h2>
