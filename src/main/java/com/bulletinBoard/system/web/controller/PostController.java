@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bulletinBoard.system.bl.dto.PostDTO;
-import com.bulletinBoard.system.bl.dto.UserDTO;
 import com.bulletinBoard.system.bl.service.post.PostService;
 import com.bulletinBoard.system.common.ControllerUtil;
 import com.bulletinBoard.system.web.form.PostForm;

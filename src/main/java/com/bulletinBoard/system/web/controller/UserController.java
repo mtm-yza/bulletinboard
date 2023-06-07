@@ -79,6 +79,7 @@ public class UserController {
      * </p>
      *
      * @param session HttpSession
+     *
      * @return ModelAndView
      */
     @GetMapping({ "/", "" })
@@ -95,8 +96,7 @@ public class UserController {
      * Redirect To Add User Form Page
      * </p>
      *
-     * @return
-     * @return ModelAndView
+     * @return ModelAndView mv
      */
     @GetMapping("add")
     protected ModelAndView getAddUserForm() {
@@ -114,7 +114,7 @@ public class UserController {
      * @param user              UserForm
      * @param bindingResult     BindingResult
      * @param redirectAttribute RedirectAttributes
-     * @return ModelAndView
+     * @return mv ModelAndView
      */
     @PostMapping("add")
     protected ModelAndView addUser(@ModelAttribute @Valid UserForm user, BindingResult bindingResult,
@@ -154,7 +154,7 @@ public class UserController {
      * @param user    UserForm
      * @param session HttpSession
      * @param auth    Authentications
-     * @return ModelAndView mv
+     * @return mv ModelAndView
      */
     @GetMapping("list")
     protected ModelAndView getUserListView(@RequestParam(defaultValue = "0") int page,
@@ -184,7 +184,7 @@ public class UserController {
      * @param user              UserForm
      * @param bindingResult     BindingResult
      * @param redirectAttribute RedirectAttribute
-     * @return ModelAndView mv
+     * @return mv ModelAndView
      */
     @PostMapping("update")
     protected ModelAndView updateUser(@Valid @ModelAttribute UserForm user, BindingResult bindingResult,
@@ -209,7 +209,7 @@ public class UserController {
      * </p>
      *
      * @param id int
-     * @return ModelAndView mv
+     * @return mv ModelAndView
      * @throws ServletException
      */
     @PostMapping("delete")
